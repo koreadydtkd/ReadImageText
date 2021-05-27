@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -33,6 +34,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 
 }
@@ -50,6 +52,11 @@ dependencies {
 
     // Firebase OCR
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:16.1.3'
-    implementation 'com.google.mlkit:image-labeling:17.0.3'
+    implementation 'com.google.mlkit:image-labeling:17.0.4'
 
+    // 스와이프하여 새로고침
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 }

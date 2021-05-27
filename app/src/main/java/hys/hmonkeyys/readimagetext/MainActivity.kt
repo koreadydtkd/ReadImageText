@@ -1,25 +1,31 @@
 package hys.hmonkeyys.readimagetext
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Rect
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.webkit.URLUtil
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import java.io.IOException
 import java.util.*
-
 
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var binding: ActivityMainBinding
@@ -35,41 +41,115 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initToolbar()
         initWebView()
-        initButtons()
+        initViews()
 
         checkPermissions()
     }
 
-    private fun initWebView() {
-        binding.webView.webViewClient = WebViewClient()
-        binding.webView.loadUrl("http://www.google.com")
+    private fun initToolbar() {
+        binding.goHomeButton.setOnClickListener {
+            binding.webView.loadUrl(DEFAULT_URL)
+        }
+
+        binding.addressBar.apply {
+            setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val loadingUrl = v.text.toString()
+
+                    if(URLUtil.isNetworkUrl(loadingUrl)) {
+                        binding.webView.loadUrl(loadingUrl)
+                    } else {
+                        binding.webView.loadUrl("http://$loadingUrl")
+                    }
+
+                }
+                return@setOnEditorActionListener false
+            }
+        }
+
+        binding.goBackButton.setOnClickListener {
+            binding.webView.goBack()
+        }
+
+        binding.goForwardButton.setOnClickListener {
+            binding.webView.goForward()
+        }
     }
 
-    private fun initButtons() {
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun initWebView() {
+
+        binding.webView.apply {
+            webViewClient = WebViewClient()
+            webChromeClient = WebChromeClient()
+            settings.javaScriptEnabled = true
+            loadUrl(DEFAULT_URL)
+
+            setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                binding.scrollValue = scrollY
+            }
+
+        }
+    }
+
+
+    /*private fun getToolBarAnimation(toolbarHeight: Float, state: String): TranslateAnimation {
+        val anim: TranslateAnimation = if(state == "SHOW") {
+            TranslateAnimation(0f, 0f, 0f, -toolbarHeight)
+        } else {
+            TranslateAnimation(0f, 0f, -toolbarHeight, 0f)
+        }
+        anim.duration = ANIMATION_SPEED
+        anim.fillAfter = true
+        return anim
+    }*/
+
+    private fun initViews() {
+        binding.toolbar.visibility = View.GONE
         binding.screenshotButton.setOnClickListener {
+
+
+
             val rootView = this.window.decorView.rootView
             val bitmap = getBitmapFromView(rootView)
 
-            bitmap ?: return@setOnClickListener
-            readImageTextBitmap(bitmap)
+//            CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(this)
+
+//            bitmap ?: return@setOnClickListener
+//            readImageTextBitmap(bitmap)
+
+            binding.cropImageView.setImageBitmap(bitmap)
+
+
         }
 
         binding.speakOutButton.setOnClickListener {
-            if(readText.isNotEmpty()) {
-                Log.e(TAG, readText)
-                speakOut(readText)
-            } else {
-                Log.e(TAG, "is Empty!!")
-            }
+            val test = binding.cropImageView.croppedImage
+            readImageTextBitmap(test)
+            binding.cropImageView.visibility = View.GONE
+
+//            if(readText.isNotEmpty()) {
+//                Log.e(TAG, readText)
+//                speakOut(readText)
+//            } else {
+//                Log.e(TAG, "is Empty!!")
+//            }
+        }
+
+        binding.refreshLayout.setOnRefreshListener {
+            binding.webView.reload()
         }
     }
 
     private fun getBitmapFromView(view: View): Bitmap? {
 //        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
         val bitmap = Bitmap.createBitmap(1000, 1500, Bitmap.Config.ARGB_8888)
+
         val canvas = Canvas(bitmap)
         view.draw(canvas)
+
         return bitmap
     }
 
@@ -85,10 +165,12 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             recognizer.process(image)
                 .addOnSuccessListener {
                     readText = it.text
+                    Log.e(TAG, readText)
                 }
                 .addOnFailureListener {
                     it.printStackTrace()
                     readText = "Image Read Fail"
+                    Log.e(TAG, readText)
                 }
 
         } catch (e: IOException) {
@@ -131,10 +213,6 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
-
-
-
-
     /*private fun getImageUrl(image: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
@@ -174,8 +252,6 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         return readTextContents
     }*/
 
-
-
     // TTS 초기화
     override fun onInit(status: Int) {
         try {
@@ -213,13 +289,6 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                                 finish()
                             }
                         }
-//                        for((i, permission) in permissions.withIndex()) {
-//                            if(grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-//                                //권한 획득 실패
-//                                Toast.makeText(this, "권한 허용 후 이용할 수 있습니다.", Toast.LENGTH_LONG).show()
-//                                finish()
-//                            }
-//                        }
                     }
                 }
             }
@@ -236,9 +305,66 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onDestroy()
     }
 
+    override fun onBackPressed() {
+        if(binding.webView.canGoBack()) {
+            binding.webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    inner class WebViewClient: android.webkit.WebViewClient() {
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            super.onPageStarted(view, url, favicon)
+
+            binding.progressBar.show()
+        }
+
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+
+            with(binding) {
+                refreshLayout.isRefreshing = false
+                progressBar.hide()
+
+                goBackButton.isEnabled = webView.canGoBack()
+                goForwardButton.isEnabled =  webView.canGoForward()
+                addressBar.setText(url)
+            }
+
+        }
+    }
+
+    inner class WebChromeClient: android.webkit.WebChromeClient() {
+        override fun onProgressChanged(view: WebView?, newProgress: Int) {
+            super.onProgressChanged(view, newProgress)
+
+            binding.progressBar.progress = newProgress
+        }
+    }
+
     companion object {
         private const val TAG = "MainActivity"
         private const val PERMISSIONS_REQUEST_CODE = 100
+        private const val DEFAULT_URL = "https://www.google.com"
     }
 
 }
+
+
+/**
+ *
+Copyright [yyyy] [name of copyright owner]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
