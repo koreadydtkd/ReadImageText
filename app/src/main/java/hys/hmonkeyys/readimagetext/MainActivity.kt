@@ -1,16 +1,20 @@
 package hys.hmonkeyys.readimagetext
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.webkit.URLUtil
 import android.webkit.WebView
@@ -19,28 +23,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import com.canhub.cropper.CropImage
+import com.canhub.cropper.CropImageView
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+//import com.theartofdev.edmodo.cropper.CropImage
+//import com.theartofdev.edmodo.cropper.CropImageView
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import java.io.IOException
 import java.util.*
 
-class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
-    private val requiredPermissions = arrayOf(Manifest.permission.RECORD_AUDIO)
-
-    private val tts: TextToSpeech by lazy { TextToSpeech(this, this) }
-
-    private var readText = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initData()
         initToolbar()
         initWebView()
         initViews()
@@ -48,25 +49,30 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         checkPermissions()
     }
 
+    // 바인딩 데이터 초기화
+    private fun initData() {
+        binding.isFabItemVisible = false
+        binding.isCropImageViewVisible = false
+    }
+
+    // 상단 툴바 초기화
     private fun initToolbar() {
         binding.goHomeButton.setOnClickListener {
             binding.webView.loadUrl(DEFAULT_URL)
         }
 
-        binding.addressBar.apply {
-            setOnEditorActionListener { v, actionId, event ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    val loadingUrl = v.text.toString()
+        binding.addressBar.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val loadingUrl = v.text.toString()
 
-                    if(URLUtil.isNetworkUrl(loadingUrl)) {
-                        binding.webView.loadUrl(loadingUrl)
-                    } else {
-                        binding.webView.loadUrl("http://$loadingUrl")
-                    }
-
+                if(URLUtil.isNetworkUrl(loadingUrl)) {
+                    binding.webView.loadUrl(loadingUrl)
+                } else {
+                    binding.webView.loadUrl("http://$loadingUrl")
                 }
-                return@setOnEditorActionListener false
+
             }
+            return@setOnEditorActionListener false
         }
 
         binding.goBackButton.setOnClickListener {
@@ -78,78 +84,92 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
+    // 웹뷰 초기화
     @SuppressLint("SetJavaScriptEnabled")
     private fun initWebView() {
-
         binding.webView.apply {
             webViewClient = WebViewClient()
             webChromeClient = WebChromeClient()
             settings.javaScriptEnabled = true
             loadUrl(DEFAULT_URL)
 
-            setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 binding.scrollValue = scrollY
             }
-
         }
     }
 
-
-    /*private fun getToolBarAnimation(toolbarHeight: Float, state: String): TranslateAnimation {
-        val anim: TranslateAnimation = if(state == "SHOW") {
-            TranslateAnimation(0f, 0f, 0f, -toolbarHeight)
-        } else {
-            TranslateAnimation(0f, 0f, -toolbarHeight, 0f)
-        }
-        anim.duration = ANIMATION_SPEED
-        anim.fillAfter = true
-        return anim
-    }*/
-
+    // 뷰 초기화
     private fun initViews() {
-        binding.toolbar.visibility = View.GONE
-        binding.screenshotButton.setOnClickListener {
-
-
-
-            val rootView = this.window.decorView.rootView
-            val bitmap = getBitmapFromView(rootView)
-
-//            CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(this)
-
-//            bitmap ?: return@setOnClickListener
-//            readImageTextBitmap(bitmap)
-
-            binding.cropImageView.setImageBitmap(bitmap)
-
-
-        }
-
-        binding.speakOutButton.setOnClickListener {
-            val test = binding.cropImageView.croppedImage
-            readImageTextBitmap(test)
-            binding.cropImageView.visibility = View.GONE
-
-//            if(readText.isNotEmpty()) {
-//                Log.e(TAG, readText)
-//                speakOut(readText)
-//            } else {
-//                Log.e(TAG, "is Empty!!")
-//            }
-        }
-
         binding.refreshLayout.setOnRefreshListener {
             binding.webView.reload()
         }
+
+        binding.fabMain.setOnClickListener {
+            toggleFab()
+        }
+
+        binding.fabScreenCapture.setOnClickListener {
+            closeFloatingButtonWithAnimation()
+
+            Handler(mainLooper).postDelayed({
+                val rootView = this.window.decorView.rootView
+                val bitmap = getBitmapFromView(rootView)
+
+                binding.cropImageView.setImageBitmap(bitmap)
+                binding.isCropImageViewVisible = true
+            }, 400)
+        }
+
+        binding.fabAppInfo.setOnClickListener {
+            closeFloatingButtonWithAnimation()
+
+            startActivity(Intent(this, AppInfotmationActivity::class.java))
+        }
+
+        binding.fabCheck.setOnClickListener {
+            val selectedBitmap = binding.cropImageView.croppedImage
+            selectedBitmap ?: return@setOnClickListener
+
+            readImageTextBitmap(selectedBitmap)
+
+            binding.isCropImageViewVisible = false
+        }
+
     }
 
-    private fun getBitmapFromView(view: View): Bitmap? {
-//        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        val bitmap = Bitmap.createBitmap(1000, 1500, Bitmap.Config.ARGB_8888)
+    // 플로팅 액션 버튼 토클
+    private fun toggleFab() {
+        if (binding.isFabItemVisible == true) {
+            closeFloatingButtonWithAnimation()
+        } else {
+            openFloatingButtonWithAnimation()
+        }
+    }
 
+    private fun closeFloatingButtonWithAnimation() {
+        ObjectAnimator.ofFloat(binding.fabScreenCapture, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabScreenCaptureTextView, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppInfo, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppInfoTextView, TRANSLATION_Y, 0f).apply { start() }
+        binding.fabMain.setImageResource(R.drawable.ic_add_24)
+        binding.isFabItemVisible = false
+    }
+
+    private fun openFloatingButtonWithAnimation() {
+        ObjectAnimator.ofFloat(binding.fabScreenCapture, TRANSLATION_Y, -200f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabScreenCaptureTextView, TRANSLATION_Y, -200f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppInfo, TRANSLATION_Y, -400f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppInfoTextView, TRANSLATION_Y, -400f).apply { start() }
+        binding.fabMain.setImageResource(R.drawable.ic_clear_24)
+        binding.isFabItemVisible = true
+    }
+
+    // 뷰를 bitmap 으로 변환
+    private fun getBitmapFromView(view: View): Bitmap? {
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         view.draw(canvas)
-
         return bitmap
     }
 
@@ -164,30 +184,19 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             recognizer.process(image)
                 .addOnSuccessListener {
-                    readText = it.text
-                    Log.e(TAG, readText)
+                    Log.d(TAG, it.text)
+
+                    val bottomDialogFragment = BottomDialogFragment(it.text)
+                    bottomDialogFragment.show(supportFragmentManager, bottomDialogFragment.tag)
                 }
                 .addOnFailureListener {
                     it.printStackTrace()
-                    readText = "Image Read Fail"
-                    Log.e(TAG, readText)
+                    Toast.makeText(this, resources.getString(R.string.ocr_error), Toast.LENGTH_SHORT).show()
                 }
 
         } catch (e: IOException) {
+            Toast.makeText(this, resources.getString(R.string.ocr_error), Toast.LENGTH_SHORT).show()
             e.printStackTrace()
-            readText = "Error"
-        }
-    }
-
-    // TTS 실행
-    private fun speakOut(speechText: String) {
-        try {
-            tts.setPitch(1.0F)
-            tts.setSpeechRate(1.0F)
-            tts.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "id1")
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "예기치 못한 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -195,79 +204,18 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         try {
             val rejectedPermissionList = ArrayList<String>()
 
-            //필요한 퍼미션들을 하나씩 끄집어내서 현재 권한을 받았는지 체크
-            for(permission in requiredPermissions){
+            // 필요한 퍼미션들을 하나씩 권한을 받았는지 확인
+            for(permission in REQUIRED_PERMISSIONS){
                 if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                    //만약 권한이 없다면 추가
+                    // 권한이 없으면 추가
                     rejectedPermissionList.add(permission)
                 }
             }
 
-            //거절된 퍼미션이 있다면 권한 요청
+            // 거절한 퍼미션이 있으면 권한 요청
             if(rejectedPermissionList.isNotEmpty()){
                 val array = arrayOfNulls<String>(rejectedPermissionList.size)
                 ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), PERMISSIONS_REQUEST_CODE)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    /*private fun getImageUrl(image: Bitmap): Uri {
-        val bytes = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-
-
-        val path = MediaStore.Images.Media.insertImage(
-            applicationContext.contentResolver,
-            image,
-            "Title" + "-" + Calendar.getInstance().time,
-            null
-        )
-        return Uri.parse(path)
-    }*/
-
-    /*private fun readImageText(uri: Uri): String {
-        var readTextContents = ""
-        try {
-            val image = InputImage.fromFilePath(applicationContext, uri)
-            val recognizer = TextRecognition.getClient()
-
-            recognizer.process(image)
-                .addOnSuccessListener {
-                    readTextContents = it.text
-//                    readText = resultText
-                }
-                .addOnFailureListener {
-                    it.printStackTrace()
-                    readTextContents = "Image Read Fail"
-                }
-
-//            return readTextContents
-        } catch (e: IOException) {
-            e.printStackTrace()
-            readTextContents = "Error"
-        }
-
-        return readTextContents
-    }*/
-
-    // TTS 초기화
-    override fun onInit(status: Int) {
-        try {
-            if(status == TextToSpeech.SUCCESS) {
-                val result = tts.setLanguage(Locale.ENGLISH)
-                if(result == TextToSpeech.LANG_MISSING_DATA ||
-                    result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Log.e(TAG, "This Language is not supported")
-                } else {
-                    if(readText.isNotEmpty()) {
-                        speakOut(readText)
-                    }
-
-                }
-            } else {
-                Log.e(TAG, "Initilization Failed!")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -285,7 +233,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                         permissions.forEachIndexed { index, _ ->
                             if(grantResults[index] != PackageManager.PERMISSION_GRANTED) {
                                 //권한 획득 실패
-                                Toast.makeText(this, "권한 허용 후 이용할 수 있습니다.", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, resources.getString(R.string.decline_permissions), Toast.LENGTH_LONG).show()
                                 finish()
                             }
                         }
@@ -297,29 +245,27 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
-    override fun onDestroy() {
-        tts?.let {
-            tts.stop()
-            tts.shutdown()
-        }
-        super.onDestroy()
-    }
-
     override fun onBackPressed() {
-        if(binding.webView.canGoBack()) {
-            binding.webView.goBack()
+        if(binding.cropImageView.isVisible) {
+            binding.isCropImageViewVisible = false
         } else {
-            super.onBackPressed()
+            if(binding.webView.canGoBack()) {
+                binding.webView.goBack()
+            } else {
+                super.onBackPressed()
+            }
         }
     }
 
     inner class WebViewClient: android.webkit.WebViewClient() {
+        // 페이지 로드 시작
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
 
             binding.progressBar.show()
         }
 
+        // 페이지 로드 완료
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
 
@@ -346,25 +292,9 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     companion object {
         private const val TAG = "MainActivity"
         private const val PERMISSIONS_REQUEST_CODE = 100
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.RECORD_AUDIO)
         private const val DEFAULT_URL = "https://www.google.com"
+        private const val TRANSLATION_Y = "translationY"
     }
 
 }
-
-
-/**
- *
-Copyright [yyyy] [name of copyright owner]
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/

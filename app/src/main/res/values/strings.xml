@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">ReadImageText</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Permissions -->
+    <string name="decline_permissions">권한 허용 후 이용할 수 있습니다.</string>
+
+    <!-- OCR -->
+    <string name="ocr_error">Image Read Fail</string>
+
+    <!-- TTS -->
+    <string name="tts_error">예기치 못한 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.</string>
 </resources>

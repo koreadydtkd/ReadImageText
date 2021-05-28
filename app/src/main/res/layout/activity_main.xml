@@ -10,6 +10,14 @@
         <variable
             name="scrollValue"
             type="Integer" />
+
+        <variable
+            name="isFabItemVisible"
+            type="Boolean" />
+
+        <variable
+            name="isCropImageViewVisible"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -91,7 +99,7 @@
             android:id="@+id/refreshLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/linear"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
@@ -102,35 +110,6 @@
                 android:layout_height="match_parent" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <LinearLayout
-            android:id="@+id/linear"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/speakOutButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="결과 값 일기" />
-
-            <Button
-                android:id="@+id/screenshotButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="ScreenShot" />
-
-        </LinearLayout>
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progressBar"
@@ -143,15 +122,128 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             tools:progress="30" />
 
-        <com.theartofdev.edmodo.cropper.CropImageView
+        <View
+            android:id="@+id/transparentView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#55000000"
+            android:clickable="@{isFabItemVisible}"
+            android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/fabAppInfoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="앱 정보 확인하기"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/fabAppInfo"
+            app:layout_constraintEnd_toStartOf="@+id/fabAppInfo"
+            app:layout_constraintTop_toTopOf="@+id/fabAppInfo"
+            tools:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAppInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_info_24"
+            android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@id/fabMain"
+            app:layout_constraintEnd_toEndOf="@id/fabMain"
+            app:layout_constraintStart_toStartOf="@id/fabMain"
+            app:layout_constraintTop_toTopOf="@id/fabMain"
+            app:tint="#0066FF"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/fabScreenCaptureTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:gravity="center"
+            android:text="원하는 영역을 선택하여\n글자를 읽어올 수 있습니다"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@id/fabScreenCapture"
+            app:layout_constraintEnd_toStartOf="@+id/fabScreenCapture"
+            app:layout_constraintTop_toTopOf="@+id/fabScreenCapture"
+            tools:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabScreenCapture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_fullscreen_24"
+            android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@id/fabMain"
+            app:layout_constraintEnd_toEndOf="@id/fabMain"
+            app:layout_constraintStart_toStartOf="@id/fabMain"
+            app:layout_constraintTop_toTopOf="@id/fabMain"
+            tools:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_add_24"
+            app:borderWidth="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- 캡처한 이미지에서 영역 선택하는 View -->
+        <!--<com.theartofdev.edmodo.cropper.CropImageView
             android:id="@+id/cropImageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/refreshLayout"
-            app:layout_constraintStart_toStartOf="@+id/refreshLayout"
-            app:layout_constraintEnd_toEndOf="@+id/refreshLayout"
-            app:layout_constraintTop_toTopOf="@+id/refreshLayout" />
+            android:visibility="@{isCropImageViewVisible == true ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            tools:visibility="gone" />-->
 
+        <com.canhub.cropper.CropImageView
+            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cropImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{isCropImageViewVisible == true ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            custom:cropGuidelines="off"
+            custom:cropBorderCornerColor="@color/black"
+            tools:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_check_24"
+            android:visibility="@{isCropImageViewVisible == true ? View.VISIBLE : View.GONE}"
+            app:borderWidth="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
