@@ -13,12 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReadImageText"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AppInfotmationActivity"></activity>
-        <!-- OCR 관련 -->
-        <meta-data
-            android:name="com.google.mlkit.vision.DEPENDENCIES"
-            android:value="ocr" />
-
+        <activity android:name=".LicenseDetailActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:hardwareAccelerated="true">
@@ -27,7 +22,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity> <!-- OCR 관련 -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr" />
+
+        <activity android:name=".AppInformationActivity" />
     </application>
 
 </manifest>

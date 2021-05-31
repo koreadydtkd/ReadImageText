@@ -56,41 +56,29 @@
         android:text="읽기 속도"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/speakSpeedEditButton"
+        app:layout_constraintBottom_toBottomOf="@+id/speakSpeedCardView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/speakSpeedEditButton" />
+        app:layout_constraintTop_toTopOf="@+id/speakSpeedCardView" />
 
-    <LinearLayout
-        android:id="@+id/speakSpeedEditButton"
+    <androidx.cardview.widget.CardView
+        android:id="@id/speakSpeedCardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/shape_address_bar"
-        android:backgroundTint="@color/purple_700"
-        android:orientation="horizontal"
-        android:paddingHorizontal="4dp"
+        app:cardCornerRadius="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view1">
 
-        <TextView
+        <Spinner
+            android:id="@+id/speakSpeedSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="8dp"
-            android:text="1.0"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_centerHorizontal="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view1" />
 
-        <ImageView
-            android:backgroundTint="@color/white"
-            android:background="@drawable/ic_drop_down_24"
-            android:layout_width="24dp"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <View
         android:id="@+id/view2"
@@ -100,7 +88,60 @@
         android:background="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/speakSpeedEditButton" />
+        app:layout_constraintTop_toBottomOf="@+id/speakSpeedCardView" />
+
+    <EditText
+        android:id="@+id/defaultUrlEditText"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_address_bar"
+        android:padding="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/defaultUrlEditText" />
+
+    <TextView
+        android:id="@+id/licenseTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="라이센스 이용약관"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+    <TextView
+        android:id="@+id/licenseDetailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="자세히"
+        android:textColor="@color/cursor"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/licenseTextView"
+        app:layout_constraintEnd_toEndOf="@+id/speakSpeedCardView" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/licenseTextView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -112,7 +153,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     <TextView
         android:id="@+id/appVersionTextView"
@@ -123,13 +164,13 @@
         android:text="1.0.0"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/speakSpeedEditButton"
-        app:layout_constraintStart_toStartOf="@+id/speakSpeedEditButton"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintEnd_toEndOf="@+id/speakSpeedCardView"
+        app:layout_constraintStart_toStartOf="@+id/speakSpeedCardView"
+        app:layout_constraintTop_toBottomOf="@+id/view4" />
 
 
     <View
-        android:id="@+id/view3"
+        android:id="@+id/view5"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
