@@ -3,7 +3,9 @@ package hys.hmonkeyys.readimagetext
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -25,6 +27,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageView
+import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.common.model.RemoteModelManager
+import com.google.mlkit.nl.translate.TranslateLanguage
+import com.google.mlkit.nl.translate.TranslateRemoteModel
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 //import com.theartofdev.edmodo.cropper.CropImage
@@ -36,6 +42,10 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
+    private val spf: SharedPreferences by lazy {
+        getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -45,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         initToolbar()
         initWebView()
         initViews()
+        initTranslator()
 
         checkPermissions()
     }
@@ -124,7 +135,7 @@ class MainActivity : AppCompatActivity() {
         binding.fabAppInfo.setOnClickListener {
             closeFloatingButtonWithAnimation()
 
-            startActivity(Intent(this, AppInfotmationActivity::class.java))
+            startActivity(Intent(this, AppInformationActivity::class.java))
         }
 
         binding.fabCheck.setOnClickListener {
@@ -136,6 +147,25 @@ class MainActivity : AppCompatActivity() {
             binding.isCropImageViewVisible = false
         }
 
+    }
+
+    // 번역에 필요한 데이터 다운
+    private fun initTranslator() {
+        val modelManager = RemoteModelManager.getInstance()
+        val koreanModel = TranslateRemoteModel.Builder(TranslateLanguage.KOREAN).build()
+
+        val conditions = DownloadConditions.Builder()
+            .requireCharging()
+            .build()
+
+        modelManager.download(koreanModel, conditions)
+            .addOnSuccessListener {
+                Log.e(TAG, "번역 준비 완료")
+                spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, true).apply()
+            }
+            .addOnFailureListener {
+                Log.e(TAG, it.toString())
+            }
     }
 
     // 플로팅 액션 버튼 토클

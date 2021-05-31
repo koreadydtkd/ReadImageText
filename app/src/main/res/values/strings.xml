@@ -11,4 +11,8 @@
 
     <!-- TTS -->
     <string name="tts_error">예기치 못한 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.</string>
+
+    <!-- Translate -->
+    <string name="translate_data_download">번역에 필요한 데이터를 받고 있습니다.\n잠시만 기다려주세요.</string>
+    <string name="download_fail">다운로드 실패\n잠시 후 다시 시도해주세요.</string>
 </resources>

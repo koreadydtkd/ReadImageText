@@ -8,63 +8,113 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/resultTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="확인 후 번역해주세요"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="결과" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/resultTranslationTextView"
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="추출 결과"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/resultEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:textSize="18sp"
+        android:maxHeight="250dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/edittext_background"
+        android:gravity="start|center_vertical"
+        android:inputType="textMultiLine"
+        android:padding="16dp"
+        android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultTextView"
-        tools:text="번역" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:text="Test" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/listenCardView"
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Google 변역 결과"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resultEditText" />
+
+    <EditText
+        android:id="@+id/resultTranslationEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/edittext_background"
+        android:maxHeight="250dp"
+        android:gravity="start|center_vertical"
+        android:inputType="textMultiLine"
+        android:padding="16dp"
+        android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:text="테스트" />
+
+    <LinearLayout
+        android:id="@+id/listenButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@drawable/border_background"
+        android:elevation="4dp"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView">
+        app:layout_constraintTop_toBottomOf="@+id/resultTranslationEditText">
 
-        <LinearLayout
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_headset_24"
+            android:backgroundTint="@color/dark_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView"
+            tools:ignore="ContentDescription" />
+
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="6dp">
+            android:layout_height="40dp"
+            android:layout_marginStart="4dp"
+            android:gravity="center"
+            android:text="듣기"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/ic_headset_24"
-                android:backgroundTint="@color/dark_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView"
-                tools:ignore="ContentDescription" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="4dp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:text="듣기"
-                android:textSize="20sp" />
 
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
+    <Button
+        android:id="@+id/translateButton"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="번역"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/listenButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/listenButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
