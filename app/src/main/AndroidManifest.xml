@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReadImageText"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LicenseDetailActivity"></activity>
+        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".LicenseDetailActivity" />
         <activity
             android:name=".MainActivity"
             android:hardwareAccelerated="true">

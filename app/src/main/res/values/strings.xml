@@ -1,7 +1,20 @@
 <resources>
     <string name="app_name">ReadImageText</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Main -->
+    <string name="main_fab_contents1">앱 정보 확인하기</string>
+    <string name="main_fab_contents2">방문 기록 확인하기</string>
+    <string name="main_fab_contents3">원하는 영역을 선택하여\n글자를 읽어올 수 있습니다</string>
+    <string name="fab_description">이미지가 확인되지 않습니다.</string>
+
+    <!-- BottomSheetDialog -->
+    <string name="bottom_sheet_text1">확인 후 번역해주세요</string>
+    <string name="bottom_sheet_text2">추출 결과</string>
+    <string name="bottom_sheet_text3">Google 변역 결과</string>
+    <string name="bottom_sheet_text4">듣기</string>
+    <string name="bottom_sheet_button">번역</string>
 
     <!-- Permissions -->
     <string name="decline_permissions">권한 허용 후 이용할 수 있습니다.</string>
@@ -15,4 +28,6 @@
     <!-- Translate -->
     <string name="translate_data_download">번역에 필요한 데이터를 받고 있습니다.\n잠시만 기다려주세요.</string>
     <string name="download_fail">다운로드 실패\n잠시 후 다시 시도해주세요.</string>
+
+
 </resources>

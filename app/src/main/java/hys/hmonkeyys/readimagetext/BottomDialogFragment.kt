@@ -70,17 +70,10 @@ class BottomDialogFragment(
     // TTS 실행
     private fun speakOut(speechText: String) {
         try {
-            val speakCount = spf.getInt(SharedPreferencesConst.TTS_COUNT, 0)
-            if(speakCount > 10) {
-                Toast.makeText(requireContext(), "무료 횟수를 모두 이용하였습니다.", Toast.LENGTH_SHORT).show()
-            } else {
-                val ttsSpeed = spf.getFloat(SharedPreferencesConst.TTS_SPEED, TTS_SPEECH_RATE)
-                tts.setSpeechRate(ttsSpeed)
-                tts.setPitch(TTS_PITCH)
-
-                tts.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "id1")
-                spf.edit().putInt(SharedPreferencesConst.TTS_COUNT, speakCount + 1).apply()
-            }
+            val ttsSpeed = spf.getFloat(SharedPreferencesConst.TTS_SPEED, TTS_SPEECH_RATE)
+            tts.setSpeechRate(ttsSpeed)
+            tts.setPitch(TTS_PITCH)
+            tts.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, "id1")
 
         } catch (e: Exception) {
             e.printStackTrace()

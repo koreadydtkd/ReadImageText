@@ -91,25 +91,38 @@
         app:layout_constraintTop_toBottomOf="@+id/speakSpeedCardView" />
 
     <EditText
-        android:id="@+id/defaultUrlEditText"
-        android:layout_width="200dp"
+        android:id="@+id/settingUrlEditText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
         android:background="@drawable/shape_address_bar"
-        android:padding="4dp"
+        android:inputType="textUri"
+        android:paddingVertical="4dp"
+        android:paddingHorizontal="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/urlEditButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+    <Button
+        android:id="@+id/urlEditButton"
+        android:layout_width="65dp"
+        android:layout_height="45dp"
+        android:text="변경"
+        app:layout_constraintBottom_toBottomOf="@id/settingUrlEditText"
+        app:layout_constraintEnd_toEndOf="@id/speakSpeedCardView"
+        app:layout_constraintTop_toTopOf="@id/settingUrlEditText" />
 
     <View
         android:id="@+id/view3"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/defaultUrlEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/settingUrlEditText" />
 
     <TextView
         android:id="@+id/licenseTextView"
@@ -131,7 +144,8 @@
         android:textColor="@color/cursor"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/licenseTextView"
-        app:layout_constraintEnd_toEndOf="@+id/speakSpeedCardView" />
+        app:layout_constraintEnd_toEndOf="@+id/urlEditButton"
+        app:layout_constraintTop_toTopOf="@+id/licenseTextView" />
 
     <View
         android:id="@+id/view4"
@@ -164,8 +178,7 @@
         android:text="1.0.0"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/speakSpeedCardView"
-        app:layout_constraintStart_toStartOf="@+id/speakSpeedCardView"
+        app:layout_constraintEnd_toEndOf="@+id/licenseDetailTextView"
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
 

@@ -57,13 +57,17 @@ dependencies {
 
     // ML Kit 번역
     implementation 'com.google.mlkit:translate:16.1.2'
-//    implementation 'com.google.firebase:firebase-ml-natural-language:22.0.1'
-//    implementation 'com.google.firebase:firebase-ml-natural-language-translate-model:20.0.9'
 
     // 스와이프하여 새로고침
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     // 화면 선택영역 가져오는 라이브러리
-//    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     implementation 'com.github.CanHub:Android-Image-Cropper:3.1.1'
+
+    // Room
+    implementation 'androidx.room:room-runtime:2.3.0'
+    kapt 'androidx.room:room-compiler:2.3.0'
+
+    // Room 을 코루틴에서 사용하기 위해 추가
+    implementation 'androidx.room:room-ktx:2.3.0'
 }

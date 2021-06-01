@@ -89,6 +89,14 @@ class AppInformationActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.settingUrlEditText.setText(spf.getString(SharedPreferencesConst.SETTING_URL, DEFAULT_URL))
+
+        binding.urlEditButton.setOnClickListener {
+            val changeUrl = binding.settingUrlEditText.text.toString()
+            spf.edit().putString(SharedPreferencesConst.SETTING_URL, changeUrl).apply()
+            Toast.makeText(this, "기본 주소가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+        }
+
         // 라이센스 TextView
         binding.licenseDetailTextView.setOnClickListener {
             startActivity(Intent(this, LicenseDetailActivity::class.java))
@@ -107,5 +115,6 @@ class AppInformationActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "AppInformationActivity"
+        private const val DEFAULT_URL = "https://www.google.com"
     }
 }

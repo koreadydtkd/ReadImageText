@@ -28,7 +28,13 @@ import com.google.mlkit.nl.translate.TranslateRemoteModel
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
+import hys.hmonkeyys.readimagetext.model.WebHistoryModel
+import hys.hmonkeyys.readimagetext.room.WebDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -38,30 +44,41 @@ class MainActivity : AppCompatActivity() {
         getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
     }
 
+    private var db: WebDatabase? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initData()
+        initDatabaseAndDataBinding()
+
         initToolbar()
+
         initWebView()
+
         initViews()
+
         initTranslator()
 
         checkPermissions()
     }
 
-    // 바인딩 데이터 초기화
-    private fun initData() {
+    // DB 및 데이터 바인딩 초기화
+    private fun initDatabaseAndDataBinding() {
         binding.isFabItemVisible = false
         binding.isCropImageViewVisible = false
+
+        db = WebDatabase.getInstance(applicationContext)
+        CoroutineScope(Dispatchers.IO).launch {
+            db?.historyDao()?.deleteDataTwoWeeksAgo(getDateTwoWeeksAgo())
+        }
     }
 
     // 상단 툴바 초기화
     private fun initToolbar() {
         binding.goHomeButton.setOnClickListener {
-            binding.webView.loadUrl(DEFAULT_URL)
+            binding.webView.loadUrl(getLoadUrl())
         }
 
         binding.addressBar.setOnEditorActionListener { v, actionId, event ->
@@ -94,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             webViewClient = WebViewClient()
             webChromeClient = WebChromeClient()
             settings.javaScriptEnabled = true
-            loadUrl(DEFAULT_URL)
+            loadUrl(getLoadUrl())
 
             setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 binding.scrollValue = scrollY
@@ -115,18 +132,31 @@ class MainActivity : AppCompatActivity() {
         binding.fabScreenCapture.setOnClickListener {
             closeFloatingButtonWithAnimation()
 
-            Handler(mainLooper).postDelayed({
-                val rootView = this.window.decorView.rootView
-                val bitmap = getBitmapFromView(rootView)
+            val captureCount = spf.getInt(SharedPreferencesConst.CAPTURE_COUNT, 0)
+            if(captureCount > 10) {
+                // todo 인앱결제 구현
+                Toast.makeText(this, "무료 횟수를 모두 이용하였습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Handler(mainLooper).postDelayed({
+                    spf.edit().putInt(SharedPreferencesConst.CAPTURE_COUNT, captureCount + 1).apply()
 
-                binding.cropImageView.setImageBitmap(bitmap)
-                binding.isCropImageViewVisible = true
-            }, 400)
+                    val rootView = this.window.decorView.rootView
+                    val bitmap = getBitmapFromView(rootView)
+
+                    binding.cropImageView.setImageBitmap(bitmap)
+                    binding.isCropImageViewVisible = true
+                }, 350)
+            }
+
+        }
+
+        binding.fabHistory.setOnClickListener {
+            closeFloatingButtonWithAnimation()
+            startActivity(Intent(this, HistoryActivity::class.java))
         }
 
         binding.fabAppInfo.setOnClickListener {
             closeFloatingButtonWithAnimation()
-
             startActivity(Intent(this, AppInformationActivity::class.java))
         }
 
@@ -143,21 +173,30 @@ class MainActivity : AppCompatActivity() {
 
     // 번역에 필요한 데이터 다운
     private fun initTranslator() {
-        val modelManager = RemoteModelManager.getInstance()
-        val koreanModel = TranslateRemoteModel.Builder(TranslateLanguage.KOREAN).build()
+        // 다운로드 안한 경우에만 다운
+        if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, false).not()) {
+            val modelManager = RemoteModelManager.getInstance()
+            val koreanModel = TranslateRemoteModel.Builder(TranslateLanguage.KOREAN).build()
 
-        val conditions = DownloadConditions.Builder()
-            .requireCharging()
-            .build()
+            val conditions = DownloadConditions.Builder()
+                .requireCharging()
+                .build()
 
-        modelManager.download(koreanModel, conditions)
-            .addOnSuccessListener {
-                Log.e(TAG, "번역 준비 완료")
-                spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, true).apply()
-            }
-            .addOnFailureListener {
-                Log.e(TAG, it.toString())
-            }
+            modelManager.download(koreanModel, conditions)
+                .addOnSuccessListener {
+                    Log.i(TAG, "번역 준비 완료")
+                    spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, true).apply()
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, it.toString())
+                }
+        }
+
+    }
+
+    private fun getLoadUrl(): String {
+        val url = spf.getString(SharedPreferencesConst.SETTING_URL, DEFAULT_URL)
+        return url ?: DEFAULT_URL
     }
 
     // 플로팅 액션 버튼 토클
@@ -170,19 +209,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun closeFloatingButtonWithAnimation() {
-        ObjectAnimator.ofFloat(binding.fabScreenCapture, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabScreenCaptureTextView, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppInfo, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabAppInfoTextView, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppInfo, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabHistoryTextView, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabHistory, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabScreenCaptureTextView, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabScreenCapture, TRANSLATION_Y, 0f).apply { start() }
         binding.fabMain.setImageResource(R.drawable.ic_add_24)
         binding.isFabItemVisible = false
     }
 
     private fun openFloatingButtonWithAnimation() {
-        ObjectAnimator.ofFloat(binding.fabScreenCapture, TRANSLATION_Y, -200f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppInfoTextView, TRANSLATION_Y, -600f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppInfo, TRANSLATION_Y, -600f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabHistoryTextView, TRANSLATION_Y, -400f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabHistory, TRANSLATION_Y, -400f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabScreenCaptureTextView, TRANSLATION_Y, -200f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppInfo, TRANSLATION_Y, -400f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppInfoTextView, TRANSLATION_Y, -400f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabScreenCapture, TRANSLATION_Y, -200f).apply { start() }
         binding.fabMain.setImageResource(R.drawable.ic_clear_24)
         binding.isFabItemVisible = true
     }
@@ -300,7 +343,35 @@ class MainActivity : AppCompatActivity() {
                 addressBar.setText(url)
             }
 
+            CoroutineScope(Dispatchers.IO).launch {
+                // 중복 확인을 위한 쿼리 : 0 반환 시 데이터 없음
+                val haveData = db?.historyDao()?.findByHistory(url ?: "", getCurrentDate()) ?: 0
+                if(haveData < 1) {
+                    db?.historyDao()?.insertHistory(
+                        WebHistoryModel(
+                            uid = null,
+                            loadUrl = url,
+                            visitDate = getCurrentDate()
+                        )
+                    )
+                }
+            }
+
         }
+    }
+
+    private fun getCurrentDate(): String {
+        val now = System.currentTimeMillis()
+        val date = Date(now)
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        return sdf.format(date)
+    }
+
+    private fun getDateTwoWeeksAgo(): String {
+        val week = Calendar.getInstance()
+        week.add(Calendar.DATE, -14)
+
+        return SimpleDateFormat("yyyy-MM-dd").format(week.time)
     }
 
     inner class WebChromeClient: android.webkit.WebChromeClient() {
@@ -313,8 +384,10 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "MainActivity"
+
         private const val PERMISSIONS_REQUEST_CODE = 100
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.RECORD_AUDIO)
+
         private const val DEFAULT_URL = "https://www.google.com"
         private const val TRANSLATION_Y = "translationY"
     }
