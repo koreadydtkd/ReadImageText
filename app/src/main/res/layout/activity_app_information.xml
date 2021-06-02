@@ -29,7 +29,7 @@
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="앱 설정"
+            android:text="앱 정보"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"

@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import hys.hmonkeyys.readimagetext.databinding.ActivityAppInformationBinding
+import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 
 
 class AppInformationActivity : AppCompatActivity() {

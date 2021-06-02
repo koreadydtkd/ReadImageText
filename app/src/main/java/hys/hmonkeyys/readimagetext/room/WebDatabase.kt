@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 
-// 업데이트할때 version도 올려줘야함
+// 업데이트할때 Version 도 올려줘야함
 @Database(entities = [WebHistoryModel::class], version = 1)
 abstract class WebDatabase: RoomDatabase() {
     abstract fun historyDao(): HistoryDao

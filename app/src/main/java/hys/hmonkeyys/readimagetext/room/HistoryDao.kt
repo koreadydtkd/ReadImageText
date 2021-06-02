@@ -24,8 +24,12 @@ interface HistoryDao {
     @Query("DELETE FROM web")
     suspend fun deleteAll()
 
-    // 오늘날짜 기준으로 14일전 시간이 지난 데이터 삭제
-    @Query("DELETE FROM web WHERE visit_date LIKE :twoWeeksAgo")
+    // 오늘날짜 기준으로 7일이 지난 데이터 삭제
+    @Query("DELETE FROM web WHERE CAST(strftime('%s', visit_date) AS integer) < CAST(strftime('%s', :oneWeeksAgo) AS integer)")
+    suspend fun deleteDataOneWeeksAgo(oneWeeksAgo: String)
+
+    // 오늘날짜 기준으로 14일이 지난 데이터 삭제
+    @Query("DELETE FROM web WHERE CAST(strftime('%s', visit_date) AS integer) < CAST(strftime('%s', :twoWeeksAgo) AS integer)")
     suspend fun deleteDataTwoWeeksAgo(twoWeeksAgo: String)
 
     // 데이터 하나만 삭제

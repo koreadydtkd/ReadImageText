@@ -1,13 +1,17 @@
 package hys.hmonkeyys.readimagetext
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import hys.hmonkeyys.readimagetext.adapter.HistoryAdapter
 import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHistoryBinding
@@ -23,33 +27,33 @@ class HistoryActivity : AppCompatActivity() {
 
         db = WebDatabase.getInstance(applicationContext)
 
+        initViews()
+        initAdapter()
+    }
+
+    private fun initViews() {
         binding.backButton.setOnClickListener {
             finish()
         }
 
         binding.deleteAllButton.setOnClickListener {
-            // todo 다이얼로그로 확인 받고 삭제하기
-            CoroutineScope(Dispatchers.IO).launch {
-                db?.historyDao()?.deleteAll()
-            }
+            AlertDialog.Builder(this)
+                .setTitle("히스토리 모두 삭제")
+                .setMessage("방문 기록을 모두 삭제하시겠습니까?")
+                .setPositiveButton("삭제") { _, _ ->
+                    deleteHistory(null)
+                }.setNegativeButton("취소") { dialog, _ ->
+                    dialog.dismiss()
+                }.show()
         }
-
-        initAdapter()
     }
 
     private fun initAdapter() {
-        historyAdapter = HistoryAdapter(selectedDeleteListener = {
-            CoroutineScope(Dispatchers.IO).launch {
-                db?.historyDao()?.delete(it)
-            }
-            historyAdapter.notifyDataSetChanged()
-            /*CoroutineScope(Dispatchers.IO).launch {
-                val deferredFirst = CoroutineScope(Dispatchers.IO).async { db?.historyDao()?.delete(it) }
-                val deferredSecond = CoroutineScope(Dispatchers.IO).async { historyAdapter.submitList(db?.historyDao()?.getAll()) }
-                deferredFirst.await()
-                deferredSecond.await()
-            }*/
-
+        historyAdapter = HistoryAdapter(deleteSelectItemListener = { selectModel ->
+            deleteHistory(selectModel)
+        }, moveWebView = { selectUrl ->
+            setResult(RESPONSE_CODE, Intent().putExtra("select_url", selectUrl))
+            finish()
         })
 
         binding.historyRecyclerView.adapter = historyAdapter
@@ -59,4 +63,21 @@ class HistoryActivity : AppCompatActivity() {
         }
     }
 
+    private fun deleteHistory(selectModel: WebHistoryModel?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.Default) {
+                if(selectModel == null) {
+                    db?.historyDao()?.deleteAll()
+                } else {
+                    db?.historyDao()?.delete(selectModel)
+                }
+                historyAdapter.submitList(db?.historyDao()?.getAll())
+            }
+        }
+    }
+
+    companion object {
+        private const val TAG = "HistoryActivity"
+        private const val RESPONSE_CODE = 1014
+    }
 }

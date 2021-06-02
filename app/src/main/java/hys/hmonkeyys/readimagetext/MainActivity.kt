@@ -17,6 +17,7 @@ import android.view.inputmethod.EditorInfo
 import android.webkit.URLUtil
 import android.webkit.WebView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -30,6 +31,7 @@ import com.google.mlkit.vision.text.TextRecognition
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
+import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,33 +48,33 @@ class MainActivity : AppCompatActivity() {
 
     private var db: WebDatabase? = null
 
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        if(activityResult.resultCode == REQUEST_CODE) {
+            activityResult.data?.let { data ->
+                val selectUrl = data.getStringExtra("select_url").toString()
+                binding.webView.loadUrl(selectUrl)
+            } ?: run {
+                Log.d(TAG, "data is null!!")
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initDatabaseAndDataBinding()
+        db = WebDatabase.getInstance(applicationContext)
 
-        initToolbar()
-
-        initWebView()
-
-        initViews()
-
-        initTranslator()
-
-        checkPermissions()
-    }
-
-    // DB 및 데이터 바인딩 초기화
-    private fun initDatabaseAndDataBinding() {
         binding.isFabItemVisible = false
         binding.isCropImageViewVisible = false
 
-        db = WebDatabase.getInstance(applicationContext)
-        CoroutineScope(Dispatchers.IO).launch {
-            db?.historyDao()?.deleteDataTwoWeeksAgo(getDateTwoWeeksAgo())
-        }
+        initToolbar()
+        initWebView()
+        initViews()
+
+        checkPermissions()
+        deleteData()
     }
 
     // 상단 툴바 초기화
@@ -133,10 +135,10 @@ class MainActivity : AppCompatActivity() {
             closeFloatingButtonWithAnimation()
 
             val captureCount = spf.getInt(SharedPreferencesConst.CAPTURE_COUNT, 0)
-            if(captureCount > 10) {
-                // todo 인앱결제 구현
-                Toast.makeText(this, "무료 횟수를 모두 이용하였습니다.", Toast.LENGTH_SHORT).show()
-            } else {
+//            if(captureCount > 10) {
+//                // todo 인앱결제 구현
+//                Toast.makeText(this, "무료 횟수를 모두 이용하였습니다.", Toast.LENGTH_SHORT).show()
+//            } else {
                 Handler(mainLooper).postDelayed({
                     spf.edit().putInt(SharedPreferencesConst.CAPTURE_COUNT, captureCount + 1).apply()
 
@@ -145,14 +147,14 @@ class MainActivity : AppCompatActivity() {
 
                     binding.cropImageView.setImageBitmap(bitmap)
                     binding.isCropImageViewVisible = true
-                }, 350)
-            }
+                }, 300)
+//            }
 
         }
 
         binding.fabHistory.setOnClickListener {
             closeFloatingButtonWithAnimation()
-            startActivity(Intent(this, HistoryActivity::class.java))
+            startForResult.launch(Intent(this, HistoryActivity::class.java))
         }
 
         binding.fabAppInfo.setOnClickListener {
@@ -172,26 +174,55 @@ class MainActivity : AppCompatActivity() {
     }
 
     // 번역에 필요한 데이터 다운
-    private fun initTranslator() {
+    private fun downloadGoogleTranslator() {
         // 다운로드 안한 경우에만 다운
-        if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, false).not()) {
-            val modelManager = RemoteModelManager.getInstance()
+        if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, false).not() ||
+            spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, false).not() ||
+            spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, false).not()) {
+
+            Toast.makeText(applicationContext, "번역에 필요한 파일을 다운받습니다.\n잠시만 기다려주세요.", Toast.LENGTH_LONG).show()
+
+            val englishModel = TranslateRemoteModel.Builder(TranslateLanguage.ENGLISH).build()
+            val japaneseModel = TranslateRemoteModel.Builder(TranslateLanguage.JAPANESE).build()
             val koreanModel = TranslateRemoteModel.Builder(TranslateLanguage.KOREAN).build()
 
-            val conditions = DownloadConditions.Builder()
-                .requireCharging()
-                .build()
+            CoroutineScope(Dispatchers.IO).launch {
+                downloadTranslateModel(englishModel)
+                downloadTranslateModel(japaneseModel)
+                downloadTranslateModel(koreanModel)
+            }
 
-            modelManager.download(koreanModel, conditions)
-                .addOnSuccessListener {
-                    Log.i(TAG, "번역 준비 완료")
-                    spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, true).apply()
-                }
-                .addOnFailureListener {
-                    Log.e(TAG, it.toString())
-                }
         }
 
+    }
+
+    private fun downloadTranslateModel(translateModel: TranslateRemoteModel) {
+        val modelManager = RemoteModelManager.getInstance()
+
+        val conditions = DownloadConditions.Builder()
+            .requireCharging()
+            .build()
+
+        modelManager.download(translateModel, conditions)
+            .addOnSuccessListener {
+                when(translateModel.language) {
+                    TranslateLanguage.ENGLISH -> {
+                        Log.e(TAG, "영어")
+                        spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, true).apply()
+                    }
+                    TranslateLanguage.JAPANESE -> {
+                        Log.e(TAG, "일본어")
+                        spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, true).apply()
+                    }
+                    TranslateLanguage.KOREAN -> {
+                        Log.e(TAG, "한국어")
+                        spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, true).apply()
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Log.e(TAG, it.toString())
+            }
     }
 
     private fun getLoadUrl(): String {
@@ -265,6 +296,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // 지난 데이터 삭제
+    private fun deleteData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            db?.historyDao()?.deleteDataOneWeeksAgo(getDateWeeksAgo(1))
+        }
+    }
+
+    // 7일 전 날짜 가져오기
+    private fun getDateWeeksAgo(selectWeek: Int): String {
+        val week = Calendar.getInstance()
+        week.add(Calendar.DATE, (selectWeek * -7))
+        return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+    }
+
     private fun checkPermissions() {
         try {
             val rejectedPermissionList = ArrayList<String>()
@@ -295,12 +340,22 @@ class MainActivity : AppCompatActivity() {
             when (requestCode) {
                 PERMISSIONS_REQUEST_CODE -> {
                     if(grantResults.isNotEmpty()) {
-                        permissions.forEachIndexed { index, _ ->
-                            if(grantResults[index] != PackageManager.PERMISSION_GRANTED) {
-                                //권한 획득 실패
-                                Toast.makeText(this, resources.getString(R.string.decline_permissions), Toast.LENGTH_LONG).show()
-                                finish()
+                        var isAllGranted = true
+                        for(grant in grantResults) {
+                            if(grant != PackageManager.PERMISSION_GRANTED) {
+                                isAllGranted = false
+                                break
                             }
+                        }
+
+                        if(isAllGranted) {
+                            // 모든 권한 허용
+                            downloadGoogleTranslator()
+                        } else {
+                            // 권한 불허
+                            Log.e(TAG, "권한 미 허용")
+                            Toast.makeText(this, resources.getString(R.string.decline_permissions), Toast.LENGTH_LONG).show()
+                            finish()
                         }
                     }
                 }
@@ -326,7 +381,6 @@ class MainActivity : AppCompatActivity() {
         // 페이지 로드 시작
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-
             binding.progressBar.show()
         }
 
@@ -347,31 +401,18 @@ class MainActivity : AppCompatActivity() {
                 // 중복 확인을 위한 쿼리 : 0 반환 시 데이터 없음
                 val haveData = db?.historyDao()?.findByHistory(url ?: "", getCurrentDate()) ?: 0
                 if(haveData < 1) {
-                    db?.historyDao()?.insertHistory(
-                        WebHistoryModel(
-                            uid = null,
-                            loadUrl = url,
-                            visitDate = getCurrentDate()
-                        )
-                    )
+                    db?.historyDao()?.insertHistory(WebHistoryModel(null, url, getCurrentDate()))
                 }
             }
 
         }
-    }
 
-    private fun getCurrentDate(): String {
-        val now = System.currentTimeMillis()
-        val date = Date(now)
-        val sdf = SimpleDateFormat("yyyy-MM-dd")
-        return sdf.format(date)
-    }
-
-    private fun getDateTwoWeeksAgo(): String {
-        val week = Calendar.getInstance()
-        week.add(Calendar.DATE, -14)
-
-        return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+        private fun getCurrentDate(): String {
+            val now = System.currentTimeMillis()
+            val date = Date(now)
+            val sdf = SimpleDateFormat("yyyy-MM-dd")
+            return sdf.format(date)
+        }
     }
 
     inner class WebChromeClient: android.webkit.WebChromeClient() {
@@ -390,6 +431,8 @@ class MainActivity : AppCompatActivity() {
 
         private const val DEFAULT_URL = "https://www.google.com"
         private const val TRANSLATION_Y = "translationY"
+
+        private const val REQUEST_CODE = 1014
     }
 
 }
