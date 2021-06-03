@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ReadImageText</string>
+    <string name="app_name">영번듣</string>
 
     <!-- Admob -->
     <string name="admob_app_id">ca-app-pub-3924676263890790~2654234603</string>
