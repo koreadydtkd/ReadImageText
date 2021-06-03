@@ -37,14 +37,7 @@ class HistoryActivity : AppCompatActivity() {
         }
 
         binding.deleteAllButton.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("히스토리 모두 삭제")
-                .setMessage("방문 기록을 모두 삭제하시겠습니까?")
-                .setPositiveButton("삭제") { _, _ ->
-                    deleteHistory(null)
-                }.setNegativeButton("취소") { dialog, _ ->
-                    dialog.dismiss()
-                }.show()
+            showDeleteDialog()
         }
     }
 
@@ -61,6 +54,17 @@ class HistoryActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             historyAdapter.submitList(db?.historyDao()?.getAll())
         }
+    }
+
+    private fun showDeleteDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("히스토리 모두 삭제")
+            .setMessage("방문 기록을 모두 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { _, _ ->
+                deleteHistory(null)
+            }.setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
     }
 
     private fun deleteHistory(selectModel: WebHistoryModel?) {

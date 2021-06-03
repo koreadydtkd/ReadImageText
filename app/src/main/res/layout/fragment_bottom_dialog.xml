@@ -22,7 +22,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bottom_sheet_text2"
-        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,7 +49,6 @@
         android:layout_marginTop="20dp"
         android:text="@string/bottom_sheet_text3"
         android:textColor="@android:color/holo_blue_dark"
-        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resultEditText" />
 
@@ -65,6 +63,8 @@
         android:maxHeight="250dp"
         android:padding="16dp"
         android:scrollbars="vertical"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
@@ -80,26 +80,28 @@
         android:elevation="4dp"
         android:orientation="horizontal"
         android:paddingStart="12dp"
-        android:paddingTop="6dp"
+        android:paddingTop="7dp"
         android:paddingEnd="12dp"
-        android:paddingBottom="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingBottom="7dp"
+        app:layout_constraintEnd_toStartOf="@+id/translateButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resultTranslationEditText">
 
         <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/ic_headset_24"
-            android:backgroundTint="@color/dark_gray"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@color/white"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_headset_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView"
+            app:tint="@color/teal_700"
             tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="32dp"
             android:layout_marginStart="4dp"
             android:gravity="center"
             android:text="@string/bottom_sheet_text4"
@@ -108,16 +110,44 @@
 
     </LinearLayout>
 
-
-    <Button
+    <LinearLayout
         android:id="@+id/translateButton"
-        android:layout_width="70dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/bottom_sheet_button"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/listenButton"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/border_background"
+        android:elevation="4dp"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="7dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="7dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/listenButton" />
+        app:layout_constraintStart_toEndOf="@+id/listenButton"
+        app:layout_constraintTop_toBottomOf="@+id/resultTranslationEditText">
+
+        <ImageButton
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@color/white"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_g_translate_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView"
+            app:tint="@android:color/holo_blue_dark"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:gravity="center"
+            android:text="@string/bottom_sheet_button"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"

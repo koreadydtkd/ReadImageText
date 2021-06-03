@@ -22,6 +22,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.TranslateLanguage
@@ -75,6 +79,8 @@ class MainActivity : AppCompatActivity() {
 
         checkPermissions()
         deleteData()
+
+        initAdmob()
     }
 
     // 상단 툴바 초기화
@@ -134,13 +140,13 @@ class MainActivity : AppCompatActivity() {
         binding.fabScreenCapture.setOnClickListener {
             closeFloatingButtonWithAnimation()
 
-            val captureCount = spf.getInt(SharedPreferencesConst.CAPTURE_COUNT, 0)
+//            val captureCount = spf.getInt(SharedPreferencesConst.CAPTURE_COUNT, 0)
 //            if(captureCount > 10) {
 //                // todo 인앱결제 구현
 //                Toast.makeText(this, "무료 횟수를 모두 이용하였습니다.", Toast.LENGTH_SHORT).show()
 //            } else {
                 Handler(mainLooper).postDelayed({
-                    spf.edit().putInt(SharedPreferencesConst.CAPTURE_COUNT, captureCount + 1).apply()
+//                    spf.edit().putInt(SharedPreferencesConst.CAPTURE_COUNT, captureCount + 1).apply()
 
                     val rootView = this.window.decorView.rootView
                     val bitmap = getBitmapFromView(rootView)
@@ -308,6 +314,24 @@ class MainActivity : AppCompatActivity() {
         val week = Calendar.getInstance()
         week.add(Calendar.DATE, (selectWeek * -7))
         return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+    }
+
+    private fun initAdmob() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+        val admobListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Log.d(TAG, "광고가 문제 없이 로드됨 onAdLoaded")
+            }
+
+            override fun onAdFailedToLoad(error: LoadAdError) {
+                super.onAdFailedToLoad(error)
+                Log.e(TAG, "광고 로드에 문제 발생 onAdFailedToLoad ${error.message}")
+            }
+        }
+        binding.adView.adListener = admobListener
     }
 
     private fun checkPermissions() {
