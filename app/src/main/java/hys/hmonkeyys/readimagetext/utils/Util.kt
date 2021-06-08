@@ -3,6 +3,7 @@ package hys.hmonkeyys.readimagetext.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.TranslateLanguage
@@ -19,22 +20,24 @@ class Util(context: Context) {
 
     // 변역에 필요한 파일 다운로드
     fun downloadGoogleTranslator() {
-        if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, false).not() ||
-            spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, false).not() ||
-            spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, false).not()) {
+        val englishModel = TranslateRemoteModel.Builder(TranslateLanguage.ENGLISH).build()
+        val japaneseModel = TranslateRemoteModel.Builder(TranslateLanguage.JAPANESE).build()
+        val koreanModel = TranslateRemoteModel.Builder(TranslateLanguage.KOREAN).build()
 
-            val englishModel = TranslateRemoteModel.Builder(TranslateLanguage.ENGLISH).build()
-            val japaneseModel = TranslateRemoteModel.Builder(TranslateLanguage.JAPANESE).build()
-            val koreanModel = TranslateRemoteModel.Builder(TranslateLanguage.KOREAN).build()
-
-            CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, false).not()) {
                 downloadTranslateModel(englishModel)
+            }
+
+            if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, false).not()) {
                 downloadTranslateModel(japaneseModel)
+            }
+
+            if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, false).not()) {
                 downloadTranslateModel(koreanModel)
             }
 
         }
-
     }
 
     private fun downloadTranslateModel(translateModel: TranslateRemoteModel) {
@@ -48,25 +51,26 @@ class Util(context: Context) {
             .addOnSuccessListener {
                 when(translateModel.language) {
                     TranslateLanguage.ENGLISH -> {
-                        Log.e(TAG, "영어")
+                        Log.d(TAG, "영어 다운로드 완료")
                         spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, true).apply()
                     }
                     TranslateLanguage.JAPANESE -> {
-                        Log.e(TAG, "일본어")
+                        Log.d(TAG, "일본어 다운로드 완료")
                         spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, true).apply()
                     }
                     TranslateLanguage.KOREAN -> {
-                        Log.e(TAG, "한국어")
+                        Log.d(TAG, "한국어 다운로드 완료")
                         spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, true).apply()
                     }
                 }
             }
             .addOnFailureListener {
                 Log.e(TAG, it.toString())
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
     }
 
     companion object {
-        private const val TAG = "Util"
+        private const val TAG = "HYS_Util"
     }
 }

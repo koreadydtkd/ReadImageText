@@ -115,7 +115,7 @@ class AppInformationActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val TAG = "AppInformationActivity"
+        private const val TAG = "HYS_AppInformationActivity"
         private const val DEFAULT_URL = "https://www.google.com"
     }
 }

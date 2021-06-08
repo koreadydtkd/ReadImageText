@@ -81,7 +81,7 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "HistoryActivity"
+        private const val TAG = "HYS_HistoryActivity"
         private const val RESPONSE_CODE = 1014
     }
 }

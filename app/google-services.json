@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1086614863852",
+    "project_id": "englishtranslatelisten",
+    "storage_bucket": "englishtranslatelisten.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086614863852:android:43fc03d6e3a1a64f4f4ac9",
+        "android_client_info": {
+          "package_name": "hys.hmonkeyys.readimagetext"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086614863852-mi6eibhlj5meleetts78dldv9r25kefl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWYonM0yZNgX9Emsd87FA7NYhA4dS7RuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086614863852-mi6eibhlj5meleetts78dldv9r25kefl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -57,7 +57,7 @@ class BottomDialogFragment(
         TextToSpeech(requireContext(), this)
     }
 
-    private val mCountDown: CountDownTimer = object : CountDownTimer(30 * 1000, 500) {
+    private val mCountDown: CountDownTimer = object : CountDownTimer(30 * SECOND, 500) {
         override fun onTick(millisUntilFinished: Long) {
             if(isDownloaded()) {
                 progressBarHide()
@@ -95,7 +95,7 @@ class BottomDialogFragment(
                     googleTranslatorEnglishToJapanese(binding.resultEditText.text.toString())
                     progressBarShow()
                 } else {
-                    showDialog()
+                    showDownloadDialog()
                 }
 
 //                translatePapago(binding.resultEditText.text.toString())
@@ -181,7 +181,7 @@ class BottomDialogFragment(
             }
     }
 
-    private fun showDialog() {
+    private fun showDownloadDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("파일 다운로드")
             .setMessage("번역에 필요한 파일이 다운로드되지 않았습니다.")
@@ -247,9 +247,11 @@ class BottomDialogFragment(
     }
 
     companion object {
-        private const val TAG = "BottomDialogFragment"
+        private const val TAG = "HYS_BottomDialogFragment"
         private const val TTS_PITCH = 0.8F
         private const val TTS_SPEECH_RATE = 0.8F
+
+        private const val SECOND = 1000L
     }
 
 }

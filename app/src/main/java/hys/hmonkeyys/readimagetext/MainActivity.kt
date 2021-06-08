@@ -26,10 +26,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
-import com.google.mlkit.common.model.DownloadConditions
-import com.google.mlkit.common.model.RemoteModelManager
-import com.google.mlkit.nl.translate.TranslateLanguage
-import com.google.mlkit.nl.translate.TranslateRemoteModel
+import com.google.firebase.FirebaseApp
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
@@ -70,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         db = WebDatabase.getInstance(applicationContext)
+        FirebaseApp.initializeApp(applicationContext)
 
         binding.isFabItemVisible = false
         binding.isCropImageViewVisible = false
@@ -176,58 +174,6 @@ class MainActivity : AppCompatActivity() {
             binding.isCropImageViewVisible = false
         }
 
-    }
-
-    // 번역에 필요한 데이터 다운
-    private fun downloadGoogleTranslator() {
-        // 다운로드 안한 경우에만 다운
-        if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, false).not() ||
-            spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, false).not() ||
-            spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, false).not()) {
-
-            Toast.makeText(applicationContext, "번역에 필요한 파일을 다운받습니다.\n잠시만 기다려주세요.", Toast.LENGTH_LONG).show()
-
-            val englishModel = TranslateRemoteModel.Builder(TranslateLanguage.ENGLISH).build()
-            val japaneseModel = TranslateRemoteModel.Builder(TranslateLanguage.JAPANESE).build()
-            val koreanModel = TranslateRemoteModel.Builder(TranslateLanguage.KOREAN).build()
-
-            CoroutineScope(Dispatchers.IO).launch {
-                downloadTranslateModel(englishModel)
-                downloadTranslateModel(japaneseModel)
-                downloadTranslateModel(koreanModel)
-            }
-
-        }
-
-    }
-
-    private fun downloadTranslateModel(translateModel: TranslateRemoteModel) {
-        val modelManager = RemoteModelManager.getInstance()
-
-        val conditions = DownloadConditions.Builder()
-            .requireCharging()
-            .build()
-
-        modelManager.download(translateModel, conditions)
-            .addOnSuccessListener {
-                when(translateModel.language) {
-                    TranslateLanguage.ENGLISH -> {
-                        Log.e(TAG, "영어")
-                        spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, true).apply()
-                    }
-                    TranslateLanguage.JAPANESE -> {
-                        Log.e(TAG, "일본어")
-                        spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, true).apply()
-                    }
-                    TranslateLanguage.KOREAN -> {
-                        Log.e(TAG, "한국어")
-                        spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, true).apply()
-                    }
-                }
-            }
-            .addOnFailureListener {
-                Log.e(TAG, it.toString())
-            }
     }
 
     private fun getLoadUrl(): String {
@@ -379,8 +325,6 @@ class MainActivity : AppCompatActivity() {
                         if(isAllGranted) {
                             // 모든 권한 허용
                             Util(applicationContext).downloadGoogleTranslator()
-                            Toast.makeText(applicationContext, "번역에 필요한 파일을 다운받습니다.\n잠시만 기다려주세요.", Toast.LENGTH_LONG).show()
-//                            downloadGoogleTranslator()
                         } else {
                             // 권한 불허
                             Log.e(TAG, "권한 미 허용")
@@ -454,7 +398,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "MainActivity"
+        private const val TAG = "HYS_MainActivity"
 
         private const val PERMISSIONS_REQUEST_CODE = 100
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.RECORD_AUDIO)
