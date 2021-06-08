@@ -36,6 +36,7 @@ import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
+import hys.hmonkeyys.readimagetext.utils.Util
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -76,11 +77,9 @@ class MainActivity : AppCompatActivity() {
         initToolbar()
         initWebView()
         initViews()
+        initAdmob()
 
         checkPermissions()
-        deleteData()
-
-        initAdmob()
     }
 
     // 상단 툴바 초기화
@@ -302,13 +301,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 지난 데이터 삭제
-    private fun deleteData() {
-        CoroutineScope(Dispatchers.IO).launch {
-            db?.historyDao()?.deleteDataOneWeeksAgo(getDateWeeksAgo(1))
-        }
-    }
-
     // 7일 전 날짜 가져오기
     private fun getDateWeeksAgo(selectWeek: Int): String {
         val week = Calendar.getInstance()
@@ -319,19 +311,21 @@ class MainActivity : AppCompatActivity() {
     private fun initAdmob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
-        val admobListener = object : AdListener() {
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                Log.d(TAG, "광고가 문제 없이 로드됨 onAdLoaded")
-            }
 
-            override fun onAdFailedToLoad(error: LoadAdError) {
-                super.onAdFailedToLoad(error)
-                Log.e(TAG, "광고 로드에 문제 발생 onAdFailedToLoad ${error.message}")
+        binding.adView.apply {
+            loadAd(adRequest)
+            adListener = object : AdListener() {
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+                    Log.d(TAG, "광고가 문제 없이 로드됨 onAdLoaded")
+                }
+
+                override fun onAdFailedToLoad(error: LoadAdError) {
+                    super.onAdFailedToLoad(error)
+                    Log.e(TAG, "광고 로드에 문제 발생 onAdFailedToLoad ${error.message}")
+                }
             }
         }
-        binding.adView.adListener = admobListener
     }
 
     private fun checkPermissions() {
@@ -350,9 +344,19 @@ class MainActivity : AppCompatActivity() {
             if(rejectedPermissionList.isNotEmpty()){
                 val array = arrayOfNulls<String>(rejectedPermissionList.size)
                 ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), PERMISSIONS_REQUEST_CODE)
+            } else {
+                Log.e(TAG, "권한 모두 허용됨")
+                deleteData()
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    // 지난 데이터 삭제
+    private fun deleteData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            db?.historyDao()?.deleteDataOneWeeksAgo(getDateWeeksAgo(1))
         }
     }
 
@@ -374,7 +378,9 @@ class MainActivity : AppCompatActivity() {
 
                         if(isAllGranted) {
                             // 모든 권한 허용
-                            downloadGoogleTranslator()
+                            Util(applicationContext).downloadGoogleTranslator()
+                            Toast.makeText(applicationContext, "번역에 필요한 파일을 다운받습니다.\n잠시만 기다려주세요.", Toast.LENGTH_LONG).show()
+//                            downloadGoogleTranslator()
                         } else {
                             // 권한 불허
                             Log.e(TAG, "권한 미 허용")

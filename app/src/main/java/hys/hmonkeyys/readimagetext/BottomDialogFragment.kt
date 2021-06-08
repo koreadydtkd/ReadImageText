@@ -3,6 +3,7 @@ package hys.hmonkeyys.readimagetext
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import hys.hmonkeyys.readimagetext.api.NaverApi
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding
 import hys.hmonkeyys.readimagetext.model.ResultTransferPapago
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
+import hys.hmonkeyys.readimagetext.utils.Util
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,6 +37,7 @@ class BottomDialogFragment(
         requireContext().getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
     }
 
+    // 영어 -> 일본어 번역
     private val englishToJapaneseOptions: TranslatorOptions by lazy {
         TranslatorOptions.Builder()
             .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -42,6 +45,7 @@ class BottomDialogFragment(
             .build()
     }
 
+    // 일본어 -> 한국어 번역
     private val japaneseToKoreanOptions: TranslatorOptions by lazy {
         TranslatorOptions.Builder()
             .setSourceLanguage(TranslateLanguage.JAPANESE)
@@ -51,6 +55,20 @@ class BottomDialogFragment(
 
     private val tts: TextToSpeech by lazy {
         TextToSpeech(requireContext(), this)
+    }
+
+    private val mCountDown: CountDownTimer = object : CountDownTimer(30 * 1000, 500) {
+        override fun onTick(millisUntilFinished: Long) {
+            if(isDownloaded()) {
+                progressBarHide()
+                Toast.makeText(requireContext(), "다운로드 완료", Toast.LENGTH_SHORT).show()
+                cancel()
+            }
+        }
+        override fun onFinish() {
+            cancel()
+            progressBarHide()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -75,7 +93,7 @@ class BottomDialogFragment(
             binding.translateButton.setOnClickListener {
                 if(isDownloaded()) {
                     googleTranslatorEnglishToJapanese(binding.resultEditText.text.toString())
-                    binding.progressBar.visibility = View.VISIBLE
+                    progressBarShow()
                 } else {
                     showDialog()
                 }
@@ -156,7 +174,7 @@ class BottomDialogFragment(
             .addOnSuccessListener { translatedText ->
                 Log.d(TAG, "번역 결과 : $translatedText")
                 binding?.resultTranslationEditText?.setText(translatedText)
-                binding?.progressBar?.visibility = View.GONE
+                progressBarHide()
             }
             .addOnFailureListener { exception ->
                 Log.e(TAG, exception.toString())
@@ -166,10 +184,17 @@ class BottomDialogFragment(
     private fun showDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("파일 다운로드")
-            .setMessage("번역에 필요한 파일이 다운로드되지 않았습니다.\n잠시 후 다시 시도해주세요.")
+            .setMessage("번역에 필요한 파일이 다운로드되지 않았습니다.")
             .setCancelable(false)
-            .setPositiveButton("확인") { dialog, _ ->
+            .setNegativeButton("취소") { dialog, _ ->
                 dialog.dismiss()
+            }
+            .setPositiveButton("다운로드") { _, _ ->
+                progressBarShow()
+                mCountDown.start()
+                Util(requireContext()).downloadGoogleTranslator()
+                Toast.makeText(requireContext(), "번역에 필요한 파일을 다운받습니다.\n잠시만 기다려주세요.", Toast.LENGTH_LONG).show()
+
             }
             .show()
     }
@@ -196,6 +221,19 @@ class BottomDialogFragment(
                 Log.e("PAPAGO", t.message.toString())
             }
         })
+    }
+
+    private fun progressBarShow() {
+        binding?.let { binding ->
+            binding.progressBar.visibility = View.VISIBLE
+        }
+    }
+
+
+    private fun progressBarHide() {
+        binding?.let { binding ->
+            binding.progressBar.visibility = View.GONE
+        }
     }
 
     override fun onDestroy() {
