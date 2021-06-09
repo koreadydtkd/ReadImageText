@@ -244,8 +244,6 @@ class MainActivity : AppCompatActivity() {
 
             recognizer.process(image)
                 .addOnSuccessListener {
-                    Log.d(TAG, it.text)
-
                     // 하단 프레그먼트(다이얼로그) 띄우기
                     val bottomDialogFragment = BottomDialogFragment(it.text)
                     bottomDialogFragment.show(supportFragmentManager, bottomDialogFragment.tag)

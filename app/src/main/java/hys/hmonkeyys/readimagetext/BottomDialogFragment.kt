@@ -4,24 +4,19 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.mlkit.nl.translate.*
 import hys.hmonkeyys.readimagetext.api.KakaoTranslateApi
-import hys.hmonkeyys.readimagetext.api.NaverTranslateApi
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding
-import hys.hmonkeyys.readimagetext.model.ResultTransferPapago
 import hys.hmonkeyys.readimagetext.model.TranslateKakaoModel
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
-import hys.hmonkeyys.readimagetext.utils.Util
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,7 +50,8 @@ class BottomDialogFragment(
         super.onViewCreated(view, savedInstanceState)
 
         binding?.let { binding ->
-            binding.resultEditText.setText(readText)
+            val a = readText.substring(0, 1).uppercase() + readText.substring(1).lowercase()
+            binding.resultEditText.setText(a.replace("\n", " "))
 
             binding.listenButton.setOnClickListener {
                 if(tts.isSpeaking) {
@@ -110,7 +106,7 @@ class BottomDialogFragment(
 
     // TTS 실행
     private fun speakOut() {
-        val extractedResults = binding?.resultEditText?.text.toString().replace("\n", " ")
+        val extractedResults = binding?.resultEditText?.text.toString()/*.replace("\n", " ")*/
 
         try {
             val ttsSpeed = spf.getFloat(SharedPreferencesConst.TTS_SPEED, TTS_SPEECH_RATE)
