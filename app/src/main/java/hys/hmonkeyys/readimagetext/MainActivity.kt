@@ -28,6 +28,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.TextRecognizerOptions
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
@@ -91,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             binding.webView.loadUrl(getLoadUrl())
         }
 
-        binding.addressBar.setOnEditorActionListener { v, actionId, event ->
+        binding.addressBar.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val loadingUrl = v.text.toString()
 
@@ -239,7 +240,7 @@ class MainActivity : AppCompatActivity() {
     private fun readImageTextBitmap(bitmap: Bitmap) {
         try {
             val image = InputImage.fromBitmap(bitmap, 0)
-            val recognizer = TextRecognition.getClient()
+            val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
             recognizer.process(image)
                 .addOnSuccessListener {
