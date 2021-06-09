@@ -231,7 +231,7 @@
             android:id="@+id/fabMain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="36dp"
             android:layout_marginBottom="56dp"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/fab_description"

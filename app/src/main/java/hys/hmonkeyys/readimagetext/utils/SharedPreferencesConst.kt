@@ -14,5 +14,6 @@ class SharedPreferencesConst {
         const val SETTING_URL = "setting_url"
 
         const val IS_PAID = "is_paid"
+        const val LAST_URL = "last_url"
     }
 }

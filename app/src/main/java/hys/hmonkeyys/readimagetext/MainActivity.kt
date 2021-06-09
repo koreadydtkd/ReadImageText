@@ -78,6 +78,13 @@ class MainActivity : AppCompatActivity() {
         checkPermissions()
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        // 마지막 접속한 페이지 저장
+        spf.edit().putString(SharedPreferencesConst.LAST_URL, binding.addressBar.text.toString()).apply()
+    }
+
     // 상단 툴바 초기화
     private fun initToolbar() {
         binding.goHomeButton.setOnClickListener {
@@ -114,7 +121,14 @@ class MainActivity : AppCompatActivity() {
             webViewClient = WebViewClient()
             webChromeClient = WebChromeClient()
             settings.javaScriptEnabled = true
-            loadUrl(getLoadUrl())
+
+            // 앱 실행 시 마지막 방문한 페이지로 이동
+            val lastUrl = spf.getString(SharedPreferencesConst.LAST_URL, "")
+            if(lastUrl.isNullOrEmpty()) {
+                loadUrl(getLoadUrl())
+            } else {
+                loadUrl(lastUrl)
+            }
 
             setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 binding.scrollValue = scrollY
