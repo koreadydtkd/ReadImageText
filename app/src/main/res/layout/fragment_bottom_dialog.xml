@@ -47,7 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/bottom_sheet_text3"
-        android:textColor="@android:color/holo_blue_dark"
+        android:textColor="@color/view_yellow"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resultEditText" />
 
@@ -92,17 +93,14 @@
             android:paddingEnd="12dp"
             android:paddingBottom="7dp">
 
-            <ImageButton
+            <View
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@color/white"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_headset_24"
+                android:background="@drawable/ic_headset_24"
+                android:backgroundTint="@android:color/holo_blue_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView"
-                app:tint="@color/teal_700"
-                tools:ignore="ContentDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -122,8 +120,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="10dp"
         android:layout_marginBottom="4dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/listenButton"
@@ -140,19 +138,17 @@
             android:paddingEnd="12dp"
             android:paddingBottom="7dp">
 
-            <ImageButton
+            <View
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@color/white"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_g_translate_24"
+                android:background="@drawable/ic_text_24"
+                android:backgroundTint="@color/view_yellow"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView"
-                app:tint="@android:color/holo_blue_dark"
-                tools:ignore="ContentDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView" />
 
             <TextView
+                android:id="@+id/translateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_marginStart="4dp"

@@ -13,9 +13,9 @@
     <string name="fab_description">이미지가 확인되지 않습니다.</string>
 
     <!-- BottomSheetDialog -->
-    <string name="bottom_sheet_text1">오타가 있는지 확인 후 번역해주세요</string>
+    <string name="bottom_sheet_text1">오타가 있는지 확인 후 번역해주세요.</string>
     <string name="bottom_sheet_text2">선택영역 추출 결과</string>
-    <string name="bottom_sheet_text3">Google 변역 결과</string>
+    <string name="bottom_sheet_text3">번역 결과</string>
     <string name="bottom_sheet_text4">듣기</string>
     <string name="bottom_sheet_button">번역</string>
 

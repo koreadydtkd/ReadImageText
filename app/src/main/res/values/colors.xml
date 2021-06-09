@@ -13,4 +13,5 @@
     <color name="cursor">#4FC8FF</color>
 
     <color name="transparent">#00000000</color>
+    <color name="view_yellow">#FFC107</color>
 </resources>

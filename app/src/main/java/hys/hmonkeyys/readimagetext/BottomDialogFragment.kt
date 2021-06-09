@@ -2,6 +2,7 @@ package hys.hmonkeyys.readimagetext
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
@@ -11,19 +12,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.mlkit.common.model.DownloadConditions
-import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.*
-import hys.hmonkeyys.readimagetext.api.NaverApi
+import hys.hmonkeyys.readimagetext.api.KakaoTranslateApi
+import hys.hmonkeyys.readimagetext.api.NaverTranslateApi
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding
 import hys.hmonkeyys.readimagetext.model.ResultTransferPapago
+import hys.hmonkeyys.readimagetext.model.TranslateKakaoModel
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import hys.hmonkeyys.readimagetext.utils.Util
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+
 
 class BottomDialogFragment(
 
@@ -37,7 +40,7 @@ class BottomDialogFragment(
         requireContext().getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
     }
 
-    // 영어 -> 일본어 번역
+    /*// 영어 -> 일본어 번역
     private val englishToJapaneseOptions: TranslatorOptions by lazy {
         TranslatorOptions.Builder()
             .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -51,13 +54,13 @@ class BottomDialogFragment(
             .setSourceLanguage(TranslateLanguage.JAPANESE)
             .setTargetLanguage(TranslateLanguage.KOREAN)
             .build()
-    }
+    }*/
 
     private val tts: TextToSpeech by lazy {
         TextToSpeech(requireContext(), this)
     }
 
-    private val mCountDown: CountDownTimer = object : CountDownTimer(30 * SECOND, 500) {
+    /*private val mCountDown: CountDownTimer = object : CountDownTimer(60 * SECOND, SECOND) {
         override fun onTick(millisUntilFinished: Long) {
             if(isDownloaded()) {
                 progressBarHide()
@@ -69,7 +72,7 @@ class BottomDialogFragment(
             cancel()
             progressBarHide()
         }
-    }
+    }*/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentBottomDialogBinding.inflate(inflater, container, false)
@@ -91,26 +94,39 @@ class BottomDialogFragment(
             }
 
             binding.translateButton.setOnClickListener {
-                if(isDownloaded()) {
-                    googleTranslatorEnglishToJapanese(binding.resultEditText.text.toString())
-                    progressBarShow()
+                // 프로그레스바 돌고있으면 return
+                if(binding.progressBar.isVisible) {
+                    Toast.makeText(requireContext(), "잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
                 } else {
-                    showDownloadDialog()
+                    /*if(isDownloaded()) {
+                        googleTranslatorEnglishToJapanese(binding.resultEditText.text.toString())
+                        progressBarShow()
+                    } else {
+                        showDownloadDialog()
+                    }*/
+
+                    /*it.setBackgroundResource(R.drawable.clicked_background)
+                    it.isEnabled = false
+                    it.isClickable = false
+                    binding.translateTextView.setTextColor(Color.WHITE)*/
+                    progressBarShow()
+                    translateKakao(binding.resultEditText.text.toString())
                 }
 
-//                translatePapago(binding.resultEditText.text.toString())
+
             }
 
         }
     }
 
-    private fun isDownloaded(): Boolean {
+    /*private fun isDownloaded(): Boolean {
         val isDownloadEN = spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, false)
         val isDownloadJP = spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, false)
         val isDownloadKR = spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, false)
-        Log.d(TAG, "다운로드 상태 : EN - $isDownloadEN, JP - $isDownloadJP, KR - $$isDownloadKR")
+        Log.d(TAG, "다운로드 상태 : EN - $isDownloadEN / JP - $isDownloadJP / KR - $isDownloadKR")
         return isDownloadEN && isDownloadJP && isDownloadKR
-    }
+    }*/
 
     // TTS 실행
     private fun speakOut(speechText: String) {
@@ -151,7 +167,7 @@ class BottomDialogFragment(
     }
 
     // 영어 -> 일본어 번역 실행 (정확도를 위해서)
-    private fun googleTranslatorEnglishToJapanese(resultEditText: String) {
+    /*private fun googleTranslatorEnglishToJapanese(resultEditText: String) {
         val englishToJapaneseTranslator = Translation.getClient(englishToJapaneseOptions)
         lifecycle.addObserver(englishToJapaneseTranslator)
 
@@ -163,10 +179,10 @@ class BottomDialogFragment(
                 Log.e(TAG, exception.toString())
             }
 
-    }
+    }*/
 
     // 일본어 -> 한국어 번역 실행 (정확도를 위해서)
-    private fun japaneseToKoreanTranslate(translatedText: String) {
+    /*private fun japaneseToKoreanTranslate(translatedText: String) {
         val japaneseToKoreanTranslator = Translation.getClient(japaneseToKoreanOptions)
         lifecycle.addObserver(japaneseToKoreanTranslator)
 
@@ -179,9 +195,9 @@ class BottomDialogFragment(
             .addOnFailureListener { exception ->
                 Log.e(TAG, exception.toString())
             }
-    }
+    }*/
 
-    private fun showDownloadDialog() {
+    /*private fun showDownloadDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("파일 다운로드")
             .setMessage("번역에 필요한 파일이 다운로드되지 않았습니다.")
@@ -194,15 +210,14 @@ class BottomDialogFragment(
                 mCountDown.start()
                 Util(requireContext()).downloadGoogleTranslator()
                 Toast.makeText(requireContext(), "번역에 필요한 파일을 다운받습니다.\n잠시만 기다려주세요.", Toast.LENGTH_LONG).show()
-
             }
             .show()
-    }
+    }*/
 
-    private fun translatePapago(translateText: String) {
+    /*private fun translatePapago(translateText: String) {
         val replaceText = translateText.replace("\n", " ")
 
-        NaverApi.create().transferPapago("en", "ko", replaceText).enqueue(object : Callback<ResultTransferPapago> {
+        NaverTranslateApi.create().transferPapago("en", "ko", replaceText).enqueue(object : Callback<ResultTransferPapago> {
             override fun onResponse(call: Call<ResultTransferPapago>, response: Response<ResultTransferPapago>) {
                 if(response.isSuccessful.not()) {
                     Log.d("PAPAGO", "response fail")
@@ -221,6 +236,35 @@ class BottomDialogFragment(
                 Log.e("PAPAGO", t.message.toString())
             }
         })
+    }*/
+
+    private fun translateKakao(translateText: String) {
+        val replaceText = translateText.replace("\n", " ")
+
+        KakaoTranslateApi.create().translateKakao(replaceText, "en", "kr").enqueue(object : Callback<TranslateKakaoModel> {
+            override fun onResponse(call: Call<TranslateKakaoModel>, response: Response<TranslateKakaoModel>) {
+                if(response.isSuccessful.not()) {
+                    Log.e(TAG, "KAKAO translate Fail")
+                    return
+                }
+
+                response.body()?.let { translateKakaoModel ->
+                    val items = translateKakaoModel.translatedText?.get(0)
+
+                    val sb: StringBuilder = StringBuilder()
+                    items?.forEach {
+                        sb.append(it)
+                    }
+                    binding?.resultTranslationEditText?.setText(sb.toString())
+                    progressBarHide()
+                }
+            }
+
+            override fun onFailure(call: Call<TranslateKakaoModel>, t: Throwable) {
+                Log.e(TAG, t.message.toString())
+                Toast.makeText(requireContext(), "번역 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun progressBarShow() {
@@ -228,7 +272,6 @@ class BottomDialogFragment(
             binding.progressBar.visibility = View.VISIBLE
         }
     }
-
 
     private fun progressBarHide() {
         binding?.let { binding ->
@@ -241,6 +284,7 @@ class BottomDialogFragment(
             tts.stop()
             tts.shutdown()
         }
+//        mCountDown.cancel()
 
         binding = null
         super.onDestroy()

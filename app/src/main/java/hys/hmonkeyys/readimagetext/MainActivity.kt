@@ -26,7 +26,6 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
-import com.google.firebase.FirebaseApp
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
@@ -67,7 +66,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         db = WebDatabase.getInstance(applicationContext)
-        FirebaseApp.initializeApp(applicationContext)
 
         binding.isFabItemVisible = false
         binding.isCropImageViewVisible = false
@@ -233,6 +231,7 @@ class MainActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Log.d(TAG, it.text)
 
+                    // 하단 프레그먼트(다이얼로그) 띄우기
                     val bottomDialogFragment = BottomDialogFragment(it.text)
                     bottomDialogFragment.show(supportFragmentManager, bottomDialogFragment.tag)
                 }
@@ -291,7 +290,7 @@ class MainActivity : AppCompatActivity() {
                 val array = arrayOfNulls<String>(rejectedPermissionList.size)
                 ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), PERMISSIONS_REQUEST_CODE)
             } else {
-                Log.e(TAG, "권한 모두 허용됨")
+                Log.d(TAG, "권한 모두 허용됨")
                 deleteData()
             }
         } catch (e: Exception) {
@@ -324,7 +323,7 @@ class MainActivity : AppCompatActivity() {
 
                         if(isAllGranted) {
                             // 모든 권한 허용
-                            Util(applicationContext).downloadGoogleTranslator()
+//                            Util(applicationContext).downloadGoogleTranslator()
                         } else {
                             // 권한 불허
                             Log.e(TAG, "권한 미 허용")

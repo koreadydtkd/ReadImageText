@@ -3,7 +3,6 @@ package hys.hmonkeyys.readimagetext.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.TranslateLanguage
@@ -12,62 +11,73 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class Util(context: Context) {
+class Util(mContext: Context) {
 
     private val spf: SharedPreferences by lazy {
-        context.getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
+        mContext.getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
+    }
+
+    private val modelManager: RemoteModelManager by lazy {
+        RemoteModelManager.getInstance()
+    }
+
+    private val conditions: DownloadConditions by lazy {
+        DownloadConditions.Builder()
+            .requireCharging()
+            .requireWifi()
+            .build()
     }
 
     // 변역에 필요한 파일 다운로드
     fun downloadGoogleTranslator() {
-        val englishModel = TranslateRemoteModel.Builder(TranslateLanguage.ENGLISH).build()
-        val japaneseModel = TranslateRemoteModel.Builder(TranslateLanguage.JAPANESE).build()
-        val koreanModel = TranslateRemoteModel.Builder(TranslateLanguage.KOREAN).build()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, false).not()) {
-                downloadTranslateModel(englishModel)
-            }
-
-            if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, false).not()) {
-                downloadTranslateModel(japaneseModel)
-            }
-
-            if(spf.getBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, false).not()) {
-                downloadTranslateModel(koreanModel)
-            }
-
-        }
-    }
-
-    private fun downloadTranslateModel(translateModel: TranslateRemoteModel) {
-        val modelManager = RemoteModelManager.getInstance()
-
-        val conditions = DownloadConditions.Builder()
-            .requireCharging()
-            .build()
-
-        modelManager.download(translateModel, conditions)
+        val translateModelList = mutableListOf<String>()
+        modelManager.getDownloadedModels(TranslateRemoteModel::class.java)
             .addOnSuccessListener {
-                when(translateModel.language) {
-                    TranslateLanguage.ENGLISH -> {
-                        Log.d(TAG, "영어 다운로드 완료")
-                        spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, true).apply()
-                    }
-                    TranslateLanguage.JAPANESE -> {
-                        Log.d(TAG, "일본어 다운로드 완료")
-                        spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, true).apply()
-                    }
-                    TranslateLanguage.KOREAN -> {
-                        Log.d(TAG, "한국어 다운로드 완료")
-                        spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, true).apply()
-                    }
+                it.forEach { translateRemoteModel ->
+                    Log.e(TAG, translateRemoteModel.language)
+                    translateModelList.add(translateRemoteModel.language)
+                }
+                if(!translateModelList.contains("en")) {
+                    downloadTranslateModel(TranslateRemoteModel.Builder(TranslateLanguage.ENGLISH).build())
+                }
+                if(!translateModelList.contains("ja")) {
+                    downloadTranslateModel(TranslateRemoteModel.Builder(TranslateLanguage.JAPANESE).build())
+                }
+                if(!translateModelList.contains("ko")) {
+                    downloadTranslateModel(TranslateRemoteModel.Builder(TranslateLanguage.KOREAN).build())
                 }
             }
             .addOnFailureListener {
-                Log.e(TAG, it.toString())
-                FirebaseCrashlytics.getInstance().recordException(it)
+//                FirebaseCrashlytics.getInstance().recordException(it)
             }
+
+    }
+
+    private fun downloadTranslateModel(translateModel: TranslateRemoteModel) {
+        CoroutineScope(Dispatchers.IO).launch {
+            modelManager.download(translateModel, conditions)
+                .addOnSuccessListener {
+                    when(translateModel.language) {
+                        TranslateLanguage.ENGLISH -> {
+                            Log.d(TAG, "영어 다운로드 완료")
+                            spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_EN, true).apply()
+                        }
+                        TranslateLanguage.JAPANESE -> {
+                            Log.d(TAG, "일본어 다운로드 완료")
+                            spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_JP, true).apply()
+                        }
+                        TranslateLanguage.KOREAN -> {
+                            Log.d(TAG, "한국어 다운로드 완료")
+                            spf.edit().putBoolean(SharedPreferencesConst.IS_DOWNLOAD_TRANSLATOR_KR, true).apply()
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, it.toString())
+//                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+        }
+
     }
 
     companion object {
