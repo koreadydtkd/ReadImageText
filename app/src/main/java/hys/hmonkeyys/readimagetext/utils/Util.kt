@@ -82,5 +82,7 @@ class Util(mContext: Context) {
 
     companion object {
         private const val TAG = "HYS_Util"
+
+        const val MAIN_TO_HISTORY_DEFAULT = "select_url"
     }
 }

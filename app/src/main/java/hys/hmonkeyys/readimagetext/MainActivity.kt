@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
         if(activityResult.resultCode == REQUEST_CODE) {
             activityResult.data?.let { data ->
-                val selectUrl = data.getStringExtra("select_url").toString()
+                val selectUrl = data.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT).toString()
                 binding.webView.loadUrl(selectUrl)
             } ?: run {
                 Log.d(TAG, "data is null!!")

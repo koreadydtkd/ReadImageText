@@ -2,12 +2,14 @@ package hys.hmonkeyys.readimagetext
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import hys.hmonkeyys.readimagetext.adapter.HistoryAdapter
 import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
+import hys.hmonkeyys.readimagetext.utils.Util
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,7 +47,7 @@ class HistoryActivity : AppCompatActivity() {
         historyAdapter = HistoryAdapter(deleteSelectItemListener = { selectModel ->
             deleteHistory(selectModel)
         }, moveWebView = { selectUrl ->
-            setResult(RESPONSE_CODE, Intent().putExtra("select_url", selectUrl))
+            setResult(RESPONSE_CODE, Intent().putExtra(Util.MAIN_TO_HISTORY_DEFAULT, selectUrl))
             finish()
         })
 
@@ -58,11 +60,11 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun showDeleteDialog() {
         AlertDialog.Builder(this)
-            .setTitle("히스토리 모두 삭제")
-            .setMessage("방문 기록을 모두 삭제하시겠습니까?")
-            .setPositiveButton("삭제") { _, _ ->
+            .setTitle(resources.getString(R.string.history_dialog_title))
+            .setMessage(resources.getString(R.string.history_dialog_message))
+            .setPositiveButton(resources.getString(R.string.delete)) { _, _ ->
                 deleteHistory(null)
-            }.setNegativeButton("취소") { dialog, _ ->
+            }.setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }
@@ -72,8 +74,10 @@ class HistoryActivity : AppCompatActivity() {
             withContext(Dispatchers.Default) {
                 if(selectModel == null) {
                     db?.historyDao()?.deleteAll()
+                    Log.d(TAG, "모두 삭제")
                 } else {
                     db?.historyDao()?.delete(selectModel)
+                    Log.d(TAG, "선택 삭제")
                 }
                 historyAdapter.submitList(db?.historyDao()?.getAll())
             }

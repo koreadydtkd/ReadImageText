@@ -40,6 +40,8 @@ class BottomDialogFragment(
         requireContext().getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
     }
 
+    private var translateCount = 0
+
     /*// 영어 -> 일본어 번역
     private val englishToJapaneseOptions: TranslatorOptions by lazy {
         TranslatorOptions.Builder()
@@ -96,7 +98,7 @@ class BottomDialogFragment(
             binding.translateButton.setOnClickListener {
                 // 프로그레스바 돌고있으면 return
                 if(binding.progressBar.isVisible) {
-                    Toast.makeText(requireContext(), "잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), resources.getString(R.string.wait_please), Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 } else {
                     /*if(isDownloaded()) {
@@ -106,17 +108,46 @@ class BottomDialogFragment(
                         showDownloadDialog()
                     }*/
 
-                    /*it.setBackgroundResource(R.drawable.clicked_background)
-                    it.isEnabled = false
-                    it.isClickable = false
-                    binding.translateTextView.setTextColor(Color.WHITE)*/
+                    if(translateCount > 2) {
+                        it.setBackgroundResource(R.drawable.clicked_background)
+                        binding.translateTextView.setTextColor(Color.WHITE)
+                        Toast.makeText(requireContext(), resources.getString(R.string.selected_translate_limit), Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+
                     progressBarShow()
+                    translateCount += 1
                     translateKakao(binding.resultEditText.text.toString())
                 }
 
 
             }
 
+        }
+    }
+
+    // TTS 초기화
+    override fun onInit(status: Int) {
+        try {
+            if(status == TextToSpeech.SUCCESS) {
+                val result = tts.setLanguage(Locale.ENGLISH)
+
+                if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.e(TAG, "This Language is not supported")
+                } else {
+                    binding?.let { binding ->
+                        val speechText = binding.resultEditText.text.toString().replace("\n", " ")
+                        if(speechText.isNotBlank() && speechText.isNotEmpty()) {
+                            speakOut(speechText)
+                        }
+                    }
+
+                }
+            } else {
+                Log.e(TAG, "Initialization Failed!")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -139,30 +170,6 @@ class BottomDialogFragment(
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(requireContext(), resources.getString(R.string.tts_error), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    override fun onInit(status: Int) {
-        try {
-            if(status == TextToSpeech.SUCCESS) {
-                val result = tts.setLanguage(Locale.ENGLISH)
-
-                if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Log.e(TAG, "This Language is not supported")
-                } else {
-                    binding?.let { binding ->
-                        val speechText = binding.resultEditText.text.toString().replace("\n", " ")
-                        if(speechText.isNotBlank() && speechText.isNotEmpty()) {
-                            speakOut(speechText)
-                        }
-                    }
-
-                }
-            } else {
-                Log.e(TAG, "Initialization Failed!")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
@@ -245,6 +252,7 @@ class BottomDialogFragment(
             override fun onResponse(call: Call<TranslateKakaoModel>, response: Response<TranslateKakaoModel>) {
                 if(response.isSuccessful.not()) {
                     Log.e(TAG, "KAKAO translate Fail")
+                    Toast.makeText(requireContext(), resources.getString(R.string.translate_fail), Toast.LENGTH_SHORT).show()
                     return
                 }
 
@@ -262,7 +270,8 @@ class BottomDialogFragment(
 
             override fun onFailure(call: Call<TranslateKakaoModel>, t: Throwable) {
                 Log.e(TAG, t.message.toString())
-                Toast.makeText(requireContext(), "번역 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), resources.getString(R.string.translate_fail), Toast.LENGTH_SHORT).show()
+                progressBarHide()
             }
         })
     }
@@ -285,7 +294,7 @@ class BottomDialogFragment(
             tts.shutdown()
         }
 //        mCountDown.cancel()
-
+        translateCount = 0
         binding = null
         super.onDestroy()
     }
@@ -295,7 +304,7 @@ class BottomDialogFragment(
         private const val TTS_PITCH = 0.8F
         private const val TTS_SPEECH_RATE = 0.8F
 
-        private const val SECOND = 1000L
+//        private const val SECOND = 1000L
     }
 
 }

@@ -78,7 +78,7 @@ class AppInformationActivity : AppCompatActivity() {
         if(duplicateProtection) {
             Log.d(TAG, "스피치 속도 변경 $tts_speed")
             spf.edit().putFloat(SharedPreferencesConst.TTS_SPEED, tts_speed).apply()
-            Toast.makeText(this, "속도가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, resources.getString(R.string.edit_speed), Toast.LENGTH_SHORT).show()
         } else {
             duplicateProtection = true
         }
@@ -95,7 +95,7 @@ class AppInformationActivity : AppCompatActivity() {
         binding.urlEditButton.setOnClickListener {
             val changeUrl = binding.settingUrlEditText.text.toString()
             spf.edit().putString(SharedPreferencesConst.SETTING_URL, changeUrl).apply()
-            Toast.makeText(this, "기본 주소가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, resources.getString(R.string.edit_default_url), Toast.LENGTH_SHORT).show()
         }
 
         // 라이센스 TextView
