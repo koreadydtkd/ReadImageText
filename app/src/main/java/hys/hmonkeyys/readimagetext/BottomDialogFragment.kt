@@ -35,7 +35,7 @@ class BottomDialogFragment(
         requireContext().getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
     }
 
-    private var translateCount = 0
+    private var translateCount = 1
 
     private val tts: TextToSpeech by lazy {
         TextToSpeech(requireContext(), this)
@@ -50,8 +50,14 @@ class BottomDialogFragment(
         super.onViewCreated(view, savedInstanceState)
 
         binding?.let { binding ->
-            val a = readText.substring(0, 1).uppercase() + readText.substring(1).lowercase()
-            binding.resultEditText.setText(a.replace("\n", " "))
+
+            val replaceText = readText.replace("\n", " ")
+            if(isAlmostUpperText()) {
+                val result = replaceText.substring(0, 1).uppercase() + replaceText.substring(1).lowercase()
+                binding.resultEditText.setText(result)
+            } else {
+                binding.resultEditText.setText(replaceText)
+            }
 
             binding.listenButton.setOnClickListener {
                 if(tts.isSpeaking) {
@@ -66,7 +72,7 @@ class BottomDialogFragment(
                     Toast.makeText(requireContext(), resources.getString(R.string.wait_please), Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 } else {
-                    if(translateCount > 2) {
+                    if(translateCount > 5) {
                         it.setBackgroundResource(R.drawable.clicked_background)
                         binding.translateTextView.setTextColor(Color.WHITE)
                         Toast.makeText(requireContext(), resources.getString(R.string.selected_translate_limit), Toast.LENGTH_SHORT).show()
@@ -81,6 +87,24 @@ class BottomDialogFragment(
 
             }
 
+        }
+    }
+
+    private fun isAlmostUpperText() : Boolean {
+        val onlyEnglishText = Regex("[^A-Za-z]").replace(readText, "")
+
+        var textUpperCount = 0
+        for(i in 0..onlyEnglishText.lastIndex) {
+            if(onlyEnglishText[i].isUpperCase()) {
+                textUpperCount += 1
+            }
+        }
+
+        return if(onlyEnglishText.length - 3 < textUpperCount) {
+            Log.d(TAG, "거의 대문자임")
+            true
+        } else {
+            false
         }
     }
 
