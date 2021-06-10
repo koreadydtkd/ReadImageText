@@ -14,8 +14,8 @@ android {
         applicationId "hys.hmonkeyys.readimagetext"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 6
-        versionName "1.2.2"
+        versionCode 8
+        versionName "1.2.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -84,5 +84,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
 
     // Admob
-    implementation 'com.google.android.gms:play-services-ads:20.2.0'
+    implementation 'com.google.android.gms:play-services-ads:20.1.0'
 }
