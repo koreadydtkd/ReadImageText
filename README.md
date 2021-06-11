@@ -7,7 +7,7 @@
 - Google MlKit(OCR) : 이미지에서 텍스트 추출
 - Google Mlkit(번역)
 - Room & Coroutine (SQLite) : 앱 데이터베이스
-- Retrofit2 & OkHttp3 : 통신
+- Retrofit2 & OkHttp3 : 통신(kakao API, Naver API 사용)
 - DataBinding & ViewBinding
 
 # Creator : Han YongSang
