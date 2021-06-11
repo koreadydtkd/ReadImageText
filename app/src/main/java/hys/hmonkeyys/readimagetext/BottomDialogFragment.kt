@@ -53,8 +53,7 @@ class BottomDialogFragment(
 
             val replaceText = readText.replace("\n", " ")
             if(isAlmostUpperText()) {
-                val result = replaceText.substring(0, 1).uppercase() + replaceText.substring(1).lowercase()
-                binding.resultEditText.setText(result)
+                binding.resultEditText.setText(getDotTextSort(replaceText))
             } else {
                 binding.resultEditText.setText(replaceText)
             }
@@ -72,7 +71,7 @@ class BottomDialogFragment(
                     Toast.makeText(requireContext(), resources.getString(R.string.wait_please), Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 } else {
-                    if(translateCount > 5) {
+                    if(translateCount > 3) {
                         it.setBackgroundResource(R.drawable.clicked_background)
                         binding.translateTextView.setTextColor(Color.WHITE)
                         Toast.makeText(requireContext(), resources.getString(R.string.selected_translate_limit), Toast.LENGTH_SHORT).show()
@@ -101,11 +100,30 @@ class BottomDialogFragment(
         }
 
         return if(onlyEnglishText.length - 3 < textUpperCount) {
-            Log.d(TAG, "거의 대문자임")
+            Log.d(TAG, "추출한 Text 거의 대문자")
             true
         } else {
             false
         }
+    }
+
+    private fun getDotTextSort(resultText: String): String {
+        var result = resultText.substring(0, 1).uppercase() + resultText.substring(1).lowercase()
+
+        val dotList = mutableListOf<Int>()
+        for(i in 0..result.lastIndex - 5) {
+            if(result[i].toString() == "." || result[i].toString() == "!" || result[i].toString() == "?") {
+                dotList.add(i + 2)
+            }
+        }
+
+        dotList.forEach { dotIndex ->
+            Log.e(TAG, dotIndex.toString())
+            result = result.substring(0, dotIndex) +
+                    result.substring(dotIndex, dotIndex + 1).uppercase() +
+                    result.substring(dotIndex + 1)
+        }
+        return result
     }
 
     // TTS 초기화
