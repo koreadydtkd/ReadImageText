@@ -29,6 +29,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizerOptions
+import hys.hmonkeyys.readimagetext.customdialog.CustomDialog
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
@@ -77,6 +78,9 @@ class MainActivity : AppCompatActivity() {
         initAdmob()
 
         checkPermissions()
+
+        val customDialog = CustomDialog()
+        customDialog.show(supportFragmentManager, customDialog.tag)
     }
 
     override fun onStop() {
@@ -341,6 +345,12 @@ class MainActivity : AppCompatActivity() {
                         if(isAllGranted) {
                             // 모든 권한 허용
 //                            Util(applicationContext).downloadGoogleTranslator()
+//                            if(!spf.getBoolean(SharedPreferencesConst.IS_FIRST, false)) {
+//                                spf.edit().putBoolean(SharedPreferencesConst.IS_FIRST, true).apply()
+                                // todo 커스텀 다이얼로그 띄우기 - 간단한 앱 안내
+//                                val customDialog = CustomDialog()
+//                                customDialog.show(supportFragmentManager, customDialog.tag)
+//                            }
                         } else {
                             // 권한 불허
                             Log.e(TAG, "권한 미 허용")
