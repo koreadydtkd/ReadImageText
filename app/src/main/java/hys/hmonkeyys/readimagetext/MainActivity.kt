@@ -244,9 +244,13 @@ class MainActivity : AppCompatActivity() {
 
             recognizer.process(image)
                 .addOnSuccessListener {
-                    // 하단 프레그먼트(다이얼로그) 띄우기
-                    val bottomDialogFragment = BottomDialogFragment(it.text)
-                    bottomDialogFragment.show(supportFragmentManager, bottomDialogFragment.tag)
+                    if(it.text.length > OCR_TEXT_LIMIT) {
+                        Toast.makeText(this, resources.getString(R.string.ocr_text_limit), Toast.LENGTH_SHORT).show()
+                    } else {
+                        // 하단 프레그먼트(다이얼로그) 띄우기
+                        val bottomDialogFragment = BottomDialogFragment(it.text)
+                        bottomDialogFragment.show(supportFragmentManager, bottomDialogFragment.tag)
+                    }
                 }
                 .addOnFailureListener {
                     it.printStackTrace()
@@ -419,6 +423,8 @@ class MainActivity : AppCompatActivity() {
         private const val TRANSLATION_Y = "translationY"
 
         private const val REQUEST_CODE = 1014
+
+        private const val OCR_TEXT_LIMIT = 350
     }
 
 }
