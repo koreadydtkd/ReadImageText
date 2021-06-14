@@ -6,9 +6,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -26,6 +30,9 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizerOptions
@@ -78,12 +85,6 @@ class MainActivity : AppCompatActivity() {
         initAdmob()
 
         checkPermissions()
-
-        /*val customDialog = CustomDialog(dialogClickedListener = {
-            Toast.makeText(this, "$it 클릭", Toast.LENGTH_SHORT).show()
-        })
-        customDialog.isCancelable = false
-        customDialog.show(supportFragmentManager, customDialog.tag)*/
     }
 
     override fun onStop() {
@@ -329,6 +330,8 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Log.d(TAG, "권한 모두 허용됨")
                 deleteData()
+
+                checkUpdateVersion()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -340,6 +343,33 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             db?.historyDao()?.deleteDataOneWeeksAgo(getDateWeeksAgo(1))
         }
+    }
+
+    private fun checkUpdateVersion() {
+        val remoteConfig = Firebase.remoteConfig
+        remoteConfig.fetchAndActivate().addOnCompleteListener {
+            if(it.isSuccessful) {
+                val updateVersion = remoteConfig.getLong("app_version")
+                val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
+                val currentVersion = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    info.longVersionCode
+                } else {
+                    info.versionCode
+                }
+
+                if(updateVersion > currentVersion.toLong()) {
+                    showUpdateDialog()
+                }
+
+            }
+        }
+    }
+
+    private fun showUpdateDialog() {
+        val customDialog = CustomDialog(/*dialogClickedListener = {
+            Toast.makeText(this, "$it 클릭", Toast.LENGTH_SHORT).show()
+        }*/)
+        customDialog.show(supportFragmentManager, customDialog.tag)
     }
 
     // 퍼미션 권한 허용 요청에 대한 결과
@@ -360,13 +390,6 @@ class MainActivity : AppCompatActivity() {
 
                         if(isAllGranted) {
                             // 모든 권한 허용
-//                            Util(applicationContext).downloadGoogleTranslator()
-//                            if(!spf.getBoolean(SharedPreferencesConst.IS_FIRST, false)) {
-//                                spf.edit().putBoolean(SharedPreferencesConst.IS_FIRST, true).apply()
-                                // todo 커스텀 다이얼로그 띄우기 - 간단한 앱 안내
-//                                val customDialog = CustomDialog()
-//                                customDialog.show(supportFragmentManager, customDialog.tag)
-//                            }
                         } else {
                             // 권한 불허
                             Log.e(TAG, "권한 미 허용")

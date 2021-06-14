@@ -1,5 +1,9 @@
 package hys.hmonkeyys.readimagetext.customdialog
 
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,34 +13,50 @@ import hys.hmonkeyys.readimagetext.databinding.DialogCustomBinding
 
 class CustomDialog(
 
-    val dialogClickedListener: (String) -> Unit
+//    val dialogClickedListener: (String) -> Unit
 
 ) : DialogFragment() {
     private var binding: DialogCustomBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogCustomBinding.inflate(inflater, container, false)
-        return binding?.root
+
+        try {
+            dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            return binding?.root
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.let { binding ->
-            binding.dialBtn1.setOnClickListener {
-                dialogClickedListener(binding.dialBtn1.text.toString())
-            }
-            binding.dialBtn2.setOnClickListener {
-                dialogClickedListener(binding.dialBtn2.text.toString())
-            }
-            binding.dialBtn3.setOnClickListener {
-                dialogClickedListener(binding.dialBtn3.text.toString())
-            }
+        binding?.updateButton?.setOnClickListener {
+            openPlayStore()
+        }
+    }
+
+    private fun openPlayStore() {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(APP_URI + requireContext().packageName)
+            requireContext().startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         binding = null
+    }
+
+    companion object {
+        private const val APP_URI = "market://details?id="
     }
 }
