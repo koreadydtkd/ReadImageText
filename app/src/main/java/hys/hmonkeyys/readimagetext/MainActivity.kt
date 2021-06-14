@@ -79,8 +79,11 @@ class MainActivity : AppCompatActivity() {
 
         checkPermissions()
 
-        val customDialog = CustomDialog()
-        customDialog.show(supportFragmentManager, customDialog.tag)
+        /*val customDialog = CustomDialog(dialogClickedListener = {
+            Toast.makeText(this, "$it 클릭", Toast.LENGTH_SHORT).show()
+        })
+        customDialog.isCancelable = false
+        customDialog.show(supportFragmentManager, customDialog.tag)*/
     }
 
     override fun onStop() {
@@ -151,6 +154,34 @@ class MainActivity : AppCompatActivity() {
             toggleFab()
         }
 
+        binding.fabCheck.setOnClickListener {
+            val selectedBitmap = binding.cropImageView.croppedImage
+            selectedBitmap ?: return@setOnClickListener
+
+            readImageTextBitmap(selectedBitmap)
+
+            binding.isCropImageViewVisible = false
+        }
+
+        // 웹뷰 스크롤 맨위로
+        binding.fabMoveTop.setOnClickListener {
+            closeFloatingButtonWithAnimation()
+            binding.webView.pageUp(true)
+        }
+
+        // 앱정보 보기 플로팅 버튼
+        binding.fabAppInfo.setOnClickListener {
+            closeFloatingButtonWithAnimation()
+            startActivity(Intent(this, AppInformationActivity::class.java))
+        }
+
+        // 히스토리 보기 플로팅 버튼
+        binding.fabHistory.setOnClickListener {
+            closeFloatingButtonWithAnimation()
+            startForResult.launch(Intent(this, HistoryActivity::class.java))
+        }
+
+        // 스크린 캡처 플로팅 버튼
         binding.fabScreenCapture.setOnClickListener {
             closeFloatingButtonWithAnimation()
 
@@ -159,36 +190,17 @@ class MainActivity : AppCompatActivity() {
 //                // todo 인앱결제 구현
 //                Toast.makeText(this, "무료 횟수를 모두 이용하였습니다.", Toast.LENGTH_SHORT).show()
 //            } else {
-                Handler(mainLooper).postDelayed({
+            Handler(mainLooper).postDelayed({
 //                    spf.edit().putInt(SharedPreferencesConst.CAPTURE_COUNT, captureCount + 1).apply()
 
-                    val rootView = this.window.decorView.rootView
-                    val bitmap = getBitmapFromView(rootView)
+                val rootView = this.window.decorView.rootView
+                val bitmap = getBitmapFromView(rootView)
 
-                    binding.cropImageView.setImageBitmap(bitmap)
-                    binding.isCropImageViewVisible = true
-                }, 300)
+                binding.cropImageView.setImageBitmap(bitmap)
+                binding.isCropImageViewVisible = true
+            }, 300)
 //            }
 
-        }
-
-        binding.fabHistory.setOnClickListener {
-            closeFloatingButtonWithAnimation()
-            startForResult.launch(Intent(this, HistoryActivity::class.java))
-        }
-
-        binding.fabAppInfo.setOnClickListener {
-            closeFloatingButtonWithAnimation()
-            startActivity(Intent(this, AppInformationActivity::class.java))
-        }
-
-        binding.fabCheck.setOnClickListener {
-            val selectedBitmap = binding.cropImageView.croppedImage
-            selectedBitmap ?: return@setOnClickListener
-
-            readImageTextBitmap(selectedBitmap)
-
-            binding.isCropImageViewVisible = false
         }
 
     }
@@ -208,6 +220,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun closeFloatingButtonWithAnimation() {
+        ObjectAnimator.ofFloat(binding.fabMoveTopTextView, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabMoveTop, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabAppInfoTextView, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabAppInfo, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabHistoryTextView, TRANSLATION_Y, 0f).apply { start() }
@@ -219,6 +233,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openFloatingButtonWithAnimation() {
+        ObjectAnimator.ofFloat(binding.fabMoveTopTextView, TRANSLATION_Y, -800f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabMoveTop, TRANSLATION_Y, -800f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabAppInfoTextView, TRANSLATION_Y, -600f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabAppInfo, TRANSLATION_Y, -600f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabHistoryTextView, TRANSLATION_Y, -400f).apply { start() }

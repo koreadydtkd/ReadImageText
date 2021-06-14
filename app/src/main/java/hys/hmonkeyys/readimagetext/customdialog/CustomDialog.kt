@@ -7,7 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import hys.hmonkeyys.readimagetext.databinding.DialogCustomBinding
 
-class CustomDialog : DialogFragment() {
+class CustomDialog(
+
+    val dialogClickedListener: (String) -> Unit
+
+) : DialogFragment() {
     private var binding: DialogCustomBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -17,6 +21,18 @@ class CustomDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding?.let { binding ->
+            binding.dialBtn1.setOnClickListener {
+                dialogClickedListener(binding.dialBtn1.text.toString())
+            }
+            binding.dialBtn2.setOnClickListener {
+                dialogClickedListener(binding.dialBtn2.text.toString())
+            }
+            binding.dialBtn3.setOnClickListener {
+                dialogClickedListener(binding.dialBtn3.text.toString())
+            }
+        }
     }
 
     override fun onDestroy() {
