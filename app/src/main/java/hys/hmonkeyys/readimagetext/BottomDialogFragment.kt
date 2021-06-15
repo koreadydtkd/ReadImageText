@@ -108,22 +108,29 @@ class BottomDialogFragment(
     }
 
     private fun getDotTextSort(resultText: String): String {
-        var result = resultText.substring(0, 1).uppercase() + resultText.substring(1).lowercase()
+        try {
+            var result = resultText.substring(0, 1).uppercase() + resultText.substring(1).lowercase()
 
-        val dotList = mutableListOf<Int>()
-        for(i in 0..result.lastIndex - 5) {
-            if(result[i].toString() == "." || result[i].toString() == "!" || result[i].toString() == "?") {
-                dotList.add(i + 2)
+            val dotList = mutableListOf<Int>()
+            for(i in 0..result.lastIndex - 5) {
+                if(result[i].toString() == "." || result[i].toString() == "!" || result[i].toString() == "?") {
+                    dotList.add(i + 2)
+                }
             }
+
+            dotList.forEach { dotIndex ->
+                Log.e(TAG, dotIndex.toString())
+                result = result.substring(0, dotIndex) +
+                        result.substring(dotIndex, dotIndex + 1).uppercase() +
+                        result.substring(dotIndex + 1)
+            }
+            return result
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), resources.getString(R.string.tts_error), Toast.LENGTH_SHORT).show()
+            return resultText
         }
 
-        dotList.forEach { dotIndex ->
-            Log.e(TAG, dotIndex.toString())
-            result = result.substring(0, dotIndex) +
-                    result.substring(dotIndex, dotIndex + 1).uppercase() +
-                    result.substring(dotIndex + 1)
-        }
-        return result
     }
 
     // TTS 초기화
@@ -194,6 +201,7 @@ class BottomDialogFragment(
                 if(response.isSuccessful.not()) {
                     Log.e(TAG, "KAKAO translate Fail")
                     Toast.makeText(requireContext(), resources.getString(R.string.translate_fail), Toast.LENGTH_SHORT).show()
+                    progressBarHide()
                     return
                 }
 
