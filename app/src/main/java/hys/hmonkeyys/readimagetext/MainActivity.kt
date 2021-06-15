@@ -349,15 +349,8 @@ class MainActivity : AppCompatActivity() {
         val remoteConfig = Firebase.remoteConfig
         remoteConfig.fetchAndActivate().addOnCompleteListener {
             if(it.isSuccessful) {
-                val updateVersion = remoteConfig.getLong("app_version")
-                val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
-                val currentVersion = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    info.longVersionCode
-                } else {
-                    info.versionCode
-                }
-
-                if(updateVersion > currentVersion.toLong()) {
+                val updateVersion = remoteConfig.getLong(REMOTE_CONFIG_KEY)
+                if(updateVersion > Util().getAppVersion(applicationContext)) {
                     showUpdateDialog()
                 }
 
@@ -474,6 +467,8 @@ class MainActivity : AppCompatActivity() {
         private const val REQUEST_CODE = 1014
 
         private const val OCR_TEXT_LIMIT = 350
+
+        private const val REMOTE_CONFIG_KEY = "app_version"
     }
 
 }

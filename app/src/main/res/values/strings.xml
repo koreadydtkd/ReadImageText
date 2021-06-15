@@ -45,6 +45,10 @@
     <string name="check">확인</string>
     <string name="cancel">취소</string>
     <string name="delete">삭제</string>
+    <string name="update">업데이트</string>
+
+    <!-- Custom Dialog -->
+    <string name="custom_dialog_text">새로운 버전이 출시되었습니다.\n새로운 기능을 사용해보세요.</string>
 
     <!-- License -->
     <string name="license_contents">
@@ -90,6 +94,5 @@ In no event and under no legal theory, whether in tort (including negligence), c
 While redistributing the Work or Derivative Works thereof, You may choose to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or rights consistent with this License. However, in accepting such obligations, You may act only on Your own behalf and on Your sole responsibility, not on behalf of any other Contributor, and only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against, such Contributor by reason of your accepting any such warranty or additional liability.\n
 END OF TERMS AND CONDITIONS
     </string>
-
 
 </resources>
