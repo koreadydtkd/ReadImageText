@@ -1,4 +1,4 @@
-package hys.hmonkeyys.readimagetext.customdialog
+package hys.hmonkeyys.readimagetext.dialog
 
 import android.content.Intent
 import android.graphics.Color
@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hys.hmonkeyys.readimagetext.databinding.DialogCustomBinding
 
 class CustomDialog(
@@ -25,6 +26,7 @@ class CustomDialog(
             dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         } catch (e: Exception) {
             e.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(e)
         } finally {
             return binding?.root
         }

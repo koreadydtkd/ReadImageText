@@ -1,4 +1,4 @@
-package hys.hmonkeyys.readimagetext
+package hys.hmonkeyys.readimagetext.floating
 
 import android.content.Context
 import android.content.Intent
@@ -11,12 +11,15 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityAppInformationBinding
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 
-
 class AppInformationActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAppInformationBinding
+    private val binding: ActivityAppInformationBinding by lazy {
+        ActivityAppInformationBinding.inflate(layoutInflater)
+    }
 
     private val spf: SharedPreferences by lazy {
         getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
@@ -27,7 +30,6 @@ class AppInformationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAppInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initSpinner()
@@ -104,9 +106,13 @@ class AppInformationActivity : AppCompatActivity() {
         }
 
         // 앱 버전 TextView
-        val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
-        binding.appVersionTextView.text = info.versionName
-
+        try {
+            val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
+            binding.appVersionTextView.text = info.versionName
+        } catch (e: Exception) {
+            e.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
     }
 
     override fun onPause() {

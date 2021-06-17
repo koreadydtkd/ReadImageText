@@ -1,7 +1,8 @@
-package hys.hmonkeyys.readimagetext
+package hys.hmonkeyys.readimagetext.floating
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import hys.hmonkeyys.readimagetext.R
 
 class LicenseDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

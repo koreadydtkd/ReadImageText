@@ -1,10 +1,11 @@
-package hys.hmonkeyys.readimagetext
+package hys.hmonkeyys.readimagetext.floating
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.adapter.HistoryAdapter
 import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
@@ -16,7 +17,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class HistoryActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityHistoryBinding
+    private val binding: ActivityHistoryBinding by lazy {
+        ActivityHistoryBinding.inflate(layoutInflater)
+    }
 
     private var db: WebDatabase? = null
 
@@ -24,7 +27,6 @@ class HistoryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         db = WebDatabase.getInstance(applicationContext)

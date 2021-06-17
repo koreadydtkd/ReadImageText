@@ -6,13 +6,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -32,12 +28,14 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizerOptions
-import hys.hmonkeyys.readimagetext.customdialog.CustomDialog
+import hys.hmonkeyys.readimagetext.dialog.CustomDialog
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
+import hys.hmonkeyys.readimagetext.dialog.BottomDialogFragment
+import hys.hmonkeyys.readimagetext.floating.AppInformationActivity
+import hys.hmonkeyys.readimagetext.floating.HistoryActivity
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
@@ -50,7 +48,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
 
     private val spf: SharedPreferences by lazy {
         getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         db = WebDatabase.getInstance(applicationContext)
@@ -85,13 +84,6 @@ class MainActivity : AppCompatActivity() {
         initAdmob()
 
         checkPermissions()
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        // 마지막 접속한 페이지 저장
-        spf.edit().putString(SharedPreferencesConst.LAST_URL, binding.addressBar.text.toString()).apply()
     }
 
     // 상단 툴바 초기화
@@ -350,6 +342,7 @@ class MainActivity : AppCompatActivity() {
         remoteConfig.fetchAndActivate().addOnCompleteListener {
             if(it.isSuccessful) {
                 val updateVersion = remoteConfig.getLong(REMOTE_CONFIG_KEY)
+                Log.i(TAG, "$updateVersion")
                 if(updateVersion > Util().getAppVersion(applicationContext)) {
                     showUpdateDialog()
                 }
@@ -395,6 +388,13 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        // 마지막 접속한 페이지 저장
+        spf.edit().putString(SharedPreferencesConst.LAST_URL, binding.addressBar.text.toString()).apply()
     }
 
     override fun onBackPressed() {

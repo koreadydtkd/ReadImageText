@@ -1,4 +1,4 @@
-package hys.hmonkeyys.readimagetext
+package hys.hmonkeyys.readimagetext.dialog
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,7 +12,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.mlkit.nl.translate.*
+import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.api.KakaoTranslateApi
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding
 import hys.hmonkeyys.readimagetext.model.TranslateKakaoModel
@@ -21,7 +23,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-
 
 class BottomDialogFragment(
 
@@ -127,6 +128,7 @@ class BottomDialogFragment(
             return result
         } catch (e: Exception) {
             e.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(e)
             Toast.makeText(requireContext(), resources.getString(R.string.tts_error), Toast.LENGTH_SHORT).show()
             return resultText
         }
@@ -165,6 +167,7 @@ class BottomDialogFragment(
 
         } catch (e: Exception) {
             e.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(e)
             Toast.makeText(requireContext(), resources.getString(R.string.tts_error), Toast.LENGTH_SHORT).show()
         }
     }
@@ -199,7 +202,6 @@ class BottomDialogFragment(
         KakaoTranslateApi.create().translateKakao(replaceText, "en", "kr").enqueue(object : Callback<TranslateKakaoModel> {
             override fun onResponse(call: Call<TranslateKakaoModel>, response: Response<TranslateKakaoModel>) {
                 if(response.isSuccessful.not()) {
-                    Log.e(TAG, "KAKAO translate Fail")
                     Toast.makeText(requireContext(), resources.getString(R.string.translate_fail), Toast.LENGTH_SHORT).show()
                     progressBarHide()
                     return
@@ -218,7 +220,7 @@ class BottomDialogFragment(
             }
 
             override fun onFailure(call: Call<TranslateKakaoModel>, t: Throwable) {
-                Log.e(TAG, t.message.toString())
+                FirebaseCrashlytics.getInstance().recordException(t)
                 Toast.makeText(requireContext(), resources.getString(R.string.translate_fail), Toast.LENGTH_SHORT).show()
                 progressBarHide()
             }
