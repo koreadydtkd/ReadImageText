@@ -37,9 +37,9 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id" />
 
-        <activity android:name=".floating.HistoryActivity" />
-        <activity android:name=".floating.LicenseDetailActivity" />
-        <activity android:name=".floating.AppInformationActivity" />
+        <activity android:name=".HistoryActivity" />
+        <activity android:name=".LicenseDetailActivity" />
+        <activity android:name=".AppInformationActivity" />
     </application>
 
 </manifest>

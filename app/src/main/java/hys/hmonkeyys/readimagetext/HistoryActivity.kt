@@ -1,11 +1,11 @@
-package hys.hmonkeyys.readimagetext.floating
+package hys.hmonkeyys.readimagetext
 
+import android.R.id
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.adapter.HistoryAdapter
 import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class HistoryActivity : AppCompatActivity() {
     private val binding: ActivityHistoryBinding by lazy {
@@ -49,8 +50,10 @@ class HistoryActivity : AppCompatActivity() {
         historyAdapter = HistoryAdapter(deleteSelectItemListener = { selectModel ->
             deleteHistory(selectModel)
         }, moveWebView = { selectUrl ->
-            setResult(RESPONSE_CODE, Intent().putExtra(Util.MAIN_TO_HISTORY_DEFAULT, selectUrl))
-            finish()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            intent.putExtra(Util.MAIN_TO_HISTORY_DEFAULT, selectUrl)
+            startActivity(intent)
         })
 
         binding.historyRecyclerView.adapter = historyAdapter

@@ -9,14 +9,12 @@
         android:id="@+id/dateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textStyle="bold"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/historyUrlTextView"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/deleteButton"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="2021년 6월 2일" />-->
+        tools:text="2021-06-02" />-->
 
     <TextView
         android:id="@+id/historyUrlTextView"
@@ -34,9 +32,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/deleteButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_marginEnd="8dp"
+        app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/historyUrlTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/historyUrlTextView">

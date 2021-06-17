@@ -26,6 +26,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.mlkit.vision.common.InputImage
@@ -34,8 +35,6 @@ import com.google.mlkit.vision.text.TextRecognizerOptions
 import hys.hmonkeyys.readimagetext.dialog.CustomDialog
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import hys.hmonkeyys.readimagetext.dialog.BottomDialogFragment
-import hys.hmonkeyys.readimagetext.floating.AppInformationActivity
-import hys.hmonkeyys.readimagetext.floating.HistoryActivity
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
@@ -58,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     private var db: WebDatabase? = null
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+    /*private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
         if(activityResult.resultCode == REQUEST_CODE) {
             activityResult.data?.let { data ->
                 val selectUrl = data.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT).toString()
@@ -67,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "data is null!!")
             }
         }
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -162,30 +161,17 @@ class MainActivity : AppCompatActivity() {
             binding.webView.pageUp(true)
         }
 
-        // 앱정보 보기 플로팅 버튼
-        binding.fabAppInfo.setOnClickListener {
+        // 앱 설정 플로팅 버튼
+        binding.fabAppSetting.setOnClickListener {
             closeFloatingButtonWithAnimation()
             startActivity(Intent(this, AppInformationActivity::class.java))
-        }
-
-        // 히스토리 보기 플로팅 버튼
-        binding.fabHistory.setOnClickListener {
-            closeFloatingButtonWithAnimation()
-            startForResult.launch(Intent(this, HistoryActivity::class.java))
         }
 
         // 스크린 캡처 플로팅 버튼
         binding.fabScreenCapture.setOnClickListener {
             closeFloatingButtonWithAnimation()
 
-//            val captureCount = spf.getInt(SharedPreferencesConst.CAPTURE_COUNT, 0)
-//            if(captureCount > 10) {
-//                // todo 인앱결제 구현
-//                Toast.makeText(this, "무료 횟수를 모두 이용하였습니다.", Toast.LENGTH_SHORT).show()
-//            } else {
             Handler(mainLooper).postDelayed({
-//                    spf.edit().putInt(SharedPreferencesConst.CAPTURE_COUNT, captureCount + 1).apply()
-
                 val rootView = this.window.decorView.rootView
                 val bitmap = getBitmapFromView(rootView)
 
@@ -215,10 +201,8 @@ class MainActivity : AppCompatActivity() {
     private fun closeFloatingButtonWithAnimation() {
         ObjectAnimator.ofFloat(binding.fabMoveTopTextView, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabMoveTop, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppInfoTextView, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppInfo, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabHistoryTextView, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabHistory, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppSettingTextView, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppSetting, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabScreenCaptureTextView, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabScreenCapture, TRANSLATION_Y, 0f).apply { start() }
         binding.fabMain.setImageResource(R.drawable.ic_add_24)
@@ -226,12 +210,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openFloatingButtonWithAnimation() {
-        ObjectAnimator.ofFloat(binding.fabMoveTopTextView, TRANSLATION_Y, -800f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabMoveTop, TRANSLATION_Y, -800f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppInfoTextView, TRANSLATION_Y, -600f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppInfo, TRANSLATION_Y, -600f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabHistoryTextView, TRANSLATION_Y, -400f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabHistory, TRANSLATION_Y, -400f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabMoveTopTextView, TRANSLATION_Y, -520f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabMoveTop, TRANSLATION_Y, -520f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppSettingTextView, TRANSLATION_Y, -360f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabAppSetting, TRANSLATION_Y, -360f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabScreenCaptureTextView, TRANSLATION_Y, -200f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabScreenCapture, TRANSLATION_Y, -200f).apply { start() }
         binding.fabMain.setImageResource(R.drawable.ic_clear_24)
@@ -254,7 +236,6 @@ class MainActivity : AppCompatActivity() {
         try {
             val image = InputImage.fromBitmap(bitmap, 0)
             val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-
             recognizer.process(image)
                 .addOnSuccessListener {
                     if(it.text.length > OCR_TEXT_LIMIT) {
@@ -267,12 +248,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener {
                     it.printStackTrace()
+                    FirebaseCrashlytics.getInstance().recordException(it)
                     Toast.makeText(this, resources.getString(R.string.ocr_error), Toast.LENGTH_SHORT).show()
                 }
 
         } catch (e: IOException) {
-            Toast.makeText(this, resources.getString(R.string.ocr_error), Toast.LENGTH_SHORT).show()
             e.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Toast.makeText(this, resources.getString(R.string.ocr_error), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -388,6 +371,22 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        try {
+            val selectUrl = intent.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT)
+            if(selectUrl.isNullOrEmpty()) {
+                return
+            }
+            binding.webView.loadUrl(selectUrl)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+
     }
 
     override fun onStop() {

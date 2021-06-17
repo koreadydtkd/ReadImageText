@@ -1,4 +1,4 @@
-package hys.hmonkeyys.readimagetext.floating
+package hys.hmonkeyys.readimagetext
 
 import android.content.Context
 import android.content.Intent
@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityAppInformationBinding
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 
@@ -100,6 +99,10 @@ class AppInformationActivity : AppCompatActivity() {
             Toast.makeText(this, resources.getString(R.string.edit_default_url), Toast.LENGTH_SHORT).show()
         }
 
+        binding.historyButton.setOnClickListener {
+            startActivity(Intent(this, HistoryActivity::class.java))
+        }
+
         // 라이센스 TextView
         binding.licenseDetailTextView.setOnClickListener {
             startActivity(Intent(this, LicenseDetailActivity::class.java))
@@ -108,7 +111,7 @@ class AppInformationActivity : AppCompatActivity() {
         // 앱 버전 TextView
         try {
             val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
-            binding.appVersionTextView.text = info.versionName
+            binding.appVersionTextView.text = "Version ${info.versionName}"
         } catch (e: Exception) {
             e.printStackTrace()
             FirebaseCrashlytics.getInstance().recordException(e)

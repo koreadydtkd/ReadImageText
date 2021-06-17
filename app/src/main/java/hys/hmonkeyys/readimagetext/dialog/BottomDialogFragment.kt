@@ -249,7 +249,7 @@ class BottomDialogFragment(
 
     companion object {
         private const val TAG = "HYS_BottomDialogFragment"
-        private const val TTS_PITCH = 0.8F
+        private const val TTS_PITCH = 1.0F
         private const val TTS_SPEECH_RATE = 0.8F
     }
 

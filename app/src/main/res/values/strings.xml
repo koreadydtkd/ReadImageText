@@ -7,10 +7,10 @@
     <string name="banner_ad_test_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- Main -->
-    <string name="main_fab_contents1">앱 정보 확인하기</string>
-    <string name="main_fab_contents2">방문 기록 확인하기</string>
-    <string name="main_fab_contents3">선택한 영역 범위 안에서\n영어를 읽어올 수 있습니다</string>
-    <string name="main_fab_contents4">맨 위로 이동하기</string>
+    <string name="main_fab_contents1">앱 설정</string>
+    <string name="main_fab_contents2">방문 기록</string>
+    <string name="main_fab_contents3">영역 선택</string>
+    <string name="main_fab_contents4">맨 위로</string>
     <string name="fab_description">이미지가 확인되지 않습니다.</string>
     <string name="ocr_error">Image Read Fail</string>
     <string name="ocr_text_limit">최대 350자까지 추출이 가능합니다.\n다시 영역을 선택해주세요.</string>
@@ -33,6 +33,12 @@
     <!-- AppInformation -->
     <string name="edit_speed">속도가 변경되었습니다.</string>
     <string name="edit_default_url">기본 주소가 변경되었습니다.</string>
+    <string name="speech_speed">읽기 속도</string>
+    <string name="change">변경</string>
+    <string name="look">보기</string>
+    <string name="detail">자세히</string>
+    <string name="history">방문 기록</string>
+    <string name="license_terms_of_service">라이센스 이용약관</string>
 
     <!-- Permissions -->
     <string name="decline_permissions">권한 허용 후 이용할 수 있습니다.</string>

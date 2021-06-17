@@ -1,4 +1,4 @@
-package hys.hmonkeyys.readimagetext.floating
+package hys.hmonkeyys.readimagetext
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

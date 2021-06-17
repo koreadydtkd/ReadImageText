@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".floating.AppInformationActivity">
+    tools:context=".AppInformationActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/titleBar"
@@ -29,7 +29,7 @@
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="앱 정보"
+            android:text="@string/main_fab_contents1"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="읽기 속도"
+        android:text="@string/speech_speed"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/speakSpeedCardView"
@@ -96,20 +96,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/shape_address_bar"
         android:inputType="textUri"
-        android:paddingVertical="4dp"
         android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/urlEditButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toBottomOf="@+id/view2"
+        tools:text="www.google.com" />
 
     <Button
         android:id="@+id/urlEditButton"
         android:layout_width="65dp"
-        android:layout_height="45dp"
-        android:text="변경"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/teal_200"
+        android:text="@string/change"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/settingUrlEditText"
         app:layout_constraintEnd_toEndOf="@id/speakSpeedCardView"
         app:layout_constraintTop_toTopOf="@id/settingUrlEditText" />
@@ -125,22 +129,55 @@
         app:layout_constraintTop_toBottomOf="@+id/settingUrlEditText" />
 
     <TextView
-        android:id="@+id/licenseTextView"
+        android:id="@+id/historyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="라이센스 이용약관"
+        android:text="@string/history"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3" />
 
+    <Button
+        android:id="@+id/historyButton"
+        android:layout_width="65dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/teal_200"
+        android:text="@string/look"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/historyTextView"
+        app:layout_constraintEnd_toEndOf="@+id/urlEditButton"
+        app:layout_constraintTop_toTopOf="@+id/historyTextView" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/historyTextView" />
+
+    <TextView
+        android:id="@+id/licenseTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/license_terms_of_service"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view4" />
+
     <TextView
         android:id="@+id/licenseDetailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="자세히"
+        android:text="@string/detail"
         android:textColor="@color/cursor"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/licenseTextView"
@@ -148,7 +185,7 @@
         app:layout_constraintTop_toTopOf="@+id/licenseTextView" />
 
     <View
-        android:id="@+id/view4"
+        android:id="@+id/view5"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="12dp"
@@ -158,38 +195,14 @@
         app:layout_constraintTop_toBottomOf="@+id/licenseTextView" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="앱 버전"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view4" />
-
-    <TextView
         android:id="@+id/appVersionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="1.0.0"
-        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/licenseDetailTextView"
-        app:layout_constraintTop_toBottomOf="@+id/view4" />
-
-
-    <View
-        android:id="@+id/view5"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appVersionTextView" />
+        tools:text="Version 1.0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
