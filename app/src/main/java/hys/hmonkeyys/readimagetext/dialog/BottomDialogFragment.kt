@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.mlkit.nl.translate.*
@@ -19,16 +22,13 @@ import hys.hmonkeyys.readimagetext.api.KakaoTranslateApi
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding
 import hys.hmonkeyys.readimagetext.model.TranslateKakaoModel
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
+import hys.hmonkeyys.readimagetext.viewmodel.BottomSheetDialogViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-class BottomDialogFragment(
-
-    private val readText: String
-
-) : BottomSheetDialogFragment(), TextToSpeech.OnInitListener {
+class BottomDialogFragment(private val readText: String) : BottomSheetDialogFragment(), TextToSpeech.OnInitListener {
 
     private var binding: FragmentBottomDialogBinding? = null
 
@@ -36,11 +36,13 @@ class BottomDialogFragment(
         requireContext().getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
     }
 
-    private var translateCount = 1
-
     private val tts: TextToSpeech by lazy {
         TextToSpeech(requireContext(), this)
     }
+
+    private val model: BottomSheetDialogViewModel by activityViewModels()
+
+    private var ocrResultText = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentBottomDialogBinding.inflate(inflater, container, false)
@@ -51,42 +53,23 @@ class BottomDialogFragment(
         super.onViewCreated(view, savedInstanceState)
 
         binding?.let { binding ->
+            // 추출한 텍스트 초기화
+            initResultText(binding)
 
-            val replaceText = readText.replace("\n", " ")
-            if(isAlmostUpperText()) {
-                binding.resultEditText.setText(getDotTextSort(replaceText))
-            } else {
-                binding.resultEditText.setText(replaceText)
-            }
+            // 뷰-모델 초기화(번역 횟수 감지)
+            initViewModel(binding)
 
-            binding.listenButton.setOnClickListener {
-                if(tts.isSpeaking) {
-                    return@setOnClickListener
-                }
-                speakOut()
-            }
+            // 버튼 초기화
+            initButtons(binding)
+        }
+    }
 
-            binding.translateButton.setOnClickListener {
-                // 프로그레스바 돌고있으면 return
-                if(binding.progressBar.isVisible) {
-                    Toast.makeText(requireContext(), resources.getString(R.string.wait_please), Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                } else {
-                    if(translateCount > 3) {
-                        it.setBackgroundResource(R.drawable.clicked_background)
-                        binding.translateTextView.setTextColor(Color.WHITE)
-                        Toast.makeText(requireContext(), resources.getString(R.string.selected_translate_limit), Toast.LENGTH_SHORT).show()
-                        return@setOnClickListener
-                    }
-
-                    progressBarShow()
-                    translateCount += 1
-                    translateKakao(binding.resultEditText.text.toString())
-                }
-
-
-            }
-
+    private fun initResultText(binding: FragmentBottomDialogBinding) {
+        val replaceText = readText.replace("\n", " ")
+        if(isAlmostUpperText()) {
+            binding.resultEditText.setText(getDotTextSort(replaceText))
+        } else {
+            binding.resultEditText.setText(replaceText)
         }
     }
 
@@ -108,31 +91,39 @@ class BottomDialogFragment(
         }
     }
 
-    private fun getDotTextSort(resultText: String): String {
-        try {
-            var result = resultText.substring(0, 1).uppercase() + resultText.substring(1).lowercase()
-
-            val dotList = mutableListOf<Int>()
-            for(i in 0..result.lastIndex - 5) {
-                if(result[i].toString() == "." || result[i].toString() == "!" || result[i].toString() == "?") {
-                    dotList.add(i + 2)
-                }
+    private fun initViewModel(binding: FragmentBottomDialogBinding){
+        model.translateCount.observe(viewLifecycleOwner, { count ->
+            Log.d(TAG, "카운트: $count")
+            if(count == 3) {
+                binding.translateButton.setBackgroundResource(R.drawable.clicked_background)
+                binding.translateButton.isEnabled = false
+                binding.translateButton.isClickable = false
+                binding.translateTextView.setTextColor(Color.WHITE)
+                Toast.makeText(requireContext(), resources.getString(R.string.selected_translate_limit), Toast.LENGTH_LONG).show()
             }
+        })
+    }
 
-            dotList.forEach { dotIndex ->
-                Log.e(TAG, dotIndex.toString())
-                result = result.substring(0, dotIndex) +
-                        result.substring(dotIndex, dotIndex + 1).uppercase() +
-                        result.substring(dotIndex + 1)
-            }
-            return result
-        } catch (e: Exception) {
-            e.printStackTrace()
-            FirebaseCrashlytics.getInstance().recordException(e)
-            Toast.makeText(requireContext(), resources.getString(R.string.tts_error), Toast.LENGTH_SHORT).show()
-            return resultText
+    private fun initButtons(binding: FragmentBottomDialogBinding) {
+        binding.listenButton.setOnClickListener {
+            if(tts.isSpeaking) return@setOnClickListener
+            speakOut()
         }
 
+        binding.translateButton.setOnClickListener {
+            if(binding.progressBar.isVisible) {
+                Toast.makeText(requireContext(), resources.getString(R.string.wait_please), Toast.LENGTH_SHORT).show()
+            } else {
+                if(ocrResultText != binding.resultEditText.text.toString()) {
+                    ocrResultText = binding.resultEditText.text.toString()
+
+                    progressBarShow()
+                    translateKakao(ocrResultText)
+                } else {
+                    Toast.makeText(requireContext(), "변경된 글자가 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     // TTS 초기화
@@ -171,6 +162,35 @@ class BottomDialogFragment(
             Toast.makeText(requireContext(), resources.getString(R.string.tts_error), Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun getDotTextSort(resultText: String): String {
+        try {
+            var result = resultText.substring(0, 1).uppercase() + resultText.substring(1).lowercase()
+
+            val dotList = mutableListOf<Int>()
+            for(i in 0..result.lastIndex - 5) {
+                if(result[i].toString() == "." || result[i].toString() == "!" || result[i].toString() == "?") {
+                    dotList.add(i + 2)
+                }
+            }
+
+            dotList.forEach { dotIndex ->
+                Log.e(TAG, dotIndex.toString())
+                result = result.substring(0, dotIndex) +
+                        result.substring(dotIndex, dotIndex + 1).uppercase() +
+                        result.substring(dotIndex + 1)
+            }
+            return result
+        } catch (e: Exception) {
+            e.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Toast.makeText(requireContext(), resources.getString(R.string.tts_error), Toast.LENGTH_SHORT).show()
+            return resultText
+        }
+
+    }
+
+
 
     /*private fun translatePapago(translateText: String) {
         val replaceText = translateText.replace("\n", " ")
@@ -212,9 +232,10 @@ class BottomDialogFragment(
 
                     val sb: StringBuilder = StringBuilder()
                     items?.forEach {
-                        sb.append(it)
+                        sb.append("$it ")
                     }
                     binding?.resultTranslationEditText?.setText(sb.toString())
+                    model.increaseCount()
                     progressBarHide()
                 }
             }
@@ -242,8 +263,9 @@ class BottomDialogFragment(
     override fun onDestroy() {
         tts.stop()
         tts.shutdown()
-        translateCount = 0
+        model.setDefaultValue()
         binding = null
+
         super.onDestroy()
     }
 

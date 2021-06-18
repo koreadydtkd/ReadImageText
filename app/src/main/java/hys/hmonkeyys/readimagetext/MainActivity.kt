@@ -146,15 +146,6 @@ class MainActivity : AppCompatActivity() {
             toggleFab()
         }
 
-        binding.fabCheck.setOnClickListener {
-            val selectedBitmap = binding.cropImageView.croppedImage
-            selectedBitmap ?: return@setOnClickListener
-
-            readImageTextBitmap(selectedBitmap)
-
-            binding.isCropImageViewVisible = false
-        }
-
         // 웹뷰 스크롤 맨위로
         binding.fabMoveTop.setOnClickListener {
             closeFloatingButtonWithAnimation()
@@ -178,8 +169,15 @@ class MainActivity : AppCompatActivity() {
                 binding.cropImageView.setImageBitmap(bitmap)
                 binding.isCropImageViewVisible = true
             }, 300)
-//            }
+        }
 
+        binding.fabCheck.setOnClickListener {
+            val selectedBitmap = binding.cropImageView.croppedImage
+            selectedBitmap ?: return@setOnClickListener
+
+            readImageTextBitmap(selectedBitmap)
+
+            binding.isCropImageViewVisible = false
         }
 
     }

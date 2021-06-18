@@ -12,7 +12,7 @@
     <string name="main_fab_contents3">영역 선택</string>
     <string name="main_fab_contents4">맨 위로</string>
     <string name="fab_description">이미지가 확인되지 않습니다.</string>
-    <string name="ocr_error">Image Read Fail</string>
+    <string name="ocr_error">텍스트 추출에 실패하였습니다.</string>
     <string name="ocr_text_limit">최대 350자까지 추출이 가능합니다.\n다시 영역을 선택해주세요.</string>
 
     <!-- BottomSheetDialog -->
@@ -23,7 +23,7 @@
     <string name="bottom_sheet_text4">듣기</string>
     <string name="bottom_sheet_button">번역</string>
     <string name="wait_please">잠시만 기다려주세요.</string>
-    <string name="selected_translate_limit">선택영역에 대한 번역은 3회까지 가능합니다.</string>
+    <string name="selected_translate_limit">번역완료.\n선택영역에 대한 번역은 3회까지 가능합니다.</string>
     <string name="translate_fail">번역 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.</string>
 
     <!-- History -->
