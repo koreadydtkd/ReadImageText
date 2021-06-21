@@ -16,19 +16,15 @@
 
         <!-- 화면 맨위에 있는 bar 변경 -->
         <item name="android:windowLightStatusBar">true</item>
-
-        <!-- BottomSheetDialog 커스텀 상단 둥글게 -->
-        <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
-
-        <!-- Customize End. -->
     </style>
 
-    <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+    <!-- BottomSheetDialog 커스텀 상단 둥글게 -->
+    <style name="CustomBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
     </style>
 
-    <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
-        <item name="shapeAppearanceOverlay">@style/CustomShapeAppearanceBottomSheetDialog</item>
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="CustomShapeAppearanceBottomSheetDialog" parent="">

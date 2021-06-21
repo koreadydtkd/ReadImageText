@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
@@ -43,6 +41,11 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
     private val model: BottomSheetDialogViewModel by activityViewModels()
 
     private var ocrResultText = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentBottomDialogBinding.inflate(inflater, container, false)
@@ -95,10 +98,13 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
         model.translateCount.observe(viewLifecycleOwner, { count ->
             Log.d(TAG, "카운트: $count")
             if(count == 3) {
-                binding.translateButton.setBackgroundResource(R.drawable.clicked_background)
-                binding.translateButton.isEnabled = false
-                binding.translateButton.isClickable = false
+                binding.translateButton.apply {
+                    setBackgroundResource(R.drawable.clicked_background)
+                    isEnabled = false
+                    isClickable = false
+                }
                 binding.translateTextView.setTextColor(Color.WHITE)
+
                 Toast.makeText(requireContext(), resources.getString(R.string.selected_translate_limit), Toast.LENGTH_LONG).show()
             }
         })
@@ -189,8 +195,6 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
         }
 
     }
-
-
 
     /*private fun translatePapago(translateText: String) {
         val replaceText = translateText.replace("\n", " ")
