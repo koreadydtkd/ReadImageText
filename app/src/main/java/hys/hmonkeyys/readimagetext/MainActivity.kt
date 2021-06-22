@@ -1,12 +1,10 @@
 package hys.hmonkeyys.readimagetext
 
-import android.Manifest
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
@@ -18,20 +16,15 @@ import android.webkit.URLUtil
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizerOptions
-import hys.hmonkeyys.readimagetext.dialog.CustomDialog
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import hys.hmonkeyys.readimagetext.dialog.BottomDialogFragment
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
@@ -80,8 +73,6 @@ class MainActivity : AppCompatActivity() {
         initWebView()
         initViews()
         initAdmob()
-
-        checkPermissions()
     }
 
     // 상단 툴바 초기화
@@ -256,13 +247,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 7일 전 날짜 가져오기
-    private fun getDateWeeksAgo(selectWeek: Int): String {
-        val week = Calendar.getInstance()
-        week.add(Calendar.DATE, (selectWeek * -7))
-        return SimpleDateFormat("yyyy-MM-dd").format(week.time)
-    }
-
     private fun initAdmob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
@@ -280,93 +264,6 @@ class MainActivity : AppCompatActivity() {
                     Log.e(TAG, "광고 로드에 문제 발생 onAdFailedToLoad ${error.message}")
                 }
             }
-        }
-    }
-
-    private fun checkPermissions() {
-        try {
-            val rejectedPermissionList = ArrayList<String>()
-
-            // 필요한 퍼미션들을 하나씩 권한을 받았는지 확인
-            for(permission in REQUIRED_PERMISSIONS){
-                if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                    // 권한이 없으면 추가
-                    rejectedPermissionList.add(permission)
-                }
-            }
-
-            // 거절한 퍼미션이 있으면 권한 요청
-            if(rejectedPermissionList.isNotEmpty()){
-                val array = arrayOfNulls<String>(rejectedPermissionList.size)
-                ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), PERMISSIONS_REQUEST_CODE)
-            } else {
-                Log.d(TAG, "권한 모두 허용됨")
-                deleteData()
-
-                checkUpdateVersion()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    // 지난 데이터 삭제
-    private fun deleteData() {
-        CoroutineScope(Dispatchers.IO).launch {
-            db?.historyDao()?.deleteDataOneWeeksAgo(getDateWeeksAgo(1))
-        }
-    }
-
-    private fun checkUpdateVersion() {
-        val remoteConfig = Firebase.remoteConfig
-        remoteConfig.fetchAndActivate().addOnCompleteListener {
-            if(it.isSuccessful) {
-                val updateVersion = remoteConfig.getLong(REMOTE_CONFIG_KEY)
-                Log.i(TAG, "$updateVersion")
-                if(updateVersion > Util().getAppVersion(applicationContext)) {
-                    showUpdateDialog()
-                }
-
-            }
-        }
-    }
-
-    private fun showUpdateDialog() {
-        val customDialog = CustomDialog(/*dialogClickedListener = {
-            Toast.makeText(this, "$it 클릭", Toast.LENGTH_SHORT).show()
-        }*/)
-        customDialog.show(supportFragmentManager, customDialog.tag)
-    }
-
-    // 퍼미션 권한 허용 요청에 대한 결과
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        try {
-            when (requestCode) {
-                PERMISSIONS_REQUEST_CODE -> {
-                    if(grantResults.isNotEmpty()) {
-                        var isAllGranted = true
-                        for(grant in grantResults) {
-                            if(grant != PackageManager.PERMISSION_GRANTED) {
-                                isAllGranted = false
-                                break
-                            }
-                        }
-
-                        if(isAllGranted) {
-                            // 모든 권한 허용
-                        } else {
-                            // 권한 불허
-                            Log.e(TAG, "권한 미 허용")
-                            Toast.makeText(this, resources.getString(R.string.decline_permissions), Toast.LENGTH_LONG).show()
-                            finish()
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
@@ -454,17 +351,9 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "HYS_MainActivity"
 
-        private const val PERMISSIONS_REQUEST_CODE = 100
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.RECORD_AUDIO)
-
         private const val DEFAULT_URL = "https://www.google.com"
         private const val TRANSLATION_Y = "translationY"
 
-        private const val REQUEST_CODE = 1014
-
         private const val OCR_TEXT_LIMIT = 350
-
-        private const val REMOTE_CONFIG_KEY = "app_version"
     }
-
 }

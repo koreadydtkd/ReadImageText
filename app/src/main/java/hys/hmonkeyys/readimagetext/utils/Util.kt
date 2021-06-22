@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.util.Log
 import androidx.core.content.pm.PackageInfoCompat
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Util {
 
@@ -25,4 +27,19 @@ class Util {
 
         const val MAIN_TO_HISTORY_DEFAULT = "select_url"
     }
+}
+
+// 7일 전 날짜 가져오기
+fun getDateWeeksAgo(selectWeek: Int): String {
+    val week = Calendar.getInstance()
+    week.add(Calendar.DATE, (selectWeek * -7))
+    return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+}
+
+// . ! ? 포함여부 확인 확장함수
+fun Char.isSpecialSymbols(): Boolean {
+    if(this.toString() == "." || this.toString() == "!" || this.toString() == "?") {
+        return true
+    }
+    return false
 }

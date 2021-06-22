@@ -14,4 +14,7 @@
 
     <color name="transparent">#00000000</color>
     <color name="view_yellow">#FFC107</color>
+
+    <color name="intro_text_blue">#4472C4</color>
+    <color name="intro_text_yellow">#FFFF00</color>
 </resources>

@@ -1,9 +1,7 @@
 package hys.hmonkeyys.readimagetext.dialog
 
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +12,7 @@ import hys.hmonkeyys.readimagetext.databinding.DialogCustomBinding
 
 class CustomDialog(
 
-//    val dialogClickedListener: (String) -> Unit
+    val dialogClickedListener: () -> Unit
 
 ) : DialogFragment() {
     private var binding: DialogCustomBinding? = null
@@ -37,28 +35,13 @@ class CustomDialog(
         super.onViewCreated(view, savedInstanceState)
 
         binding?.updateButton?.setOnClickListener {
-            openPlayStore()
+            dialogClickedListener()
         }
-    }
 
-    private fun openPlayStore() {
-        try {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(APP_URI + requireContext().packageName)
-            requireContext().startActivity(intent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-        }
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         binding = null
-    }
-
-    companion object {
-        private const val APP_URI = "market://details?id="
+        super.onDestroy()
     }
 }

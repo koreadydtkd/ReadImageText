@@ -107,15 +107,6 @@ class AppInformationActivity : AppCompatActivity() {
         binding.licenseDetailTextView.setOnClickListener {
             startActivity(Intent(this, LicenseDetailActivity::class.java))
         }
-
-        // 앱 버전 TextView
-        try {
-            val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
-            binding.appVersionTextView.text = "Version ${info.versionName}"
-        } catch (e: Exception) {
-            e.printStackTrace()
-            FirebaseCrashlytics.getInstance().recordException(e)
-        }
     }
 
     override fun onPause() {

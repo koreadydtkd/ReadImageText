@@ -6,6 +6,10 @@
     <string name="banner_ad_id">ca-app-pub-3924676263890790/2183461317</string>
     <string name="banner_ad_test_id">ca-app-pub-3940256099942544/6300978111</string>
 
+    <!-- Intro -->
+    <string name="contents">영어 웹툰, 해외 뉴스 등\n웹사이트 서핑 중 모르는 부분을\n번역하고 Listening 과 함께 공부하자 !!</string>
+    <string name="app_version">Version %s</string>
+
     <!-- Main -->
     <string name="main_fab_contents1">앱 설정</string>
     <string name="main_fab_contents2">방문 기록</string>

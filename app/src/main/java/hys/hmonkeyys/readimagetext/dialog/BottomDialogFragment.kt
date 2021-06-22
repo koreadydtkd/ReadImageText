@@ -20,6 +20,7 @@ import hys.hmonkeyys.readimagetext.api.KakaoTranslateApi
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding
 import hys.hmonkeyys.readimagetext.model.TranslateKakaoModel
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
+import hys.hmonkeyys.readimagetext.utils.isSpecialSymbols
 import hys.hmonkeyys.readimagetext.viewmodel.BottomSheetDialogViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -175,7 +176,7 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
 
             val dotList = mutableListOf<Int>()
             for(i in 0..result.lastIndex - 5) {
-                if(result[i].toString() == "." || result[i].toString() == "!" || result[i].toString() == "?") {
+                if(result[i].isSpecialSymbols()) {
                     dotList.add(i + 2)
                 }
             }
