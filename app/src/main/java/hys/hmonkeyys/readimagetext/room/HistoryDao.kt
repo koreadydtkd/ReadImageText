@@ -6,8 +6,8 @@ import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 @Dao
 interface HistoryDao {
 
-    // 전체 조회(역순으로)
-    @Query("SELECT * FROM web ORDER BY uid DESC")
+    // 전체 조회 (최신 날짜부터 조회하고 나중에 추가된 것부터)
+    @Query("SELECT * FROM web ORDER BY visit_date DESC, uid DESC")
     suspend fun getAll(): List<WebHistoryModel>
 
     // 중복 데이터 조회

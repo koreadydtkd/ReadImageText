@@ -47,14 +47,17 @@
             android:name=".HistoryActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".LicenseDetailActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".AppInformationActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+
     </application>
 
 </manifest>

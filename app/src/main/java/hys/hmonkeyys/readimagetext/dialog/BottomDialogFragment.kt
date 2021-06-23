@@ -14,7 +14,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.mlkit.nl.translate.*
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.api.KakaoTranslateApi
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding

@@ -3,7 +3,6 @@ package hys.hmonkeyys.readimagetext
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,7 +10,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hys.hmonkeyys.readimagetext.databinding.ActivityAppInformationBinding
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 

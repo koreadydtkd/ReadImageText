@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -12,6 +11,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -41,13 +41,24 @@ class IntroActivity : AppCompatActivity() {
 
         db = WebDatabase.getInstance(applicationContext)
 
+        initStatusBar()
         initTextViews()
+
         checkPermissions()
+    }
+
+    private fun initStatusBar() {
+        try {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = resources.getColor(R.color.teal_200, null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun initTextViews() {
         binding.mainTextView.apply {
-            val str = "영어 사이트\n번역하고\n듣기"
+            val str = resources.getString(R.string.intro_main_contents)
             val ssb = SpannableStringBuilder(str)
             ssb.setSpan(ForegroundColorSpan(resources.getColor(R.color.intro_text_blue, null)), 7, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             ssb.setSpan(ForegroundColorSpan(resources.getColor(R.color.intro_text_yellow, null)), 12, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -189,5 +200,6 @@ class IntroActivity : AppCompatActivity() {
         private const val REMOTE_CONFIG_KEY = "app_version"
 
         private const val APP_URI = "market://details?id="
+
     }
 }

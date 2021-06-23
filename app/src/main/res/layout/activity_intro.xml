@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/contentTextView"
-        tools:text="영어 사이트\n번역하고\n듣자 !" />
+        tools:text="@string/intro_main_contents" />
 
     <TextView
         android:id="@+id/contentTextView"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:text="@string/contents"
+        android:text="@string/intro_contents"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@id/mainTextView"

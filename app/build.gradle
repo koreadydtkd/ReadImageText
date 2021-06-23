@@ -14,8 +14,8 @@ android {
         applicationId "hys.hmonkeyys.readimagetext"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 17
-        versionName "1.2.8"
+        versionCode 18
+        versionName "1.2.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,9 +53,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    // Firebase Start
+    implementation "androidx.activity:activity-ktx:1.2.3"
+    implementation "androidx.fragment:fragment-ktx:1.3.5"
 
-    // base
+    // ----- Firebase Start -----
+
+    // Default
     implementation platform('com.google.firebase:firebase-bom:28.1.0')
 
     // Crashlytics
@@ -65,14 +68,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-config-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    // Firebase End
+    // ----- Firebase End -----
 
     // ML Kit OCR
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:16.2.0'
     implementation 'com.google.mlkit:image-labeling:17.0.4'
-
-    // ML Kit 번역
-    implementation 'com.google.mlkit:translate:16.1.2'
 
     // 스와이프하여 새로고침
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
@@ -103,7 +103,4 @@ dependencies {
 
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
-
-    implementation "androidx.activity:activity-ktx:1.2.3"
-    implementation "androidx.fragment:fragment-ktx:1.3.5"
 }

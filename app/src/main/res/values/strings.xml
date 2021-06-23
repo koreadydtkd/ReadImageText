@@ -7,7 +7,8 @@
     <string name="banner_ad_test_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- Intro -->
-    <string name="contents">영어 웹툰, 해외 뉴스 등\n웹사이트 서핑 중 모르는 부분을\n번역하고 Listening 과 함께 공부하자 !!</string>
+    <string name="intro_main_contents">영어 사이트\n번역하고\n듣기</string>
+    <string name="intro_contents">영어 웹툰, 해외 뉴스 등\n웹사이트 서핑 중 모르는 부분을\n번역하고 Listening 과 함께 공부하자 !!</string>
     <string name="app_version">Version %s</string>
 
     <!-- Main -->
@@ -18,6 +19,7 @@
     <string name="fab_description">이미지가 확인되지 않습니다.</string>
     <string name="ocr_error">텍스트 추출에 실패하였습니다.</string>
     <string name="ocr_text_limit">최대 350자까지 추출이 가능합니다.\n다시 영역을 선택해주세요.</string>
+    <string name="backward_finish">뒤로가기를 한번 더 실행하면 앱이 종료 됩니다.</string>
 
     <!-- BottomSheetDialog -->
     <string name="tts_error">예기치 못한 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.</string>

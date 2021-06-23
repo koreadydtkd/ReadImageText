@@ -1,8 +1,8 @@
 package hys.hmonkeyys.readimagetext
 
-import android.R.id
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +11,7 @@ import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
 import hys.hmonkeyys.readimagetext.utils.Util
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 
 class HistoryActivity : AppCompatActivity() {
@@ -47,14 +44,14 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun initAdapter() {
-        historyAdapter = HistoryAdapter(deleteSelectItemListener = { selectModel ->
-            deleteHistory(selectModel)
-        }, moveWebView = { selectUrl ->
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            intent.putExtra(Util.MAIN_TO_HISTORY_DEFAULT, selectUrl)
-            startActivity(intent)
-        })
+        historyAdapter = HistoryAdapter(
+            deleteSelectItemListener = { selectModel ->
+                deleteHistory(selectModel)
+            },
+            moveWebView = { selectUrl ->
+                selectURLGoToMainWebView(selectUrl)
+            }
+        )
 
         binding.historyRecyclerView.adapter = historyAdapter
 
@@ -76,21 +73,35 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun deleteHistory(selectModel: WebHistoryModel?) {
         CoroutineScope(Dispatchers.IO).launch {
-            withContext(Dispatchers.Default) {
-                if(selectModel == null) {
-                    db?.historyDao()?.deleteAll()
-                    Log.d(TAG, "모두 삭제")
-                } else {
-                    db?.historyDao()?.delete(selectModel)
-                    Log.d(TAG, "선택 삭제")
-                }
-                historyAdapter.submitList(db?.historyDao()?.getAll())
+            if(selectModel == null) {
+                db?.historyDao()?.deleteAll()
+                Log.i(TAG, "모두 삭제")
+            } else {
+                db?.historyDao()?.delete(selectModel)
+                Log.i(TAG, "선택 삭제")
             }
+            historyAdapter.submitList(db?.historyDao()?.getAll())
+        }.invokeOnCompletion {
+            Log.i(TAG, "삭제 완료")
+            Handler(mainLooper).postDelayed({
+                historyAdapter.notifyDataSetChanged()
+            }, 300)
+
+//            Thread.sleep(300)
+//            runOnUiThread {
+//                historyAdapter.notifyDataSetChanged()
+//            }
         }
+    }
+
+    private fun selectURLGoToMainWebView(url: String) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.putExtra(Util.MAIN_TO_HISTORY_DEFAULT, url)
+        startActivity(intent)
     }
 
     companion object {
         private const val TAG = "HYS_HistoryActivity"
-        private const val RESPONSE_CODE = 1014
     }
 }

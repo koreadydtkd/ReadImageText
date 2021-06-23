@@ -29,11 +29,18 @@ class Util {
     }
 }
 
+fun getCurrentDate(): String {
+    val now = System.currentTimeMillis()
+    val date = Date(now)
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return sdf.format(date)
+}
+
 // 7일 전 날짜 가져오기
 fun getDateWeeksAgo(selectWeek: Int): String {
     val week = Calendar.getInstance()
     week.add(Calendar.DATE, (selectWeek * -7))
-    return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+    return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(week.time)
 }
 
 // . ! ? 포함여부 확인 확장함수

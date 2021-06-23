@@ -2,9 +2,7 @@ package hys.hmonkeyys.readimagetext
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
@@ -31,11 +29,11 @@ import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import hys.hmonkeyys.readimagetext.utils.Util
+import hys.hmonkeyys.readimagetext.utils.getCurrentDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -48,6 +46,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var db: WebDatabase? = null
+
+    private var backPressTime = 0L
 
     /*private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
         if(activityResult.resultCode == REQUEST_CODE) {
@@ -269,7 +269,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         try {
             val selectUrl = intent.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT)
             if(selectUrl.isNullOrEmpty()) {
@@ -280,7 +279,6 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
             FirebaseCrashlytics.getInstance().recordException(e)
         }
-
     }
 
     override fun onStop() {
@@ -297,7 +295,13 @@ class MainActivity : AppCompatActivity() {
             if(binding.webView.canGoBack()) {
                 binding.webView.goBack()
             } else {
-                super.onBackPressed()
+                val time = System.currentTimeMillis()
+                if (time - backPressTime > ONE_POINT_FIVE_SECOND) {
+                    Toast.makeText(this, resources.getString(R.string.backward_finish), Toast.LENGTH_SHORT).show()
+                    backPressTime = time
+                } else {
+                    super.onBackPressed()
+                }
             }
         }
     }
@@ -329,15 +333,8 @@ class MainActivity : AppCompatActivity() {
                     db?.historyDao()?.insertHistory(WebHistoryModel(null, url, getCurrentDate()))
                 }
             }
-
         }
 
-        private fun getCurrentDate(): String {
-            val now = System.currentTimeMillis()
-            val date = Date(now)
-            val sdf = SimpleDateFormat("yyyy-MM-dd")
-            return sdf.format(date)
-        }
     }
 
     inner class WebChromeClient: android.webkit.WebChromeClient() {
@@ -355,5 +352,7 @@ class MainActivity : AppCompatActivity() {
         private const val TRANSLATION_Y = "translationY"
 
         private const val OCR_TEXT_LIMIT = 350
+
+        private const val ONE_POINT_FIVE_SECOND = 1500L
     }
 }
