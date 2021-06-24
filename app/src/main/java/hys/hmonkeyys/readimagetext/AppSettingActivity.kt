@@ -6,16 +6,17 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import hys.hmonkeyys.readimagetext.databinding.ActivityAppInformationBinding
+import hys.hmonkeyys.readimagetext.databinding.ActivityAppSettingBinding
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 
-class AppInformationActivity : AppCompatActivity() {
-    private val binding: ActivityAppInformationBinding by lazy {
-        ActivityAppInformationBinding.inflate(layoutInflater)
+class AppSettingActivity : AppCompatActivity() {
+    private val binding: ActivityAppSettingBinding by lazy {
+        ActivityAppSettingBinding.inflate(layoutInflater)
     }
 
     private val spf: SharedPreferences by lazy {
@@ -101,8 +102,7 @@ class AppInformationActivity : AppCompatActivity() {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
 
-        // 라이센스 TextView
-        binding.licenseDetailTextView.setOnClickListener {
+        binding.licenseDetailButton.setOnClickListener {
             startActivity(Intent(this, LicenseDetailActivity::class.java))
         }
     }
@@ -113,7 +113,7 @@ class AppInformationActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "HYS_AppInformationActivity"
+        private const val TAG = "HYS_AppSettingActivity"
         private const val DEFAULT_URL = "https://www.google.com"
     }
 }

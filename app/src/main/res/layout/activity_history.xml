@@ -9,6 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/titleBar"
         android:layout_width="0dp"
+        android:background="@color/teal_200"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +21,7 @@
             android:layout_height="32dp"
             android:layout_marginStart="8dp"
             android:background="@drawable/ic_arrow_back_24"
-            android:backgroundTint="@color/black"
+            android:backgroundTint="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/titleTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/titleTextView" />
@@ -29,8 +30,8 @@
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="히스토리"
-            android:textColor="@color/black"
+            android:text="@string/history"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,20 +45,12 @@
             android:layout_height="32dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/ic_delete_24"
+            android:backgroundTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:background="@color/dark_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleBar" />
 
     <TextView
         android:id="@+id/textView"
@@ -67,10 +60,10 @@
         android:gravity="center"
         android:textSize="12sp"
         android:textColor="@android:color/holo_red_dark"
-        android:text="※ 지난 7일까지만 볼 수 있습니다.\n더 지난 기록은 삭제됩니다."
+        android:text="@string/before_seven_days"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toBottomOf="@+id/titleBar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/historyRecyclerView"

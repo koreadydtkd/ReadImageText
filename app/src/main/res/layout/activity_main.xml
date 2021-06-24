@@ -61,7 +61,6 @@
                 android:inputType="textWebEmailAddress"
                 android:paddingHorizontal="12dp"
                 android:selectAllOnFocus="true"
-                android:textCursorDrawable="@drawable/edittext_cursor"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/goBackButton"

@@ -136,13 +136,12 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
     override fun onInit(status: Int) {
         try {
             if(status == TextToSpeech.SUCCESS) {
-                val result = tts.setLanguage(Locale.ENGLISH)
+                val ttsLang = tts.setLanguage(Locale.ENGLISH)
 
-                if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                if(ttsLang == TextToSpeech.LANG_MISSING_DATA || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
                     Log.e(TAG, "This Language is not supported")
                 } else {
                     speakOut()
-
                 }
             } else {
                 Log.e(TAG, "Initialization Failed!")
@@ -154,14 +153,12 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
 
     // TTS 실행
     private fun speakOut() {
-        val extractedResults = binding?.resultEditText?.text.toString()/*.replace("\n", " ")*/
+        val extractedResults = binding?.resultEditText?.text.toString()
 
         try {
-            val ttsSpeed = spf.getFloat(SharedPreferencesConst.TTS_SPEED, TTS_SPEECH_RATE)
-            tts.setSpeechRate(ttsSpeed)
+            tts.setSpeechRate(spf.getFloat(SharedPreferencesConst.TTS_SPEED, TTS_SPEECH_RATE))
             tts.setPitch(TTS_PITCH)
             tts.speak(extractedResults, TextToSpeech.QUEUE_FLUSH, null, "id1")
-
         } catch (e: Exception) {
             e.printStackTrace()
             FirebaseCrashlytics.getInstance().recordException(e)

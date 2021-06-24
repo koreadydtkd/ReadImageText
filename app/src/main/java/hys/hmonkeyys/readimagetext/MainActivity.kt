@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
         // 앱 설정 플로팅 버튼
         binding.fabAppSetting.setOnClickListener {
             closeFloatingButtonWithAnimation()
-            startActivity(Intent(this, AppInformationActivity::class.java))
+            startActivity(Intent(this, AppSettingActivity::class.java))
         }
 
         // 스크린 캡처 플로팅 버튼
@@ -161,6 +161,7 @@ class MainActivity : AppCompatActivity() {
             }, 300)
         }
 
+        // 스크린 캡처한 텍스트 추출
         binding.fabCheck.setOnClickListener {
             val selectedBitmap = binding.cropImageView.croppedImage
             selectedBitmap ?: return@setOnClickListener
