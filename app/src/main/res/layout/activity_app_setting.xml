@@ -47,9 +47,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="기본주소"
+        android:text="@string/default_url"
         android:textSize="16sp"
-        android:textColor="@color/teal_200"
+        android:textColor="@color/dark_gray"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleBar" />
@@ -87,6 +87,7 @@
         android:layout_height="32dp"
         android:layout_marginEnd="16dp"
         android:foreground="?android:attr/selectableItemBackground"
+        android:backgroundTint="@color/teal_200"
         app:cardCornerRadius="14dp"
         app:layout_constraintBottom_toBottomOf="@id/settingUrlEditText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +98,7 @@
             android:layout_height="match_parent"
             android:layout_margin="4dp"
             android:background="@drawable/ic_check_24"
-            android:backgroundTint="@color/intro_text_blue" />
+            android:backgroundTint="@color/white" />
 
     </androidx.cardview.widget.CardView>
 
@@ -109,7 +110,7 @@
         android:textSize="16sp"
         android:layout_marginTop="24dp"
         android:text="@string/speech_speed"
-        android:textColor="@color/teal_200"
+        android:textColor="@color/dark_gray"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingUrlEditText" />
@@ -152,7 +153,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/history"
         android:textSize="16sp"
-        android:textColor="@color/teal_200"
+        android:textColor="@color/dark_gray"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/speakSpeedCardView" />
@@ -173,9 +174,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="6dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/teal_200"
         android:text="@string/look"
-        android:textColor="@color/intro_text_blue"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/historyTextView" />
@@ -187,7 +188,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="@string/license"
-        android:textColor="@color/teal_200"
+        android:textColor="@color/dark_gray"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -209,9 +210,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="6dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/teal_200"
         android:text="@string/terms_of_service"
-        android:textColor="@color/intro_text_blue"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/licenseTextView" />

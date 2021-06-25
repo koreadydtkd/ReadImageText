@@ -30,8 +30,18 @@ class AppSettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        initStatusBar()
         initSpinner()
         initViews()
+    }
+
+    private fun initStatusBar() {
+        try {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = resources.getColor(R.color.teal_200, null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun initSpinner() {

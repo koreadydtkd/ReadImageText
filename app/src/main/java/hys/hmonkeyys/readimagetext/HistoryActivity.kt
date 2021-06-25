@@ -4,9 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import hys.hmonkeyys.readimagetext.adapter.HistoryAdapter
+import hys.hmonkeyys.readimagetext.adapter.*
 import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
 import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
@@ -21,7 +22,7 @@ class HistoryActivity : AppCompatActivity() {
 
     private var db: WebDatabase? = null
 
-    private lateinit var historyAdapter: HistoryAdapter
+    private lateinit var historyAdapter: HistoryAdapter2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +30,18 @@ class HistoryActivity : AppCompatActivity() {
 
         db = WebDatabase.getInstance(applicationContext)
 
+        initStatusBar()
         initViews()
         initAdapter()
+    }
+
+    private fun initStatusBar() {
+        try {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = resources.getColor(R.color.teal_200, null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun initViews() {
@@ -44,7 +55,7 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun initAdapter() {
-        historyAdapter = HistoryAdapter(
+        historyAdapter = HistoryAdapter2(
             deleteSelectItemListener = { selectModel ->
                 deleteHistory(selectModel)
             },
@@ -55,9 +66,41 @@ class HistoryActivity : AppCompatActivity() {
 
         binding.historyRecyclerView.adapter = historyAdapter
 
-        CoroutineScope(Dispatchers.IO).launch {
+        /*CoroutineScope(Dispatchers.IO).launch {
             historyAdapter.submitList(db?.historyDao()?.getAll())
+        }*/
+
+        CoroutineScope(Dispatchers.IO).launch {
+            db?.historyDao()?.getAll()?.let {
+                historyAdapter.setHistoryList(convertList(it))
+            }
         }
+    }
+
+    private fun convertList(list: MutableList<WebHistoryModel>): MutableList<HistoryType>{
+        var prefDate : String? = ""
+        val historyList = mutableListOf<HistoryType>()
+
+        list.forEach { webHistoryModel ->
+            // 날짜 영역
+            if(webHistoryModel.visitDate != prefDate) {
+                historyList.add(
+                    DateType(HistoryType.DATE).apply {
+                        date = webHistoryModel.visitDate
+                    }
+                )
+                prefDate = webHistoryModel.visitDate
+            }
+
+            // 방문 이력
+            historyList.add(
+                AddressType(HistoryType.ADDRESS).apply {
+                    loadUrl = webHistoryModel.loadUrl
+                }
+            )
+        }
+
+        return historyList
     }
 
     private fun showDeleteDialog() {
@@ -80,17 +123,12 @@ class HistoryActivity : AppCompatActivity() {
                 db?.historyDao()?.delete(selectModel)
                 Log.i(TAG, "선택 삭제")
             }
-            historyAdapter.submitList(db?.historyDao()?.getAll())
+//            db?.historyDao()?.getAll()?.let { historyAdapter.setHistoryList(it) }
         }.invokeOnCompletion {
             Log.i(TAG, "삭제 완료")
             Handler(mainLooper).postDelayed({
                 historyAdapter.notifyDataSetChanged()
             }, 300)
-
-//            Thread.sleep(300)
-//            runOnUiThread {
-//                historyAdapter.notifyDataSetChanged()
-//            }
         }
     }
 

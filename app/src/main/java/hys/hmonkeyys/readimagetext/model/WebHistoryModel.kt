@@ -8,5 +8,5 @@ import androidx.room.PrimaryKey
 data class WebHistoryModel (
     @PrimaryKey val uid: Int?,
     @ColumnInfo(name = "load_url") val loadUrl: String?,
-    @ColumnInfo(name = "visit_date") val visitDate: String?
+    @ColumnInfo(name = "visit_date") var visitDate: String?
 )
