@@ -2,7 +2,6 @@ package hys.hmonkeyys.readimagetext
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
@@ -22,7 +21,7 @@ class HistoryActivity : AppCompatActivity() {
 
     private var db: WebDatabase? = null
 
-    private lateinit var historyAdapter: HistoryAdapter2
+    private lateinit var historyAdapter: HistoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +54,9 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun initAdapter() {
-        historyAdapter = HistoryAdapter2(
-            deleteSelectItemListener = { selectModel ->
-                deleteHistory(selectModel)
+        historyAdapter = HistoryAdapter(
+            deleteSelectItemListener = { uid, loadUrl ->
+                deleteHistory(uid, loadUrl)
             },
             moveWebView = { selectUrl ->
                 selectURLGoToMainWebView(selectUrl)
@@ -65,10 +64,6 @@ class HistoryActivity : AppCompatActivity() {
         )
 
         binding.historyRecyclerView.adapter = historyAdapter
-
-        /*CoroutineScope(Dispatchers.IO).launch {
-            historyAdapter.submitList(db?.historyDao()?.getAll())
-        }*/
 
         CoroutineScope(Dispatchers.IO).launch {
             db?.historyDao()?.getAll()?.let {
@@ -96,6 +91,10 @@ class HistoryActivity : AppCompatActivity() {
             historyList.add(
                 AddressType(HistoryType.ADDRESS).apply {
                     loadUrl = webHistoryModel.loadUrl
+                    webHistoryModel.uid?.let {
+                        uid = it
+                    }
+
                 }
             )
         }
@@ -108,27 +107,21 @@ class HistoryActivity : AppCompatActivity() {
             .setTitle(resources.getString(R.string.history_dialog_title))
             .setMessage(resources.getString(R.string.history_dialog_message))
             .setPositiveButton(resources.getString(R.string.delete)) { _, _ ->
-                deleteHistory(null)
+                deleteHistory(0, "ALL")
             }.setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }
 
-    private fun deleteHistory(selectModel: WebHistoryModel?) {
+    private fun deleteHistory(uid: Int, loadUrl: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            if(selectModel == null) {
+            if(uid == 0 && loadUrl == "ALL") {
                 db?.historyDao()?.deleteAll()
                 Log.i(TAG, "모두 삭제")
             } else {
-                db?.historyDao()?.delete(selectModel)
+                db?.historyDao()?.deleteSelectedItem(uid, loadUrl)
                 Log.i(TAG, "선택 삭제")
             }
-//            db?.historyDao()?.getAll()?.let { historyAdapter.setHistoryList(it) }
-        }.invokeOnCompletion {
-            Log.i(TAG, "삭제 완료")
-            Handler(mainLooper).postDelayed({
-                historyAdapter.notifyDataSetChanged()
-            }, 300)
         }
     }
 

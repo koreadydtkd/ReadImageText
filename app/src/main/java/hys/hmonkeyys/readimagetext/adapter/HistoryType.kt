@@ -13,5 +13,6 @@ class DateType(type: Int) : HistoryType(type) {
     var date : String? = ""
 }
 class AddressType(type: Int) : HistoryType(type) {
+    var uid: Int = 0
     var loadUrl : String? = ""
 }

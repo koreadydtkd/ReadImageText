@@ -35,4 +35,7 @@ interface HistoryDao {
     // 데이터 하나만 삭제
     @Delete
     suspend fun delete(webHistory: WebHistoryModel)
+
+    @Query("DELETE FROM web WHERE uid LIKE :uid AND load_url LIKE :loadUrl")
+    suspend fun deleteSelectedItem(uid: Int, loadUrl: String)
 }
