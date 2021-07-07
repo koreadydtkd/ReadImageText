@@ -39,8 +39,8 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
     }
 
     private val model: BottomSheetDialogViewModel by activityViewModels()
-
     private var ocrResultText = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,17 +86,12 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
             }
         }
 
-        return if(onlyEnglishText.length - 3 < textUpperCount) {
-            Log.d(TAG, "추출한 Text 거의 대문자")
-            true
-        } else {
-            false
-        }
+        return onlyEnglishText.length - 3 < textUpperCount
     }
 
     private fun initViewModel(binding: FragmentBottomDialogBinding){
         model.translateCount.observe(viewLifecycleOwner, { count ->
-            Log.d(TAG, "카운트: $count")
+            Log.i(TAG, "카운트: $count")
             if(count == 3) {
                 binding.translateButton.apply {
                     setBackgroundResource(R.drawable.clicked_background)
@@ -126,7 +121,7 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
                     progressBarShow()
                     translateKakao(ocrResultText)
                 } else {
-                    Toast.makeText(requireContext(), "변경된 글자가 없습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), resources.getString(R.string.no_text_have_been_changed), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -220,7 +215,7 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
     private fun translateKakao(translateText: String) {
         val replaceText = translateText.replace("\n", " ")
 
-        KakaoTranslateApi.create().translateKakao(replaceText, "en", "kr").enqueue(object : Callback<TranslateKakaoModel> {
+        KakaoTranslateApi.create().translateKakao(replaceText, SRC_LANG, TARGET_LANG).enqueue(object : Callback<TranslateKakaoModel> {
             override fun onResponse(call: Call<TranslateKakaoModel>, response: Response<TranslateKakaoModel>) {
                 if(response.isSuccessful.not()) {
                     Toast.makeText(requireContext(), resources.getString(R.string.translate_fail), Toast.LENGTH_SHORT).show()
@@ -229,12 +224,12 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
                 }
 
                 response.body()?.let { translateKakaoModel ->
-                    val items = translateKakaoModel.translatedText?.get(0)
-
                     val sb: StringBuilder = StringBuilder()
+                    val items = translateKakaoModel.translatedText?.get(0)
                     items?.forEach {
                         sb.append("$it ")
                     }
+
                     binding?.resultTranslationEditText?.setText(sb.toString())
                     model.increaseCount()
                     progressBarHide()
@@ -274,6 +269,9 @@ class BottomDialogFragment(private val readText: String) : BottomSheetDialogFrag
         private const val TAG = "HYS_BottomDialogFragment"
         private const val TTS_PITCH = 1.0F
         private const val TTS_SPEECH_RATE = 0.8F
+
+        private const val SRC_LANG = "en"
+        private const val TARGET_LANG = "kr"
     }
 
 }

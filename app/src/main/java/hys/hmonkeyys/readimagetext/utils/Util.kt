@@ -22,25 +22,26 @@ class Util {
         }
     }
 
+    fun getCurrentDate(): String {
+        val now = System.currentTimeMillis()
+        val date = Date(now)
+        val sdf = SimpleDateFormat(DATE_PATTERN, Locale.getDefault())
+        return sdf.format(date)
+    }
+
+    // 7일 전 날짜 가져오기
+    fun getDateWeeksAgo(selectWeek: Int): String {
+        val week = Calendar.getInstance()
+        week.add(Calendar.DATE, (selectWeek * -7))
+        return SimpleDateFormat(DATE_PATTERN, Locale.getDefault()).format(week.time)
+    }
+
     companion object {
         private const val TAG = "HYS_Util"
 
+        const val DATE_PATTERN = "yyyy-MM-dd"
         const val MAIN_TO_HISTORY_DEFAULT = "select_url"
     }
-}
-
-fun getCurrentDate(): String {
-    val now = System.currentTimeMillis()
-    val date = Date(now)
-    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    return sdf.format(date)
-}
-
-// 7일 전 날짜 가져오기
-fun getDateWeeksAgo(selectWeek: Int): String {
-    val week = Calendar.getInstance()
-    week.add(Calendar.DATE, (selectWeek * -7))
-    return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(week.time)
 }
 
 // . ! ? 포함여부 확인 확장함수

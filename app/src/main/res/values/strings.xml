@@ -31,6 +31,7 @@
     <string name="wait_please">잠시만 기다려주세요.</string>
     <string name="selected_translate_limit">번역완료.\n선택영역에 대한 번역은 3회까지 가능합니다.</string>
     <string name="translate_fail">번역 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.</string>
+    <string name="no_text_have_been_changed">변경된 글자가 없습니다.</string>
 
     <!-- History -->
     <string name="history_dialog_title">방문기록 모두 삭제</string>

@@ -22,7 +22,6 @@ import hys.hmonkeyys.readimagetext.databinding.ActivityIntroBinding
 import hys.hmonkeyys.readimagetext.dialog.CustomDialog
 import hys.hmonkeyys.readimagetext.room.WebDatabase
 import hys.hmonkeyys.readimagetext.utils.Util
-import hys.hmonkeyys.readimagetext.utils.getDateWeeksAgo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -95,7 +94,7 @@ class IntroActivity : AppCompatActivity() {
                 val array = arrayOfNulls<String>(rejectedPermissionList.size)
                 ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), PERMISSIONS_REQUEST_CODE)
             } else {
-                Log.d(TAG, "권한 모두 허용됨")
+                Log.i(TAG, "권한 모두 허용됨")
                 deleteData()
 
                 checkUpdateVersion()
@@ -108,7 +107,7 @@ class IntroActivity : AppCompatActivity() {
     // 7일 지난 데이터 삭제
     private fun deleteData() {
         CoroutineScope(Dispatchers.IO).launch {
-            db?.historyDao()?.deleteDataOneWeeksAgo(getDateWeeksAgo(1))
+            db?.historyDao()?.deleteDataOneWeeksAgo(Util().getDateWeeksAgo(1))
         }
     }
 

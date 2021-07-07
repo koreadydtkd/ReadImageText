@@ -29,7 +29,6 @@ import hys.hmonkeyys.readimagetext.model.WebHistoryModel
 import hys.hmonkeyys.readimagetext.room.WebDatabase
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import hys.hmonkeyys.readimagetext.utils.Util
-import hys.hmonkeyys.readimagetext.utils.getCurrentDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -257,7 +256,7 @@ class MainActivity : AppCompatActivity() {
             adListener = object : AdListener() {
                 override fun onAdLoaded() {
                     super.onAdLoaded()
-                    Log.d(TAG, "광고가 문제 없이 로드됨 onAdLoaded")
+                    Log.i(TAG, "광고가 문제 없이 로드됨 onAdLoaded")
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
@@ -329,9 +328,9 @@ class MainActivity : AppCompatActivity() {
 
             CoroutineScope(Dispatchers.IO).launch {
                 // 중복 확인을 위한 쿼리 : 0 반환 시 데이터 없음
-                val haveData = db?.historyDao()?.findByHistory(url ?: "", getCurrentDate()) ?: 0
+                val haveData = db?.historyDao()?.findByHistory(url ?: "", Util().getCurrentDate()) ?: 0
                 if(haveData < 1) {
-                    db?.historyDao()?.insertHistory(WebHistoryModel(null, url, getCurrentDate()))
+                    db?.historyDao()?.insertHistory(WebHistoryModel(null, url, Util().getCurrentDate()))
                 }
             }
         }
