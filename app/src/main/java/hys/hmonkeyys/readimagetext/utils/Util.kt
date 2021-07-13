@@ -9,7 +9,7 @@ import java.util.*
 
 class Util {
 
-    fun getAppVersion(applicationContext: Context): Long {
+    fun getAppVersionCode(applicationContext: Context): Long {
         return try {
             val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
             val currentVersionCode = PackageInfoCompat.getLongVersionCode(info)
@@ -19,6 +19,16 @@ class Util {
         } catch (e: Exception) {
             e.printStackTrace()
             0L
+        }
+    }
+
+    fun getAppVersionName(applicationContext: Context): String {
+        return try {
+            val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
+            info.versionName
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
         }
     }
 
@@ -41,6 +51,11 @@ class Util {
 
         const val DATE_PATTERN = "yyyy-MM-dd"
         const val MAIN_TO_HISTORY_DEFAULT = "select_url"
+
+        const val TEXT_LIMIT_EXCEEDED = "text_limit_exceeded"
+        const val EXTRACTION_ERROR = "extraction_error"
+
+        const val BLANK = "blank"
     }
 }
 

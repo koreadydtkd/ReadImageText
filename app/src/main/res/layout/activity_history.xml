@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HistoryActivity">
+    tools:context=".views.history.HistoryActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/titleBar"
         android:layout_width="0dp"
-        android:background="@color/teal_200"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/teal_200"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -55,12 +55,12 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="0dp"
-        android:layout_marginTop="4dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:gravity="center"
-        android:textSize="12sp"
-        android:textColor="@android:color/holo_red_dark"
         android:text="@string/before_seven_days"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleBar" />
@@ -77,5 +77,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:listitem="@layout/item_web" />
+
+    <TextView
+        android:id="@+id/noDataTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="데이터가 없습니다."
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

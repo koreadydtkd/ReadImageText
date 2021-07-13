@@ -1,6 +1,6 @@
 package hys.hmonkeyys.readimagetext.api
 
-import hys.hmonkeyys.readimagetext.model.ResultTransferPapago
+import hys.hmonkeyys.readimagetext.data.model.ResultTransferPapago
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
+        android:name=".ReadImageText"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,7 +18,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".IntroActivity"
+            android:name=".views.intro.IntroActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -38,23 +39,23 @@
             android:value="@string/admob_app_id" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".views.main.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".HistoryActivity"
+            android:name=".views.history.HistoryActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".LicenseDetailActivity"
+            android:name=".views.licensedetail.LicenseDetailActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".AppSettingActivity"
+            android:name=".views.appsetting.AppSettingActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 

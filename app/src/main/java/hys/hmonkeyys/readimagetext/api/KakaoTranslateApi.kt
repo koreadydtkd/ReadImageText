@@ -1,6 +1,6 @@
 package hys.hmonkeyys.readimagetext.api
 
-import hys.hmonkeyys.readimagetext.model.TranslateKakaoModel
+import hys.hmonkeyys.readimagetext.data.model.TranslateKakaoModel
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,6 +12,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface KakaoTranslateApi {
+
     @FormUrlEncoded
     @POST("v2/translation/translate")
     fun translateKakao(

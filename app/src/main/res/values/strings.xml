@@ -23,6 +23,7 @@
 
     <!-- BottomSheetDialog -->
     <string name="tts_error">예기치 못한 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.</string>
+    <string name="no_results">추출된 결과가 없습니다.</string>
     <string name="bottom_sheet_text1">잘못 추출된 글자가 있는지 확인 후 번역해주세요.</string>
     <string name="bottom_sheet_text2">추출 결과</string>
     <string name="bottom_sheet_text3">번역 결과</string>
@@ -40,8 +41,10 @@
     <string name="delete_all">모두 삭제되었습니다.</string>
 
     <!-- AppInformation -->
-    <string name="edit_speed">속도가 변경되었습니다.</string>
-    <string name="edit_default_url">기본 주소가 변경되었습니다.</string>
+    <string name="change_speed">속도가 변경되었습니다.</string>
+    <!--<string name="not_change_speed">속도가 변경되지 않았습니다.\n잠시 후 다시 시도해주세요.</string>-->
+    <string name="change_default_url">기본 주소가 변경되었습니다.</string>
+    <!--<string name="not_change_default_url">기본 주소가 변경되지 않았습니다.\n잠시 후 다시 시도해주세요.</string>-->
     <string name="speech_speed">읽기속도</string>
     <string name="change">변경</string>
     <string name="look">보기</string>
