@@ -24,7 +24,7 @@ class HistoryAdapter (
                 selectItem.loadUrl?.let { loadUrl ->
                     historyUrlTextView.apply {
                         text = loadUrl
-                        setOnClickListener {
+                        setOnDuplicatePreventionClickListener {
                             moveWebView(loadUrl)
                         }
                     }

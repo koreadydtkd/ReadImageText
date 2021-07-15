@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityLicenseDetailBinding
+import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 
 class LicenseDetailActivity : AppCompatActivity() {
     private val binding: ActivityLicenseDetailBinding by lazy {
@@ -17,7 +18,7 @@ class LicenseDetailActivity : AppCompatActivity() {
 
         initStatusBar()
 
-        binding.backButton.setOnClickListener {
+        binding.backButton.setOnDuplicatePreventionClickListener {
             finish()
         }
     }
