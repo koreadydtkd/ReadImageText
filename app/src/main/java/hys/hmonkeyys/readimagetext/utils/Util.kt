@@ -2,7 +2,10 @@ package hys.hmonkeyys.readimagetext.utils
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.View
 import androidx.core.content.pm.PackageInfoCompat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,4 +68,12 @@ fun Char.isSpecialSymbols(): Boolean {
         return true
     }
     return false
+}
+
+fun View.setOnDuplicatePreventionClickListener(OnDuplicatePreventionClick: () -> Unit) {
+    this.setOnClickListener {
+        it.isEnabled = false
+        OnDuplicatePreventionClick()
+        Handler(Looper.getMainLooper()).postDelayed({ it.isEnabled = true }, 500)
+    }
 }

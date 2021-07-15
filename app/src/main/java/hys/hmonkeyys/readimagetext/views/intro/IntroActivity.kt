@@ -58,17 +58,17 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         }
     }
 
-    private fun initStatusBar() = with(window){
+    private fun initStatusBar() {
         try {
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            statusBarColor = resources.getColor(R.color.teal_200, null)
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = resources.getColor(R.color.teal_200, null)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun initTextViews() = with(binding) {
-        mainTextView.apply {
+    private fun initTextViews() {
+        binding.mainTextView.apply {
             val str = resources.getString(R.string.intro_main_contents)
             val ssb = SpannableStringBuilder(str)
             ssb.setSpan(ForegroundColorSpan(resources.getColor(R.color.intro_text_blue, null)), 7, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -76,7 +76,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
             text = ssb
         }
 
-        appVersionTextView.text = resources.getString(R.string.app_version, Util().getAppVersionName(this@IntroActivity))
+        binding.appVersionTextView.text = resources.getString(R.string.app_version, Util().getAppVersionName(this@IntroActivity))
     }
 
     private fun checkPermissions() {

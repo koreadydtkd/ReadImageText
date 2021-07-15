@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hys.hmonkeyys.readimagetext.databinding.DialogCustomBinding
+import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 
 class CustomDialog(
 
@@ -34,7 +35,7 @@ class CustomDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.updateButton?.setOnClickListener {
+        binding?.updateButton?.setOnDuplicatePreventionClickListener {
             dialogClickedListener()
         }
 

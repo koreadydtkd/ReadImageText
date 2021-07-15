@@ -40,20 +40,16 @@ internal class IntroViewModel(
                     Log.i(TAG, "$updateVersion")
 
                     if(updateVersion > currentVersion) {
-                        updateStateNeedUpdate(true)
+                        _introStateLiveData.postValue(IntroState.NeedUpdate(true))
                     } else {
-                        updateStateNeedUpdate(false)
+                        _introStateLiveData.postValue(IntroState.NeedUpdate(false))
                     }
                 } else {
-                    updateStateNeedUpdate(false)
+                    _introStateLiveData.postValue(IntroState.NeedUpdate(false))
                 }
             }.addOnFailureListener {
-                updateStateNeedUpdate(false)
+                _introStateLiveData.postValue(IntroState.NeedUpdate(false))
             }
-    }
-
-    private fun updateStateNeedUpdate(isUpdate: Boolean) {
-        _introStateLiveData.postValue(IntroState.NeedUpdate(isUpdate))
     }
 
     companion object {

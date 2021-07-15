@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityAppSettingBinding
+import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.history.HistoryActivity
 import hys.hmonkeyys.readimagetext.views.licensedetail.LicenseDetailActivity
@@ -54,21 +55,21 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
     }
 
     private fun initViews() {
-        binding.backButton.setOnClickListener {
+        binding.backButton.setOnDuplicatePreventionClickListener {
             finish()
         }
 
         binding.settingUrlEditText.setText(viewModel.getDefaultUrl())
 
-        binding.urlEditButton.setOnClickListener {
+        binding.urlEditButton.setOnDuplicatePreventionClickListener {
             viewModel.saveDefaultUrl(binding.settingUrlEditText.text.toString())
         }
 
-        binding.historyButton.setOnClickListener {
+        binding.historyButton.setOnDuplicatePreventionClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
 
-        binding.licenseDetailButton.setOnClickListener {
+        binding.licenseDetailButton.setOnDuplicatePreventionClickListener {
             startActivity(Intent(this, LicenseDetailActivity::class.java))
         }
     }

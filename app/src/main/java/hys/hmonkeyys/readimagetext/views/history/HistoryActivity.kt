@@ -1,6 +1,5 @@
 package hys.hmonkeyys.readimagetext.views.history
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
 import hys.hmonkeyys.readimagetext.utils.Util
+import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.history.adapter.HistoryAdapter
 import hys.hmonkeyys.readimagetext.views.main.MainActivity
@@ -35,17 +35,17 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
     override fun observeData() {
         viewModel.historyStateData.observe(this) {
             when(it) {
-                is HistoryState.Initialized -> {
+                is HistoryState.Initialized -> { // 초기화 작업
                     initStatusBar()
                     initViews()
                     initAdapter()
                 }
-                is HistoryState.GetHistoryData -> {
+                is HistoryState.GetHistoryData -> { // 방문기록(Room DB) 불러오기
                     historyAdapter.setHistoryList(it.historyList)
                 }
-                is HistoryState.Delete -> {
+                is HistoryState.Delete -> { // 방문기록 삭제(All or Select)
                     if(it.isAll) {
-                        noData()
+                        changeView()
                     } else {
                         historyAdapter.notifyDataSetChanged()
                     }
@@ -64,11 +64,11 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
     }
 
     private fun initViews() {
-        binding.backButton.setOnClickListener {
+        binding.backButton.setOnDuplicatePreventionClickListener {
             finish()
         }
 
-        binding.deleteAllButton.setOnClickListener {
+        binding.deleteAllButton.setOnDuplicatePreventionClickListener {
             showDeleteDialog()
         }
     }
@@ -106,7 +106,7 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
         startActivity(intent)
     }
 
-    private fun noData() {
+    private fun changeView() {
         binding.textView.visibility = View.GONE
         binding.historyRecyclerView.visibility = View.GONE
 

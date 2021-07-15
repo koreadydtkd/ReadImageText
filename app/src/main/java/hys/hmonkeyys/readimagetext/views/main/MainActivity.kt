@@ -22,6 +22,7 @@ import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import hys.hmonkeyys.readimagetext.fragment.bottomdialog.BottomDialogFragment
 import hys.hmonkeyys.readimagetext.utils.Util
+import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import java.util.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -62,7 +63,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
 
     // 상단 툴바 초기화
     private fun initToolbar() {
-        binding.goHomeButton.setOnClickListener {
+        binding.goHomeButton.setOnDuplicatePreventionClickListener {
             binding.webView.loadUrl(viewModel.getSettingUrl())
         }
 
@@ -80,11 +81,11 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             return@setOnEditorActionListener false
         }
 
-        binding.goBackButton.setOnClickListener {
+        binding.goBackButton.setOnDuplicatePreventionClickListener {
             binding.webView.goBack()
         }
 
-        binding.goForwardButton.setOnClickListener {
+        binding.goForwardButton.setOnDuplicatePreventionClickListener {
             binding.webView.goForward()
         }
     }
@@ -110,24 +111,24 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             }
         }
 
-        binding.fabMain.setOnClickListener {
+        binding.fabMain.setOnDuplicatePreventionClickListener {
             toggleFab()
         }
 
         // 웹뷰 스크롤 맨위로
-        binding.fabMoveTop.setOnClickListener {
+        binding.fabMoveTop.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
             binding.webView.pageUp(true)
         }
 
         // 앱 설정 플로팅 버튼
-        binding.fabAppSetting.setOnClickListener {
+        binding.fabAppSetting.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
             startActivity(Intent(this, AppSettingActivity::class.java))
         }
 
         // 스크린 캡처 플로팅 버튼
-        binding.fabScreenCapture.setOnClickListener {
+        binding.fabScreenCapture.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
 
             Handler(mainLooper).postDelayed({
@@ -140,9 +141,9 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }
 
         // 스크린 캡처한 텍스트 추출
-        binding.fabCheck.setOnClickListener {
+        binding.fabCheck.setOnDuplicatePreventionClickListener {
             val selectedBitmap = binding.cropImageView.croppedImage
-            selectedBitmap ?: return@setOnClickListener
+            selectedBitmap ?: return@setOnDuplicatePreventionClickListener
 
             viewModel.readImageTextBitmap(selectedBitmap)
             binding.isCropImageViewVisible = false

@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import hys.hmonkeyys.readimagetext.R
+import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 
 class HistoryAdapter (
     val deleteSelectItemListener: (Int, String) -> Unit,
@@ -28,7 +29,7 @@ class HistoryAdapter (
                         }
                     }
 
-                    deleteButton.setOnClickListener {
+                    deleteButton.setOnDuplicatePreventionClickListener {
                         try {
                             // 이전, 다음 아이템이 날짜타입인 경우
                             if(historyList[layoutPosition - 1].type == HistoryType.DATE &&

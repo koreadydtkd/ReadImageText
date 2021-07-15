@@ -60,7 +60,6 @@ internal class HistoryViewModel(
     }
 
     fun deleteHistory (uid: Int, loadUrl: String) {
-
         viewModelScope.launch {
             if(uid == 0 && loadUrl == ALL) {
                 _historyStateLiveData.postValue(HistoryState.Delete(true))

@@ -16,6 +16,7 @@ import hys.hmonkeyys.readimagetext.data.model.TranslateKakaoModel
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding
 import hys.hmonkeyys.readimagetext.fragment.BaseBottomDialogFragment
 import hys.hmonkeyys.readimagetext.utils.Util
+import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -96,14 +97,14 @@ internal class BottomDialogFragment(
     }
 
     private fun initButtons(binding: FragmentBottomDialogBinding) {
-        binding.listenButton.setOnClickListener {
+        binding.listenButton.setOnDuplicatePreventionClickListener {
             if(viewModel.isSpeaking()) {
-                return@setOnClickListener
+                return@setOnDuplicatePreventionClickListener
             }
             viewModel.speakOut(binding.resultEditText.text.toString())
         }
 
-        binding.translateButton.setOnClickListener {
+        binding.translateButton.setOnDuplicatePreventionClickListener {
             if(binding.progressBar.isVisible) {
                 Toast.makeText(requireContext(), getString(R.string.wait_please), Toast.LENGTH_SHORT).show()
             } else {

@@ -22,7 +22,7 @@ import java.io.IOException
 
 internal class MainViewModel(
     private val historyDao: HistoryDao,
-    private val spf2: SharedPreferences
+    private val sharedPreferences: SharedPreferences
 ) : BaseViewModel() {
 
     private var _mainStateLiveData = MutableLiveData<MainState>()
@@ -59,39 +59,31 @@ internal class MainViewModel(
                 .addOnSuccessListener {
                     if(it.text.length > OCR_TEXT_LIMIT) {
                         // 최대 추출 제한
-                        updateStateExtractionComplete(Util.TEXT_LIMIT_EXCEEDED)
+                        _mainStateLiveData.postValue(MainState.TextExtractionComplete(Util.TEXT_LIMIT_EXCEEDED))
                     } else {
                         // 성공
-                        updateStateExtractionComplete(it.text)
+                        _mainStateLiveData.postValue(MainState.TextExtractionComplete(it.text))
                     }
                 }
                 .addOnFailureListener {
                     it.printStackTrace()
                     FirebaseCrashlytics.getInstance().recordException(it)
-                    updateStateExtractionComplete(Util.EXTRACTION_ERROR)
+                    _mainStateLiveData.postValue(MainState.TextExtractionComplete(Util.EXTRACTION_ERROR))
                 }
 
         } catch (e: IOException) {
             e.printStackTrace()
             FirebaseCrashlytics.getInstance().recordException(e)
-            updateStateExtractionComplete(Util.EXTRACTION_ERROR)
+            _mainStateLiveData.postValue(MainState.TextExtractionComplete(Util.EXTRACTION_ERROR))
         }
     }
 
-    private fun updateStateExtractionComplete(result: String) {
-        _mainStateLiveData.postValue(MainState.TextExtractionComplete(result))
-    }
+    fun getLastUrl(): String = sharedPreferences.getString(SharedPreferencesConst.LAST_URL, getSettingUrl()) ?: DEFAULT_URL
 
-    fun getLastUrl(): String {
-        return spf2.getString(SharedPreferencesConst.LAST_URL, getSettingUrl()) ?: DEFAULT_URL
-    }
-
-    fun getSettingUrl(): String {
-        return spf2.getString(SharedPreferencesConst.SETTING_URL, DEFAULT_URL) ?: DEFAULT_URL
-    }
+    fun getSettingUrl(): String = sharedPreferences.getString(SharedPreferencesConst.SETTING_URL, DEFAULT_URL) ?: DEFAULT_URL
 
     fun setLastUrl(url: String) {
-        spf2.edit().putString(SharedPreferencesConst.LAST_URL, url).apply()
+        sharedPreferences.edit().putString(SharedPreferencesConst.LAST_URL, url).apply()
     }
 
     companion object {
