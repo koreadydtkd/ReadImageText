@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        tools:context=".MainActivity">
+        tools:context=".views.main.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbar"
@@ -139,6 +139,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
+            android:autoSizeMaxTextSize="24sp"
             android:text="@string/main_fab_contents4"
             android:textColor="@color/white"
             android:textSize="15sp"
@@ -147,7 +148,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/fabMoveTop"
             app:layout_constraintEnd_toStartOf="@+id/fabMoveTop"
             app:layout_constraintTop_toTopOf="@+id/fabMoveTop"
-            tools:visibility="gone" />
+            tools:targetApi="o"
+            tools:visibility="visible" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabMoveTop"
@@ -173,6 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
+            android:autoSizeMaxTextSize="24sp"
             android:text="@string/main_fab_contents1"
             android:textColor="@color/white"
             android:textSize="15sp"
@@ -181,6 +184,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/fabAppSetting"
             app:layout_constraintEnd_toStartOf="@+id/fabAppSetting"
             app:layout_constraintTop_toTopOf="@+id/fabAppSetting"
+            tools:targetApi="o"
             tools:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -207,6 +211,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
+            android:autoSizeMaxTextSize="24sp"
             android:gravity="center"
             android:text="@string/main_fab_contents3"
             android:textColor="@color/white"
@@ -216,6 +221,7 @@
             app:layout_constraintBottom_toBottomOf="@id/fabScreenCapture"
             app:layout_constraintEnd_toStartOf="@+id/fabScreenCapture"
             app:layout_constraintTop_toTopOf="@+id/fabScreenCapture"
+            tools:targetApi="o"
             tools:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -257,12 +263,12 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="@{isCropImageViewVisible == true ? View.VISIBLE : View.GONE}"
-            custom:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            custom:layout_constraintTop_toTopOf="parent"
             custom:cropBorderCornerColor="@color/black"
             custom:cropGuidelines="off"
+            custom:layout_constraintBottom_toBottomOf="parent"
+            custom:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

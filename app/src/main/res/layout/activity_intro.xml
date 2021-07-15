@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/teal_200"
-    tools:context=".IntroActivity">
+    tools:context=".views.intro.IntroActivity">
 
     <TextView
         android:id="@+id/mainTextView"
@@ -15,11 +15,11 @@
         android:textColor="@color/white"
         android:textSize="48sp"
         android:textStyle="bold"
-        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@+id/contentTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/contentTextView"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="@string/intro_main_contents" />
 
     <TextView
@@ -31,22 +31,22 @@
         android:text="@string/intro_contents"
         android:textColor="@color/white"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/appVersionTextView"
         app:layout_constraintEnd_toEndOf="@id/mainTextView"
         app:layout_constraintStart_toStartOf="@id/mainTextView"
-        app:layout_constraintTop_toBottomOf="@+id/mainTextView"
-        app:layout_constraintBottom_toTopOf="@+id/appVersionTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/mainTextView" />
 
     <TextView
         android:id="@+id/appVersionTextView"
         android:layout_width="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        tools:text="1.1.0"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="1.1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

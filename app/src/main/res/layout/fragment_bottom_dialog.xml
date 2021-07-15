@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/rounded_dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/rounded_dialog"
     android:padding="16dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/bottom_sheet_text1"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="18sp"
         android:text="@string/bottom_sheet_text2"
         android:textColor="@color/dark_gray"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="o" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="14sp"
+        android:gravity="end"
+        android:text="@string/bottom_sheet_text1"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/resultEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:autoSizeMaxTextSize="22sp"
         android:background="@drawable/edittext_light_gray_background"
         android:gravity="start|center_vertical"
         android:inputType="textMultiLine"
@@ -42,6 +48,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:ignore="Autofill,LabelFor"
+        tools:targetApi="o"
         tools:text="Test" />
 
     <TextView
@@ -49,17 +56,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:autoSizeMaxTextSize="18sp"
         android:text="@string/bottom_sheet_text3"
         android:textColor="@color/view_yellow"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/resultEditText"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/resultTranslationEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:autoSizeMaxTextSize="22sp"
         android:background="@drawable/edittext_light_yellow_background"
         android:clickable="false"
         android:focusableInTouchMode="false"
@@ -72,6 +82,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         tools:ignore="Autofill,LabelFor"
+        tools:targetApi="o"
         tools:text="테스트" />
 
     <androidx.cardview.widget.CardView
