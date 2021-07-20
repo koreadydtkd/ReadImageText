@@ -3,7 +3,6 @@ package hys.hmonkeyys.readimagetext.di
 import android.content.Context
 import android.content.SharedPreferences
 import android.speech.tts.TextToSpeech
-import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import androidx.room.Room
 import hys.hmonkeyys.readimagetext.db.WebDatabase

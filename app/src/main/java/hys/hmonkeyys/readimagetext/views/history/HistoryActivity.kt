@@ -83,8 +83,7 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
             }
         )
         binding.historyRecyclerView.adapter = historyAdapter
-
-        viewModel.getAll()
+        viewModel.getAllHistory()
     }
 
     private fun showDeleteDialog() {

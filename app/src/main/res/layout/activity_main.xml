@@ -135,7 +135,7 @@
             tools:visibility="gone" />
 
         <TextView
-            android:id="@+id/fabMoveTopTextView"
+            android:id="@+id/moveTopTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
@@ -145,14 +145,14 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/fabMoveTop"
-            app:layout_constraintEnd_toStartOf="@+id/fabMoveTop"
-            app:layout_constraintTop_toTopOf="@+id/fabMoveTop"
+            app:layout_constraintBottom_toBottomOf="@+id/moveTopFloatingButton"
+            app:layout_constraintEnd_toStartOf="@+id/moveTopFloatingButton"
+            app:layout_constraintTop_toTopOf="@+id/moveTopFloatingButton"
             tools:targetApi="o"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabMoveTop"
+            android:id="@+id/moveTopFloatingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -163,15 +163,15 @@
             android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
             app:borderWidth="0dp"
             app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="@id/fabMain"
-            app:layout_constraintEnd_toEndOf="@id/fabMain"
-            app:layout_constraintStart_toStartOf="@id/fabMain"
-            app:layout_constraintTop_toTopOf="@id/fabMain"
+            app:layout_constraintBottom_toBottomOf="@id/mainFloatingButton"
+            app:layout_constraintEnd_toEndOf="@id/mainFloatingButton"
+            app:layout_constraintStart_toStartOf="@id/mainFloatingButton"
+            app:layout_constraintTop_toTopOf="@id/mainFloatingButton"
             app:tint="@color/teal_200"
             tools:visibility="gone" />
 
         <TextView
-            android:id="@+id/fabAppSettingTextView"
+            android:id="@+id/appSettingTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
@@ -181,14 +181,14 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/fabAppSetting"
-            app:layout_constraintEnd_toStartOf="@+id/fabAppSetting"
-            app:layout_constraintTop_toTopOf="@+id/fabAppSetting"
+            app:layout_constraintBottom_toBottomOf="@+id/appSettingFloatingButton"
+            app:layout_constraintEnd_toStartOf="@+id/appSettingFloatingButton"
+            app:layout_constraintTop_toTopOf="@+id/appSettingFloatingButton"
             tools:targetApi="o"
             tools:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAppSetting"
+            android:id="@+id/appSettingFloatingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -199,15 +199,15 @@
             android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
             app:borderWidth="0dp"
             app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="@id/fabMain"
-            app:layout_constraintEnd_toEndOf="@id/fabMain"
-            app:layout_constraintStart_toStartOf="@id/fabMain"
-            app:layout_constraintTop_toTopOf="@id/fabMain"
+            app:layout_constraintBottom_toBottomOf="@id/mainFloatingButton"
+            app:layout_constraintEnd_toEndOf="@id/mainFloatingButton"
+            app:layout_constraintStart_toStartOf="@id/mainFloatingButton"
+            app:layout_constraintTop_toTopOf="@id/mainFloatingButton"
             app:tint="@color/teal_200"
             tools:visibility="gone" />
 
         <TextView
-            android:id="@+id/fabScreenCaptureTextView"
+            android:id="@+id/screenCaptureTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
@@ -218,14 +218,14 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@id/fabScreenCapture"
-            app:layout_constraintEnd_toStartOf="@+id/fabScreenCapture"
-            app:layout_constraintTop_toTopOf="@+id/fabScreenCapture"
+            app:layout_constraintBottom_toBottomOf="@id/screenCaptureFloatingButton"
+            app:layout_constraintEnd_toStartOf="@+id/screenCaptureFloatingButton"
+            app:layout_constraintTop_toTopOf="@+id/screenCaptureFloatingButton"
             tools:targetApi="o"
             tools:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabScreenCapture"
+            android:id="@+id/screenCaptureFloatingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -236,15 +236,15 @@
             android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
             app:borderWidth="0dp"
             app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="@id/fabMain"
-            app:layout_constraintEnd_toEndOf="@id/fabMain"
-            app:layout_constraintStart_toStartOf="@id/fabMain"
-            app:layout_constraintTop_toTopOf="@id/fabMain"
+            app:layout_constraintBottom_toBottomOf="@id/mainFloatingButton"
+            app:layout_constraintEnd_toEndOf="@id/mainFloatingButton"
+            app:layout_constraintStart_toStartOf="@id/mainFloatingButton"
+            app:layout_constraintTop_toTopOf="@id/mainFloatingButton"
             app:tint="@color/teal_200"
             tools:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabMain"
+            android:id="@+id/mainFloatingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="18dp"
@@ -272,7 +272,7 @@
             tools:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabCheck"
+            android:id="@+id/checkFloatingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="18dp"

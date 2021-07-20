@@ -5,7 +5,7 @@ open class HistoryType(
 ) {
     companion object {
         const val DATE = 0
-        const val ADDRESS = 1
+        const val URL = 1
     }
 }
 
@@ -13,7 +13,7 @@ class DateType(type: Int) : HistoryType(type) {
     var date: String? = ""
 }
 
-class AddressType(type: Int) : HistoryType(type) {
+class UrlType(type: Int) : HistoryType(type) {
     var uid: Int = 0
     var loadUrl: String? = ""
 }

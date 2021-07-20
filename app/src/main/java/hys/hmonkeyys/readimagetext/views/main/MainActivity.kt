@@ -26,6 +26,7 @@ import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import java.util.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.collections.ArrayList
 
 internal class MainActivity : BaseActivity<MainViewModel>(
 
@@ -111,75 +112,33 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             }
         }
 
-        binding.fabMain.setOnDuplicatePreventionClickListener {
+        binding.mainFloatingButton.setOnDuplicatePreventionClickListener {
             toggleFab()
         }
 
         // 웹뷰 스크롤 맨위로
-        binding.fabMoveTop.setOnDuplicatePreventionClickListener {
+        binding.moveTopFloatingButton.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
             binding.webView.pageUp(true)
         }
 
         // 앱 설정 플로팅 버튼
-        binding.fabAppSetting.setOnDuplicatePreventionClickListener {
+        binding.appSettingFloatingButton.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
             startActivity(Intent(this, AppSettingActivity::class.java))
         }
 
         // 스크린 캡처 플로팅 버튼
-        binding.fabScreenCapture.setOnDuplicatePreventionClickListener {
+        binding.screenCaptureFloatingButton.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
-
-            Handler(mainLooper).postDelayed({
-                val rootView = window.decorView.rootView
-                val bitmap = viewModel.getBitmapFromView(rootView)
-
-                binding.cropImageView.setImageBitmap(bitmap)
-                binding.isCropImageViewVisible = true
-            }, CAPTURE_DELAY)
+            showCaptureScreen()
         }
 
         // 스크린 캡처한 텍스트 추출
-        binding.fabCheck.setOnDuplicatePreventionClickListener {
-            val selectedBitmap = binding.cropImageView.croppedImage
-            selectedBitmap ?: return@setOnDuplicatePreventionClickListener
-
-            viewModel.readImageTextBitmap(selectedBitmap)
-            binding.isCropImageViewVisible = false
+        binding.checkFloatingButton.setOnDuplicatePreventionClickListener {
+            textExtractionFromCapture()
         }
 
-    }
-
-    // 플로팅 액션 버튼 토클
-    private fun toggleFab() {
-        if (binding.isFabItemVisible == true) {
-            closeFloatingButtonWithAnimation()
-        } else {
-            openFloatingButtonWithAnimation()
-        }
-    }
-
-    private fun closeFloatingButtonWithAnimation() {
-        ObjectAnimator.ofFloat(binding.fabMoveTopTextView, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabMoveTop, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppSettingTextView, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppSetting, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabScreenCaptureTextView, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabScreenCapture, TRANSLATION_Y, 0f).apply { start() }
-        binding.fabMain.setImageResource(R.drawable.ic_add_24)
-        binding.isFabItemVisible = false
-    }
-
-    private fun openFloatingButtonWithAnimation() {
-        ObjectAnimator.ofFloat(binding.fabMoveTopTextView, TRANSLATION_Y, -520f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabMoveTop, TRANSLATION_Y, -520f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppSettingTextView, TRANSLATION_Y, -360f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabAppSetting, TRANSLATION_Y, -360f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabScreenCaptureTextView, TRANSLATION_Y, -200f).apply { start() }
-        ObjectAnimator.ofFloat(binding.fabScreenCapture, TRANSLATION_Y, -200f).apply { start() }
-        binding.fabMain.setImageResource(R.drawable.ic_clear_24)
-        binding.isFabItemVisible = true
     }
 
     private fun initAdmob() {
@@ -200,6 +159,56 @@ internal class MainActivity : BaseActivity<MainViewModel>(
                 }
             }
         }
+    }
+
+    // 플로팅 Toggle(on/off) Animation
+    private fun toggleFab() {
+        when (binding.isFabItemVisible) {
+            true, null -> closeFloatingButtonWithAnimation()
+            false -> openFloatingButtonWithAnimation()
+        }
+    }
+
+    private fun closeFloatingButtonWithAnimation() {
+        ObjectAnimator.ofFloat(binding.moveTopTextView, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.appSettingTextView, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.appSettingFloatingButton, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.screenCaptureTextView, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.screenCaptureFloatingButton, TRANSLATION_Y, 0f).apply { start() }
+        binding.mainFloatingButton.setImageResource(R.drawable.ic_add_24)
+        binding.isFabItemVisible = false
+    }
+
+    private fun openFloatingButtonWithAnimation() {
+        ObjectAnimator.ofFloat(binding.moveTopTextView, TRANSLATION_Y, -520f).apply { start() }
+        ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, -520f).apply { start() }
+        ObjectAnimator.ofFloat(binding.appSettingTextView, TRANSLATION_Y, -360f).apply { start() }
+        ObjectAnimator.ofFloat(binding.appSettingFloatingButton, TRANSLATION_Y, -360f).apply { start() }
+        ObjectAnimator.ofFloat(binding.screenCaptureTextView, TRANSLATION_Y, -200f).apply { start() }
+        ObjectAnimator.ofFloat(binding.screenCaptureFloatingButton, TRANSLATION_Y, -200f).apply { start() }
+        binding.mainFloatingButton.setImageResource(R.drawable.ic_clear_24)
+        binding.isFabItemVisible = true
+    }
+
+    // 화면 캡처
+    private fun showCaptureScreen() {
+        Handler(mainLooper).postDelayed({
+            val rootView = window.decorView.rootView
+            val bitmap = viewModel.getBitmapFromView(rootView)
+
+            binding.cropImageView.setImageBitmap(bitmap)
+            binding.isCropImageViewVisible = true
+        }, CAPTURE_DELAY)
+    }
+
+    // 캡처된 화면 텍스트 추출
+    private fun textExtractionFromCapture() {
+        val selectedBitmap = binding.cropImageView.croppedImage
+        selectedBitmap ?: return
+
+        viewModel.readImageTextBitmap(selectedBitmap)
+        binding.isCropImageViewVisible = false
     }
 
     // 추출결과에 따른 분기
@@ -223,9 +232,8 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         super.onResume()
         try {
             val selectUrl = intent.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT)
-            if (selectUrl.isNullOrEmpty()) {
-                return
-            }
+            if (selectUrl.isNullOrEmpty()) return
+
             binding.webView.loadUrl(selectUrl)
         } catch (e: Exception) {
             e.printStackTrace()

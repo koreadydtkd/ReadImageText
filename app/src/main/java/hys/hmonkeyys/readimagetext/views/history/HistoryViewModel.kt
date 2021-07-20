@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import hys.hmonkeyys.readimagetext.data.entity.WebHistoryEntity
 import hys.hmonkeyys.readimagetext.db.dao.HistoryDao
 import hys.hmonkeyys.readimagetext.views.BaseViewModel
-import hys.hmonkeyys.readimagetext.views.history.adapter.AddressType
 import hys.hmonkeyys.readimagetext.views.history.adapter.DateType
 import hys.hmonkeyys.readimagetext.views.history.adapter.HistoryType
+import hys.hmonkeyys.readimagetext.views.history.adapter.UrlType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -24,7 +24,7 @@ internal class HistoryViewModel(
         _historyStateLiveData.postValue(HistoryState.Initialized)
     }
 
-    fun getAll() {
+    fun getAllHistory() {
         viewModelScope.launch {
             convertList(historyDao.getAll())
         }
@@ -47,7 +47,7 @@ internal class HistoryViewModel(
 
             // 방문 이력
             historyList.add(
-                AddressType(HistoryType.ADDRESS).apply {
+                UrlType(HistoryType.URL).apply {
                     loadUrl = webHistoryModel.loadUrl
                     webHistoryModel.uid?.let {
                         uid = it
