@@ -1,15 +1,13 @@
 package hys.hmonkeyys.readimagetext.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import hys.hmonkeyys.readimagetext.db.dao.HistoryDao
 import hys.hmonkeyys.readimagetext.data.entity.WebHistoryEntity
+import hys.hmonkeyys.readimagetext.db.dao.HistoryDao
 
 // 업데이트할때 Version 도 올려줘야함
 @Database(entities = [WebHistoryEntity::class], version = 1, exportSchema = false)
-abstract class WebDatabase: RoomDatabase() {
+abstract class WebDatabase : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
 
     companion object {

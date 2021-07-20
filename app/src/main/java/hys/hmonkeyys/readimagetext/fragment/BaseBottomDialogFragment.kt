@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.Job
 
-internal abstract class BaseBottomDialogFragment<VM: BaseFragmentViewModel>: BottomSheetDialogFragment() {
+internal abstract class BaseBottomDialogFragment<VM : BaseFragmentViewModel> : BottomSheetDialogFragment() {
 
     abstract val viewModel: VM
 
@@ -20,7 +20,7 @@ internal abstract class BaseBottomDialogFragment<VM: BaseFragmentViewModel>: Bot
     abstract fun observeData()
 
     override fun onDestroy() {
-        if(fetchJob.isActive) {
+        if (fetchJob.isActive) {
             fetchJob.cancel()
         }
         super.onDestroy()

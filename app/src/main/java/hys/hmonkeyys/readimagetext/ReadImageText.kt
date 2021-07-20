@@ -7,7 +7,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class ReadImageText: Application() {
+class ReadImageText : Application() {
     override fun onCreate() {
         super.onCreate()
 

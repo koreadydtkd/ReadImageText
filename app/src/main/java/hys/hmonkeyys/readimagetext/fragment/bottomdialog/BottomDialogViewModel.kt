@@ -22,7 +22,7 @@ import retrofit2.Response
 
 internal class BottomDialogViewModel(
     private val sharedPreferences: SharedPreferences,
-    private val tts: TTS
+    private val tts: TTS,
 ) : BaseFragmentViewModel() {
 
     // 화면 상태
@@ -33,7 +33,7 @@ internal class BottomDialogViewModel(
     private var _translateCount = MutableLiveData<Int>()
     val translateCount: LiveData<Int> = _translateCount
 
-    override fun fetchData(): Job = viewModelScope.launch{
+    override fun fetchData(): Job = viewModelScope.launch {
         _translateCount.value = 0
     }
 
@@ -41,8 +41,8 @@ internal class BottomDialogViewModel(
         val onlyEnglishText = Regex("[^A-Za-z]").replace(text, "")
 
         var textUpperCount = 0
-        for(i in 0..onlyEnglishText.lastIndex) {
-            if(onlyEnglishText[i].isUpperCase()) {
+        for (i in 0..onlyEnglishText.lastIndex) {
+            if (onlyEnglishText[i].isUpperCase()) {
                 textUpperCount += 1
             }
         }
@@ -54,8 +54,8 @@ internal class BottomDialogViewModel(
             var result = resultText.substring(0, 1).uppercase() + resultText.substring(1).lowercase()
 
             val dotList = mutableListOf<Int>()
-            for(i in 0..result.lastIndex - 5) {
-                if(result[i].isSpecialSymbols()) {
+            for (i in 0..result.lastIndex - 5) {
+                if (result[i].isSpecialSymbols()) {
                     dotList.add(i + 2)
                 }
             }
@@ -70,7 +70,7 @@ internal class BottomDialogViewModel(
         } catch (e: Exception) {
             e.printStackTrace()
             FirebaseCrashlytics.getInstance().recordException(e)
-            if(resultText.isBlank()) {
+            if (resultText.isBlank()) {
                 return Util.BLANK
             }
             return resultText
@@ -108,7 +108,7 @@ internal class BottomDialogViewModel(
         KakaoTranslateApi.create().translateKakao(replaceText, SRC_LANG, TARGET_LANG).enqueue(object :
             Callback<TranslateKakaoModel> {
             override fun onResponse(call: Call<TranslateKakaoModel>, response: Response<TranslateKakaoModel>) {
-                if(response.isSuccessful.not()) {
+                if (response.isSuccessful.not()) {
                     _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
                     return
                 }

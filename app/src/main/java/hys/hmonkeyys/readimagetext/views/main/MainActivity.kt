@@ -48,7 +48,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
 
     override fun observeData() {
         viewModel.mainStateLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is MainState.Initialized -> { // 초기화
                     initToolbar()
                     initViews()
@@ -71,7 +71,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val loadingUrl = v.text.toString()
 
-                if(URLUtil.isNetworkUrl(loadingUrl)) {
+                if (URLUtil.isNetworkUrl(loadingUrl)) {
                     binding.webView.loadUrl(loadingUrl)
                 } else {
                     binding.webView.loadUrl("http://$loadingUrl")
@@ -204,7 +204,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
 
     // 추출결과에 따른 분기
     private fun extractionComplete(extractionResult: String) {
-        when(extractionResult) {
+        when (extractionResult) {
             Util.TEXT_LIMIT_EXCEEDED -> {
                 Toast.makeText(this, getString(R.string.ocr_text_limit), Toast.LENGTH_SHORT).show()
             }
@@ -223,7 +223,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         super.onResume()
         try {
             val selectUrl = intent.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT)
-            if(selectUrl.isNullOrEmpty()) {
+            if (selectUrl.isNullOrEmpty()) {
                 return
             }
             binding.webView.loadUrl(selectUrl)
@@ -241,10 +241,10 @@ internal class MainActivity : BaseActivity<MainViewModel>(
     }
 
     override fun onBackPressed() {
-        if(binding.cropImageView.isVisible) {
+        if (binding.cropImageView.isVisible) {
             binding.isCropImageViewVisible = false
         } else {
-            if(binding.webView.canGoBack()) {
+            if (binding.webView.canGoBack()) {
                 binding.webView.goBack()
             } else {
                 val time = System.currentTimeMillis()
@@ -258,7 +258,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }
     }
 
-    inner class WebViewClient: android.webkit.WebViewClient() {
+    inner class WebViewClient : android.webkit.WebViewClient() {
         // 페이지 로드 시작
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
@@ -274,7 +274,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
                 progressBar.hide()
 
                 goBackButton.isEnabled = webView.canGoBack()
-                goForwardButton.isEnabled =  webView.canGoForward()
+                goForwardButton.isEnabled = webView.canGoForward()
                 addressBar.setText(url)
             }
 
@@ -283,7 +283,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
 
     }
 
-    inner class WebChromeClient: android.webkit.WebChromeClient() {
+    inner class WebChromeClient : android.webkit.WebChromeClient() {
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
 

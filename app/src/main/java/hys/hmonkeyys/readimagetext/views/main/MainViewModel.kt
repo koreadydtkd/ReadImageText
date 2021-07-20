@@ -22,7 +22,7 @@ import java.io.IOException
 
 internal class MainViewModel(
     private val historyDao: HistoryDao,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
 ) : BaseViewModel() {
 
     private var _mainStateLiveData = MutableLiveData<MainState>()
@@ -35,7 +35,7 @@ internal class MainViewModel(
     fun insertAfterDuplicateDataLookup(url: String?) = viewModelScope.launch {
         // 중복 확인을 위한 쿼리 : 0 반환 시 데이터 없음
         val haveData = historyDao.findByHistory(url ?: "", Util().getCurrentDate())
-        if(haveData < 1) {
+        if (haveData < 1) {
             historyDao.insertHistory(WebHistoryEntity(null, url, Util().getCurrentDate()))
         }
     }
@@ -57,7 +57,7 @@ internal class MainViewModel(
             val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
             recognizer.process(image)
                 .addOnSuccessListener {
-                    if(it.text.length > OCR_TEXT_LIMIT) {
+                    if (it.text.length > OCR_TEXT_LIMIT) {
                         // 최대 추출 제한
                         _mainStateLiveData.postValue(MainState.TextExtractionComplete(Util.TEXT_LIMIT_EXCEEDED))
                     } else {

@@ -18,7 +18,7 @@ interface KakaoTranslateApi {
     fun translateKakao(
         @Field("query") query: String,
         @Field("src_lang") src_lang: String,
-        @Field("target_lang") target_lang: String
+        @Field("target_lang") target_lang: String,
     ): Call<TranslateKakaoModel>
 
     companion object {

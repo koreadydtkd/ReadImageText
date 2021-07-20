@@ -14,7 +14,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class HistoryViewModel(
-    private val historyDao: HistoryDao
+    private val historyDao: HistoryDao,
 ) : BaseViewModel() {
 
     private var _historyStateLiveData = MutableLiveData<HistoryState>()
@@ -31,12 +31,12 @@ internal class HistoryViewModel(
     }
 
     private fun convertList(list: MutableList<WebHistoryEntity>) {
-        var prefDate : String? = ""
+        var prefDate: String? = ""
         val historyList = mutableListOf<HistoryType>()
 
         list.forEach { webHistoryModel ->
             // 날짜 영역
-            if(webHistoryModel.visitDate != prefDate) {
+            if (webHistoryModel.visitDate != prefDate) {
                 historyList.add(
                     DateType(HistoryType.DATE).apply {
                         date = webHistoryModel.visitDate
@@ -59,9 +59,9 @@ internal class HistoryViewModel(
         _historyStateLiveData.postValue(HistoryState.GetHistoryData(historyList))
     }
 
-    fun deleteHistory (uid: Int, loadUrl: String) {
+    fun deleteHistory(uid: Int, loadUrl: String) {
         viewModelScope.launch {
-            if(uid == 0 && loadUrl == ALL) {
+            if (uid == 0 && loadUrl == ALL) {
                 _historyStateLiveData.postValue(HistoryState.Delete(true))
                 historyDao.deleteAll()
                 Log.i(TAG, "모두 삭제")

@@ -29,7 +29,7 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
 
     override fun observeData() {
         viewModel.appSettingLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is AppSettingState.Initialized -> {
                     initStatusBar()
                     initViews()
@@ -88,7 +88,7 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
                     viewModel.saveTTSSpeed(position)
                 }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) { }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
         }

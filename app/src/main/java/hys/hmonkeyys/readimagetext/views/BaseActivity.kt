@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.Job
 
-internal abstract class BaseActivity<VM: BaseViewModel>: AppCompatActivity() {
+internal abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
 
     abstract val viewModel: VM
 
@@ -20,7 +20,7 @@ internal abstract class BaseActivity<VM: BaseViewModel>: AppCompatActivity() {
     abstract fun observeData()
 
     override fun onDestroy() {
-        if(fetchJob.isActive) {
+        if (fetchJob.isActive) {
             fetchJob.cancel()
         }
 

@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 
-class HistoryAdapter (
+class HistoryAdapter(
     val deleteSelectItemListener: (Int, String) -> Unit,
-    val moveWebView: (String) -> Unit
-): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    val moveWebView: (String) -> Unit,
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var historyList = mutableListOf<HistoryType>()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -20,7 +20,7 @@ class HistoryAdapter (
         private val deleteButton: CardView = view.findViewById(R.id.deleteButton)
 
         fun bind(item: AddressType?) {
-            item?.let{ selectItem ->
+            item?.let { selectItem ->
                 selectItem.loadUrl?.let { loadUrl ->
                     historyUrlTextView.apply {
                         text = loadUrl
@@ -32,7 +32,7 @@ class HistoryAdapter (
                     deleteButton.setOnDuplicatePreventionClickListener {
                         try {
                             // 이전, 다음 아이템이 날짜타입인 경우
-                            if(historyList[layoutPosition - 1].type == HistoryType.DATE &&
+                            if (historyList[layoutPosition - 1].type == HistoryType.DATE &&
                                 historyList[layoutPosition + 1].type == HistoryType.DATE
                             ) {
                                 historyList.removeAt(layoutPosition)
@@ -55,10 +55,10 @@ class HistoryAdapter (
         }
     }
 
-    inner class DateViewHolder(view : View) : RecyclerView.ViewHolder(view){
+    inner class DateViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val dateTextView: TextView = view.findViewById(R.id.dateTextView)
-        fun bind(item : DateType?){
-            item?.let{
+        fun bind(item: DateType?) {
+            item?.let {
                 dateTextView.text = it.date
             }
         }
@@ -74,17 +74,17 @@ class HistoryAdapter (
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if(viewType == HistoryType.DATE){
+        return if (viewType == HistoryType.DATE) {
             DateViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_date, parent, false))
-        }else{
+        } else {
             ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_web, parent, false))
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ViewHolder){
+        if (holder is ViewHolder) {
             holder.bind(historyList[position] as? AddressType)
-        }else if(holder is DateViewHolder){
+        } else if (holder is DateViewHolder) {
             holder.bind(historyList[position] as? DateType)
         }
     }

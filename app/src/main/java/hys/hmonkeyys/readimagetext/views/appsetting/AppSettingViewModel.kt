@@ -11,7 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class AppSettingViewModel(
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
 ) : BaseViewModel() {
 
     private var _appSettingLiveData = MutableLiveData<AppSettingState>()

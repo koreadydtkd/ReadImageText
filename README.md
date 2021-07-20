@@ -4,12 +4,14 @@
 웹툰도 보면서 공부도 같이 할 수 있었으면 좋겠다는 마음에서 만들게 되었습니다.
 
 Used
-- Firebase RemoteConfig, Crashlytics
 - Google MlKit(OCR) : 이미지에서 텍스트 추출
-- Room & Coroutine (SQLite) : 앱 데이터베이스
-- Retrofit2 & OkHttp3 : 통신(kakao API, Naver API 사용)
+- Firebase RemoteConfig(버전 관리 목적), Crashlytics(앱 오류 확인 목적)
+- Retrofit2 & OkHttp3
+- Room
 - DataBinding & ViewBinding
-- LiveData
+- ViewModel & LiveData
+- Koin
+- Coroutine
 
-# Creator : Han YongSang
+# Creator : YongSang Han
 # Language : Kotlin

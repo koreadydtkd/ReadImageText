@@ -23,7 +23,6 @@ import hys.hmonkeyys.readimagetext.views.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.ArrayList
 
-
 internal class IntroActivity : BaseActivity<IntroViewModel>(
 
 ) {
@@ -39,7 +38,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
 
     override fun observeData() {
         viewModel.introLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is IntroState.Initialized -> {
                     initStatusBar()
                     initTextViews()
@@ -48,10 +47,10 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
                     checkPermissions()
                 }
                 is IntroState.NeedUpdate -> {
-                    if(it.isUpdate) {
+                    if (it.isUpdate) {
                         showUpdateDialog()
                     } else {
-                        goMainActivity(MAIN_MOVE_DELAY)
+                        goMainActivity()
                     }
                 }
             }
@@ -71,8 +70,14 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         binding.mainTextView.apply {
             val str = resources.getString(R.string.intro_main_contents)
             val ssb = SpannableStringBuilder(str)
-            ssb.setSpan(ForegroundColorSpan(resources.getColor(R.color.intro_text_blue, null)), 7, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            ssb.setSpan(ForegroundColorSpan(resources.getColor(R.color.intro_text_yellow, null)), 12, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            ssb.setSpan(ForegroundColorSpan(resources.getColor(R.color.intro_text_blue, null)),
+                7,
+                9,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            ssb.setSpan(ForegroundColorSpan(resources.getColor(R.color.intro_text_yellow, null)),
+                12,
+                14,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             text = ssb
         }
 
@@ -84,15 +89,15 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
             val rejectedPermissionList = ArrayList<String>()
 
             // 필요한 퍼미션들을 하나씩 권한을 받았는지 확인
-            for(permission in REQUIRED_PERMISSIONS){
-                if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            for (permission in REQUIRED_PERMISSIONS) {
+                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                     // 권한이 없으면 추가
                     rejectedPermissionList.add(permission)
                 }
             }
 
             // 거절한 퍼미션이 있으면 권한 요청
-            if(rejectedPermissionList.isNotEmpty()){
+            if (rejectedPermissionList.isNotEmpty()) {
                 val array = arrayOfNulls<String>(rejectedPermissionList.size)
                 ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array),
                     PERMISSIONS_REQUEST_CODE)
@@ -115,18 +120,18 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         try {
             when (requestCode) {
                 PERMISSIONS_REQUEST_CODE -> {
-                    if(grantResults.isNotEmpty()) {
+                    if (grantResults.isNotEmpty()) {
                         var isAllGranted = true
-                        for(grant in grantResults) {
-                            if(grant != PackageManager.PERMISSION_GRANTED) {
+                        for (grant in grantResults) {
+                            if (grant != PackageManager.PERMISSION_GRANTED) {
                                 isAllGranted = false
                                 break
                             }
                         }
 
-                        if(isAllGranted) {
+                        if (isAllGranted) {
                             // 모든 권한 허용
-                            goMainActivity(MAIN_MOVE_DELAY)
+                            goMainActivity()
                         } else {
                             // 권한 불허
                             Log.e(TAG, "권한 미 허용")
@@ -141,11 +146,11 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         }
     }
 
-    private fun goMainActivity(time: Long) {
+    private fun goMainActivity() {
         Handler(mainLooper).postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
             finish()
-        }, time)
+        }, MAIN_MOVE_DELAY)
     }
 
     private fun showUpdateDialog() {

@@ -17,7 +17,7 @@ interface NaverTranslateApi {
     fun transferPapago(
         @Field("source") source: String,
         @Field("target") target: String,
-        @Field("text") text: String
+        @Field("text") text: String,
     ): Call<ResultTransferPapago>
 
     companion object {

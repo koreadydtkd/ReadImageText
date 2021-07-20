@@ -34,7 +34,7 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
 
     override fun observeData() {
         viewModel.historyStateData.observe(this) {
-            when(it) {
+            when (it) {
                 is HistoryState.Initialized -> { // 초기화 작업
                     initStatusBar()
                     initViews()
@@ -44,7 +44,7 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
                     historyAdapter.setHistoryList(it.historyList)
                 }
                 is HistoryState.Delete -> { // 방문기록 삭제(All or Select)
-                    if(it.isAll) {
+                    if (it.isAll) {
                         changeView()
                     } else {
                         historyAdapter.notifyDataSetChanged()

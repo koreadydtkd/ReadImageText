@@ -24,7 +24,7 @@ import retrofit2.Response
 import java.util.*
 
 internal class BottomDialogFragment(
-    private val readText: String
+    private val readText: String,
 ) : BaseBottomDialogFragment<BottomDialogViewModel>() {
 
     private var binding: FragmentBottomDialogBinding? = null
@@ -54,9 +54,9 @@ internal class BottomDialogFragment(
 
     override fun observeData() {
         viewModel.bottomDialogStateLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is BottomDialogState.TranslateComplete -> {
-                    if(it.isSuccess) {
+                    if (it.isSuccess) {
                         binding!!.resultTranslationEditText.setText(it.translateText)
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.translate_fail), Toast.LENGTH_SHORT).show()
@@ -68,7 +68,7 @@ internal class BottomDialogFragment(
 
         viewModel.translateCount.observe(this) { count ->
             Log.i(TAG, "카운트: $count")
-            if(count == 3) {
+            if (count == 3) {
                 binding!!.translateButton.apply {
                     setBackgroundResource(R.drawable.clicked_background)
                     isEnabled = false
@@ -84,8 +84,8 @@ internal class BottomDialogFragment(
     private fun initResultText(binding: FragmentBottomDialogBinding) {
         val replaceText = readText.replace("\n", " ")
 
-        if(viewModel.isAlmostUpperText(readText)) {
-            if(viewModel.getDotTextSort(replaceText) == Util.BLANK) {
+        if (viewModel.isAlmostUpperText(readText)) {
+            if (viewModel.getDotTextSort(replaceText) == Util.BLANK) {
                 Toast.makeText(requireContext(), getString(R.string.no_results), Toast.LENGTH_SHORT).show()
                 dismiss()
             } else {
@@ -98,17 +98,17 @@ internal class BottomDialogFragment(
 
     private fun initButtons(binding: FragmentBottomDialogBinding) {
         binding.listenButton.setOnDuplicatePreventionClickListener {
-            if(viewModel.isSpeaking()) {
+            if (viewModel.isSpeaking()) {
                 return@setOnDuplicatePreventionClickListener
             }
             viewModel.speakOut(binding.resultEditText.text.toString())
         }
 
         binding.translateButton.setOnDuplicatePreventionClickListener {
-            if(binding.progressBar.isVisible) {
+            if (binding.progressBar.isVisible) {
                 Toast.makeText(requireContext(), getString(R.string.wait_please), Toast.LENGTH_SHORT).show()
             } else {
-                if(ocrResultText != binding.resultEditText.text.toString()) {
+                if (ocrResultText != binding.resultEditText.text.toString()) {
                     ocrResultText = binding.resultEditText.text.toString()
 
                     binding.progressBar.visibility = View.VISIBLE

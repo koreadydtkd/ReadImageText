@@ -13,8 +13,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class IntroViewModel(
-    private val historyDao: HistoryDao
-): BaseViewModel() {
+    private val historyDao: HistoryDao,
+) : BaseViewModel() {
 
     private var _introStateLiveData = MutableLiveData<IntroState>(IntroState.Initialized)
     val introLiveData: LiveData<IntroState> = _introStateLiveData
@@ -35,11 +35,11 @@ internal class IntroViewModel(
         val remoteConfig = Firebase.remoteConfig
         remoteConfig.fetchAndActivate()
             .addOnCompleteListener {
-                if(it.isSuccessful) {
+                if (it.isSuccessful) {
                     val updateVersion = remoteConfig.getLong(REMOTE_CONFIG_KEY)
                     Log.i(TAG, "$updateVersion")
 
-                    if(updateVersion > currentVersion) {
+                    if (updateVersion > currentVersion) {
                         _introStateLiveData.postValue(IntroState.NeedUpdate(true))
                     } else {
                         _introStateLiveData.postValue(IntroState.NeedUpdate(false))

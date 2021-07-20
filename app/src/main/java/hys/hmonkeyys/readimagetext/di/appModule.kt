@@ -57,10 +57,10 @@ internal class TTS(context: Context) : TextToSpeech.OnInitListener {
     val textToSpeech = TextToSpeech(context, this)
 
     override fun onInit(status: Int) {
-        if(status == TextToSpeech.SUCCESS) {
+        if (status == TextToSpeech.SUCCESS) {
             val ttsLang = textToSpeech.setLanguage(Locale.ENGLISH)
 
-            if(ttsLang == TextToSpeech.LANG_MISSING_DATA || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
+            if (ttsLang == TextToSpeech.LANG_MISSING_DATA || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e(TAG, "This Language is not supported")
             }
         } else {
