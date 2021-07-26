@@ -1,14 +1,14 @@
 package hys.hmonkeyys.readimagetext.db.dao
 
 import androidx.room.*
-import hys.hmonkeyys.readimagetext.data.entity.WebHistoryEntity
+import hys.hmonkeyys.readimagetext.model.entity.WebHistory
 
 @Dao
 interface HistoryDao {
 
     // 전체 조회 (최신 날짜부터 조회하고 나중에 추가된 것부터)
     @Query("SELECT * FROM web ORDER BY visit_date DESC, uid DESC")
-    suspend fun getAll(): MutableList<WebHistoryEntity>
+    suspend fun getAll(): MutableList<WebHistory>
 
     // 중복 데이터 조회
     @Query("SELECT COUNT(*) FROM web WHERE load_url LIKE :loadUrl AND visit_date LIKE :visitDate")
@@ -17,7 +17,7 @@ interface HistoryDao {
 
     // 데이터 삽입
     @Insert
-    suspend fun insertHistory(webHistory: WebHistoryEntity)
+    suspend fun insertHistory(webHistory: WebHistory)
 
 
     // 데이터 전체 삭제
@@ -34,7 +34,7 @@ interface HistoryDao {
 
     // 데이터 하나만 삭제
     @Delete
-    suspend fun delete(webHistory: WebHistoryEntity)
+    suspend fun delete(webHistory: WebHistory)
 
     @Query("DELETE FROM web WHERE uid LIKE :uid AND load_url LIKE :loadUrl")
     suspend fun deleteSelectedItem(uid: Int, loadUrl: String)

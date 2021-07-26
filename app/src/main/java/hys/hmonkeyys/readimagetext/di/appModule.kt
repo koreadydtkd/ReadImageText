@@ -6,12 +6,12 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.room.Room
 import hys.hmonkeyys.readimagetext.db.WebDatabase
-import hys.hmonkeyys.readimagetext.fragment.bottomdialog.BottomDialogViewModel
+import hys.hmonkeyys.readimagetext.views.fragment.bottomsheetdialog.BottomDialogViewModel
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
-import hys.hmonkeyys.readimagetext.views.appsetting.AppSettingViewModel
-import hys.hmonkeyys.readimagetext.views.history.HistoryViewModel
-import hys.hmonkeyys.readimagetext.views.intro.IntroViewModel
-import hys.hmonkeyys.readimagetext.views.main.MainViewModel
+import hys.hmonkeyys.readimagetext.views.activity.appsetting.AppSettingViewModel
+import hys.hmonkeyys.readimagetext.views.activity.history.HistoryViewModel
+import hys.hmonkeyys.readimagetext.views.activity.intro.IntroViewModel
+import hys.hmonkeyys.readimagetext.views.activity.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel

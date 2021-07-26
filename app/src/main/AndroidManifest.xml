@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".views.intro.IntroActivity"
+            android:name="hys.hmonkeyys.readimagetext.views.activity.intro.IntroActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -39,23 +39,23 @@
             android:value="@string/admob_app_id" />
 
         <activity
-            android:name=".views.main.MainActivity"
+            android:name="hys.hmonkeyys.readimagetext.views.activity.main.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".views.history.HistoryActivity"
+            android:name="hys.hmonkeyys.readimagetext.views.activity.history.HistoryActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".views.licensedetail.LicenseDetailActivity"
+            android:name="hys.hmonkeyys.readimagetext.views.activity.licensedetail.LicenseDetailActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".views.appsetting.AppSettingActivity"
+            android:name="hys.hmonkeyys.readimagetext.views.activity.appsetting.AppSettingActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 

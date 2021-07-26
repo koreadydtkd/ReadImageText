@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        tools:context=".views.main.MainActivity">
+        tools:context=".views.activity.main.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbar"
