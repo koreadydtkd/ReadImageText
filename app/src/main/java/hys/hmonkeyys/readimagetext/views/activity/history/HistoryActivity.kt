@@ -99,10 +99,10 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
 
     private fun selectURLGoToMainWebView(url: String) {
         Log.i(TAG, url)
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        val intent = Intent()
         intent.putExtra(Util.MAIN_TO_HISTORY_DEFAULT, url)
-        startActivity(intent)
+        setResult(200, intent)
+        finish()
     }
 
     private fun changeView() {

@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.webkit.URLUtil
 import android.webkit.WebView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -37,6 +38,16 @@ internal class MainActivity : BaseActivity<MainViewModel>(
     override val viewModel: MainViewModel by viewModel()
 
     private var backPressTime = 0L
+
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        if(activityResult.resultCode == 200) {
+            val data = activityResult.data
+            data ?: return@registerForActivityResult
+
+            val selectUrl = data.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT).toString()
+            binding.webView.loadUrl(selectUrl)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,8 +114,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             settings.javaScriptEnabled = true
 
             // 앱 실행 시 마지막 방문한 페이지로 이동
-            val lastUrl = viewModel.getLastUrl()
-            loadUrl(lastUrl)
+            loadUrl(viewModel.getLastUrl())
 
             setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 binding.scrollValue = scrollY
@@ -124,7 +134,9 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         // 앱 설정 플로팅 버튼
         binding.appSettingFloatingButton.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
-            startActivity(Intent(this, AppSettingActivity::class.java))
+
+            startForResult.launch(Intent(this, AppSettingActivity::class.java))
+//            startActivity(Intent(this, AppSettingActivity::class.java))
         }
 
         // 스크린 캡처 플로팅 버튼
@@ -223,20 +235,6 @@ internal class MainActivity : BaseActivity<MainViewModel>(
                 val bottomDialogFragment = BottomDialogFragment(extractionResult)
                 bottomDialogFragment.show(supportFragmentManager, bottomDialogFragment.tag)
             }
-        }
-    }
-
-    // intent 에 데이터 있는지 확인 후 있으면 웹뷰 페이지 이동.
-    override fun onResume() {
-        super.onResume()
-        try {
-            val selectUrl = intent.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT)
-            if (selectUrl.isNullOrEmpty()) return
-
-            binding.webView.loadUrl(selectUrl)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 
