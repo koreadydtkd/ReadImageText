@@ -2,7 +2,6 @@ package hys.hmonkeyys.readimagetext.views.activity.appsetting
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.AdapterView
@@ -16,29 +15,13 @@ import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.history.HistoryActivity
 import hys.hmonkeyys.readimagetext.views.activity.licensedetail.LicenseDetailActivity
-import hys.hmonkeyys.readimagetext.views.activity.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
-    private val binding: ActivityAppSettingBinding by lazy {
-        ActivityAppSettingBinding.inflate(layoutInflater)
-    }
+
+    private val binding: ActivityAppSettingBinding by lazy { ActivityAppSettingBinding.inflate(layoutInflater) }
 
     override val viewModel: AppSettingViewModel by viewModel()
-
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-        if(activityResult.resultCode == 200) {
-            val data = activityResult.data
-            data ?: return@registerForActivityResult
-
-            val selectUrl = data.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT).toString()
-
-            val intent = Intent()
-            intent.putExtra(Util.MAIN_TO_HISTORY_DEFAULT, selectUrl)
-            setResult(200, intent)
-            finish()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +68,6 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
 
         binding.historyButton.setOnDuplicatePreventionClickListener {
             startForResult.launch(Intent(this, HistoryActivity::class.java))
-//            startActivity(Intent(this, HistoryActivity::class.java))
         }
 
         binding.licenseDetailButton.setOnDuplicatePreventionClickListener {
@@ -106,10 +88,23 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     viewModel.saveTTSSpeed(position)
                 }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onNothingSelected(parent: AdapterView<*>?) { }
             }
+        }
 
+    }
+
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        if (activityResult.resultCode == 200) {
+            val data = activityResult.data
+            data ?: return@registerForActivityResult
+
+            val selectUrl = data.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT).toString()
+
+            val intent = Intent()
+            intent.putExtra(Util.MAIN_TO_HISTORY_DEFAULT, selectUrl)
+            setResult(200, intent)
+            finish()
         }
     }
 

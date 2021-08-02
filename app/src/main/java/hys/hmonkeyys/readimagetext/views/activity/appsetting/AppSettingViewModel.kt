@@ -21,9 +21,7 @@ internal class AppSettingViewModel(
         _appSettingLiveData.postValue(AppSettingState.Initialized)
     }
 
-    fun getDefaultUrl(): String {
-        return sharedPreferences.getString(SharedPreferencesConst.SETTING_URL, DEFAULT_URL) ?: DEFAULT_URL
-    }
+    fun getDefaultUrl(): String = sharedPreferences.getString(SharedPreferencesConst.SETTING_URL, DEFAULT_URL) ?: DEFAULT_URL
 
     fun saveDefaultUrl(url: String) {
         sharedPreferences.edit().putString(SharedPreferencesConst.SETTING_URL, url).apply()
@@ -66,9 +64,7 @@ internal class AppSettingViewModel(
 
     companion object {
         private const val TAG = "HYS_AppSettingViewModel"
-
         private const val DEFAULT_URL = "https://www.google.com"
         private const val TTS_DEFAULT = 0.8f
-
     }
 }

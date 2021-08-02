@@ -1,7 +1,6 @@
 package hys.hmonkeyys.readimagetext
 
 import android.app.Application
-import android.content.Intent
 import hys.hmonkeyys.readimagetext.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

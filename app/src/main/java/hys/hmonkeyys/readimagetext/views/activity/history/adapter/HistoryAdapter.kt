@@ -1,12 +1,8 @@
 package hys.hmonkeyys.readimagetext.views.activity.history.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ItemDateBinding
 import hys.hmonkeyys.readimagetext.databinding.ItemWebBinding
 import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
@@ -85,11 +81,7 @@ class HistoryAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return historyList.size
-    }
+    override fun getItemCount(): Int = historyList.size
 
-    override fun getItemViewType(position: Int): Int {
-        return historyList[position].type
-    }
+    override fun getItemViewType(position: Int): Int = historyList[position].type
 }

@@ -32,14 +32,16 @@ internal class MainViewModel(
         _mainStateLiveData.postValue(MainState.Initialized)
     }
 
+    // 중복 확인 후 db 삽입
     fun insertAfterDuplicateDataLookup(url: String?) = viewModelScope.launch {
-        // 중복 확인을 위한 쿼리 : 0 반환 시 데이터 없음
+        // 중복 확인 쿼리 -> 0 반환 시 데이터 없음
         val haveData = historyDao.findByHistory(url ?: "", Util().getCurrentDate())
         if (haveData < 1) {
             historyDao.insertHistory(WebHistory(null, url, Util().getCurrentDate()))
         }
     }
 
+    // View -> Bitmap
     fun getBitmapFromView(view: View): Bitmap? {
         val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -57,11 +59,11 @@ internal class MainViewModel(
             val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
             recognizer.process(image)
                 .addOnSuccessListener {
+                    // 최대 추출 제한(350자)
                     if (it.text.length > OCR_TEXT_LIMIT) {
-                        // 최대 추출 제한
                         _mainStateLiveData.postValue(MainState.TextExtractionComplete(Util.TEXT_LIMIT_EXCEEDED))
                     } else {
-                        // 성공
+                        // 추출 성공
                         _mainStateLiveData.postValue(MainState.TextExtractionComplete(it.text))
                     }
                 }
@@ -78,17 +80,19 @@ internal class MainViewModel(
         }
     }
 
-    fun getLastUrl(): String = sharedPreferences.getString(SharedPreferencesConst.LAST_URL, getSettingUrl()) ?: DEFAULT_URL
-
+    // 사용자가 설정한 페이지 가져오기
     fun getSettingUrl(): String = sharedPreferences.getString(SharedPreferencesConst.SETTING_URL, DEFAULT_URL) ?: DEFAULT_URL
 
+    // 마지막 방문 페이지 가져오기
+    fun getLastUrl(): String = sharedPreferences.getString(SharedPreferencesConst.LAST_URL, getSettingUrl()) ?: DEFAULT_URL
+
+    // 마지막 방푼 페이지 저장하기
     fun setLastUrl(url: String) {
         sharedPreferences.edit().putString(SharedPreferencesConst.LAST_URL, url).apply()
     }
 
     companion object {
         private const val OCR_TEXT_LIMIT = 350
-
         private const val DEFAULT_URL = "https://www.google.com"
     }
 }

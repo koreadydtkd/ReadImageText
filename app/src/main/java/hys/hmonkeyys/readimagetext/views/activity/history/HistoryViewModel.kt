@@ -62,12 +62,12 @@ internal class HistoryViewModel(
     fun deleteHistory(uid: Int, loadUrl: String) {
         viewModelScope.launch {
             if (uid == 0 && loadUrl == ALL) {
-                _historyStateLiveData.postValue(HistoryState.Delete(true))
                 historyDao.deleteAll()
+                _historyStateLiveData.postValue(HistoryState.Delete(true))
                 Log.i(TAG, "모두 삭제")
             } else {
-                _historyStateLiveData.postValue(HistoryState.Delete(false))
                 historyDao.deleteSelectedItem(uid, loadUrl)
+                _historyStateLiveData.postValue(HistoryState.Delete(false))
                 Log.i(TAG, "선택 삭제")
             }
         }
@@ -75,7 +75,6 @@ internal class HistoryViewModel(
 
     companion object {
         private const val TAG = "HistoryViewModel"
-
         private const val ALL = "all"
     }
 }

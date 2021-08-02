@@ -17,37 +17,24 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import hys.hmonkeyys.readimagetext.views.activity.appsetting.AppSettingActivity
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
-import hys.hmonkeyys.readimagetext.views.fragment.bottomsheetdialog.BottomDialogFragment
 import hys.hmonkeyys.readimagetext.utils.Util
 import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.views.BaseActivity
-import java.util.*
+import hys.hmonkeyys.readimagetext.views.activity.appsetting.AppSettingActivity
+import hys.hmonkeyys.readimagetext.views.fragment.bottomsheetdialog.BottomDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 internal class MainActivity : BaseActivity<MainViewModel>(
 
 ) {
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
+    private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override val viewModel: MainViewModel by viewModel()
 
     private var backPressTime = 0L
-
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-        if(activityResult.resultCode == 200) {
-            val data = activityResult.data
-            data ?: return@registerForActivityResult
-
-            val selectUrl = data.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT).toString()
-            binding.webView.loadUrl(selectUrl)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,6 +91,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
     // 뷰 초기화
     @SuppressLint("SetJavaScriptEnabled")
     private fun initViews() {
+        // 아래로 스와이프 - 새로고침
         binding.refreshLayout.setOnRefreshListener {
             binding.webView.reload()
         }
@@ -134,9 +122,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         // 앱 설정 플로팅 버튼
         binding.appSettingFloatingButton.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
-
             startForResult.launch(Intent(this, AppSettingActivity::class.java))
-//            startActivity(Intent(this, AppSettingActivity::class.java))
         }
 
         // 스크린 캡처 플로팅 버튼
@@ -152,6 +138,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
 
     }
 
+    // 하단 배너광고 초기화
     private fun initAdmob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
@@ -180,6 +167,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }
     }
 
+    // 플로팅 닫히면서 애니메이션 효과
     private fun closeFloatingButtonWithAnimation() {
         ObjectAnimator.ofFloat(binding.moveTopTextView, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, 0f).apply { start() }
@@ -191,6 +179,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         binding.isFabItemVisible = false
     }
 
+    // 플로팅 열리면서 애니메이션 효과
     private fun openFloatingButtonWithAnimation() {
         ObjectAnimator.ofFloat(binding.moveTopTextView, TRANSLATION_Y, -520f).apply { start() }
         ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, -520f).apply { start() }
@@ -283,6 +272,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
                 addressBar.setText(url)
             }
 
+            // 중복데이터 조회 후 없으면 삽입
             viewModel.insertAfterDuplicateDataLookup(url)
         }
 
@@ -296,11 +286,20 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }
     }
 
+    // 앱 설정 화면으로 이동
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        if (activityResult.resultCode == 200) {
+            val data = activityResult.data
+            data ?: return@registerForActivityResult
+
+            val selectUrl = data.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT).toString()
+            binding.webView.loadUrl(selectUrl)
+        }
+    }
+
     companion object {
         private const val TAG = "HYS_MainActivity"
-
         private const val TRANSLATION_Y = "translationY"
-
         private const val ONE_POINT_FIVE_SECOND = 1500L
         private const val CAPTURE_DELAY = 400L
     }

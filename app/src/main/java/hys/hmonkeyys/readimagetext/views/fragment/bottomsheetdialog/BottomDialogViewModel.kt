@@ -37,6 +37,7 @@ internal class BottomDialogViewModel(
         _translateCount.value = 0
     }
 
+    // 거의 대문자인지 체크
     fun isAlmostUpperText(text: String): Boolean {
         val onlyEnglishText = Regex("[^A-Za-z]").replace(text, "")
 
@@ -49,6 +50,7 @@ internal class BottomDialogViewModel(
         return onlyEnglishText.length - 3 < textUpperCount
     }
 
+    // . ? ! 뒤에 문자는 대문자로 변경
     fun getDotTextSort(resultText: String): String {
         try {
             var result = resultText.substring(0, 1).uppercase() + resultText.substring(1).lowercase()
@@ -78,15 +80,18 @@ internal class BottomDialogViewModel(
 
     }
 
+    // 번역 횟수 증가
     fun increaseCount() {
         _translateCount.value = _translateCount.value?.plus(1)
     }
 
+    // 번역 횟수 초기화
     fun translateCountInit() {
         tts.textToSpeech.stop()
         _translateCount.value = 0
     }
 
+    // 텍스트 읽기
     fun speakOut(extractedResults: String) {
         try {
             tts.textToSpeech.apply {
@@ -100,8 +105,10 @@ internal class BottomDialogViewModel(
         }
     }
 
+    // 텍스트 읽기 실행중인지
     fun isSpeaking(): Boolean = tts.textToSpeech.isSpeaking
 
+    // 카카오 번역
     fun translateKakao(translateText: String) {
         val replaceText = translateText.replace("\n", " ")
 

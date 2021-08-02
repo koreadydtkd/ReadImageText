@@ -10,21 +10,20 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding
-import hys.hmonkeyys.readimagetext.views.BaseBottomSheetDialogFragment
 import hys.hmonkeyys.readimagetext.utils.Util
 import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.views.BaseBottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 internal class BottomDialogFragment(
-    private val readText: String,
+    private val extractionText: String,
 ) : BaseBottomSheetDialogFragment<BottomDialogViewModel>() {
 
     private var binding: FragmentBottomDialogBinding? = null
 
-    override val viewModel: BottomDialogViewModel by viewModel()
-
     private var ocrResultText = ""
+
+    override val viewModel: BottomDialogViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +38,8 @@ internal class BottomDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.let { binding ->
-            initResultText(binding)
-            initButtons(binding)
-        }
+        initResultText()
+        initViews()
     }
 
     override fun observeData() {
@@ -50,70 +47,77 @@ internal class BottomDialogFragment(
             when (it) {
                 is BottomDialogState.TranslateComplete -> {
                     if (it.isSuccess) {
-                        binding!!.resultTranslationEditText.setText(it.translateText)
+                        binding?.resultTranslationEditText?.setText(it.translateText)
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.translate_fail), Toast.LENGTH_SHORT).show()
                     }
-                    binding!!.progressBar.visibility = View.GONE
+                    binding?.progressBar?.visibility = View.GONE
                 }
             }
         }
 
+        // 번역 횟수 3번으로 제한
         viewModel.translateCount.observe(this) { count ->
             Log.i(TAG, "카운트: $count")
             if (count == 3) {
-                binding!!.translateButton.apply {
+                binding?.translateButton?.apply {
                     setBackgroundResource(R.drawable.clicked_background)
                     isEnabled = false
                     isClickable = false
                 }
-                binding!!.translateTextView.setTextColor(Color.WHITE)
+                binding?.translateTextView?.setTextColor(Color.WHITE)
 
                 Toast.makeText(requireContext(), getString(R.string.selected_translate_limit), Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun initResultText(binding: FragmentBottomDialogBinding) {
-        val replaceText = readText.replace("\n", " ")
+    // 추출된 문자 초기화
+    private fun initResultText() {
+        val replaceText = extractionText.replace("\n", " ")
 
-        if (viewModel.isAlmostUpperText(readText)) {
+        if (viewModel.isAlmostUpperText(extractionText)) {
             if (viewModel.getDotTextSort(replaceText) == Util.BLANK) {
                 Toast.makeText(requireContext(), getString(R.string.no_results), Toast.LENGTH_SHORT).show()
                 dismiss()
             } else {
-                binding.resultEditText.setText(viewModel.getDotTextSort(replaceText))
+                binding?.resultEditText?.setText(viewModel.getDotTextSort(replaceText))
             }
         } else {
-            binding.resultEditText.setText(replaceText)
+            binding?.resultEditText?.setText(replaceText)
         }
     }
 
-    private fun initButtons(binding: FragmentBottomDialogBinding) {
-        binding.listenButton.setOnDuplicatePreventionClickListener {
-            if (viewModel.isSpeaking()) {
-                return@setOnDuplicatePreventionClickListener
-            }
-            viewModel.speakOut(binding.resultEditText.text.toString())
-        }
+    // 각 뷰들 초기화
+    private fun initViews() {
+        binding?.listenButton?.setOnDuplicatePreventionClickListener { readText() }
+        binding?.translateButton?.setOnDuplicatePreventionClickListener { translationEnglishToKorean() }
+    }
 
-        binding.translateButton.setOnDuplicatePreventionClickListener {
-            if (binding.progressBar.isVisible) {
-                Toast.makeText(requireContext(), getString(R.string.wait_please), Toast.LENGTH_SHORT).show()
+    // 텍스트 읽기
+    private fun readText() {
+        if (viewModel.isSpeaking()) return
+        viewModel.speakOut(binding?.resultEditText?.text.toString())
+    }
+
+    // 추출한 문자 번역
+    private fun translationEnglishToKorean() {
+        if (binding?.progressBar?.isVisible == true) {
+            Toast.makeText(requireContext(), getString(R.string.wait_please), Toast.LENGTH_SHORT).show()
+        } else {
+            if (ocrResultText != binding?.resultEditText?.text.toString()) {
+                ocrResultText = binding?.resultEditText?.text.toString()
+
+                binding?.progressBar?.visibility = View.VISIBLE
+                viewModel.translateKakao(ocrResultText)
             } else {
-                if (ocrResultText != binding.resultEditText.text.toString()) {
-                    ocrResultText = binding.resultEditText.text.toString()
-
-                    binding.progressBar.visibility = View.VISIBLE
-                    viewModel.translateKakao(ocrResultText)
-                } else {
-                    Toast.makeText(requireContext(), getString(R.string.no_text_have_been_changed), Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(requireContext(), getString(R.string.no_text_have_been_changed), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     override fun onDestroy() {
+        // 번역 횟수 초기화
         viewModel.translateCountInit()
 
         binding = null
@@ -123,5 +127,4 @@ internal class BottomDialogFragment(
     companion object {
         private const val TAG = "HYS_BottomDialogFragment"
     }
-
 }

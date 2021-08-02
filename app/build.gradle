@@ -14,8 +14,8 @@ android {
         applicationId "hys.hmonkeyys.readimagetext"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 23
-        versionName "1.3.3"
+        versionCode 24
+        versionName "1.3.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

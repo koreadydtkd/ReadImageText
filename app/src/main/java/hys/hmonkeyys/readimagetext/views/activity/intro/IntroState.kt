@@ -7,6 +7,6 @@ sealed class IntroState {
     object CheckPermission : IntroState()
 
     data class NeedUpdate(
-        val isUpdate: Boolean,
+        val isNeedUpdate: Boolean,
     ) : IntroState()
 }

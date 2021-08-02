@@ -26,13 +26,12 @@ import java.util.ArrayList
 internal class IntroActivity : BaseActivity<IntroViewModel>(
 
 ) {
-    private lateinit var binding: ActivityIntroBinding
+    private val binding: ActivityIntroBinding by lazy { ActivityIntroBinding.inflate(layoutInflater) }
 
     override val viewModel: IntroViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
@@ -41,13 +40,13 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
             when (it) {
                 is IntroState.Initialized -> {
                     initStatusBar()
-                    initTextViews()
+                    initViews()
                 }
                 is IntroState.CheckPermission -> {
                     checkPermissions()
                 }
                 is IntroState.NeedUpdate -> {
-                    if (it.isUpdate) {
+                    if (it.isNeedUpdate) {
                         showUpdateDialog()
                     } else {
                         goMainActivity()
@@ -57,33 +56,34 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         }
     }
 
+    // 상태표시줄 초기화
     private fun initStatusBar() {
         try {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = resources.getColor(R.color.teal_200, null)
+            window.statusBarColor = getColor(R.color.teal_200)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun initTextViews() {
+    // 각 뷰들 초기화
+    private fun initViews() {
         binding.mainTextView.apply {
-            val str = resources.getString(R.string.intro_main_contents)
+            val str = getString(R.string.intro_main_contents)
             val ssb = SpannableStringBuilder(str)
-            ssb.setSpan(ForegroundColorSpan(resources.getColor(R.color.intro_text_blue, null)),
-                7,
-                9,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            ssb.setSpan(ForegroundColorSpan(resources.getColor(R.color.intro_text_yellow, null)),
-                12,
-                14,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            // '번역' 글자 파란색으로 변경
+            ssb.setSpan(ForegroundColorSpan(getColor(R.color.intro_text_blue)), 7, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            // '듣기' 글자 노란색으로 변경
+            ssb.setSpan(ForegroundColorSpan(getColor(R.color.intro_text_yellow)), 12, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             text = ssb
         }
 
-        binding.appVersionTextView.text = resources.getString(R.string.app_version, Util().getAppVersionName(this@IntroActivity))
+        binding.appVersionTextView.text = getString(R.string.app_version, Util().getAppVersionName(this@IntroActivity))
     }
 
+    // 권한 체크
     private fun checkPermissions() {
         try {
             val rejectedPermissionList = ArrayList<String>()
@@ -99,8 +99,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
             // 거절한 퍼미션이 있으면 권한 요청
             if (rejectedPermissionList.isNotEmpty()) {
                 val array = arrayOfNulls<String>(rejectedPermissionList.size)
-                ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array),
-                    PERMISSIONS_REQUEST_CODE)
+                ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), PERMISSIONS_REQUEST_CODE)
             } else {
                 Log.i(TAG, "권한 모두 허용")
                 viewModel.deleteData()
@@ -146,6 +145,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         }
     }
 
+    // 메인 화면으로 이동
     private fun goMainActivity() {
         Handler(mainLooper).postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
@@ -153,6 +153,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         }, MAIN_MOVE_DELAY)
     }
 
+    // 취소 못하는 업데이트 다이얼로그 띄우기
     private fun showUpdateDialog() {
         val customDialog = CustomDialog(dialogClickedListener = {
             goPlayStore()
@@ -161,6 +162,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         customDialog.show(supportFragmentManager, customDialog.tag)
     }
 
+    // 플레이스토어로 이동
     private fun goPlayStore() {
         try {
             val intent = Intent(Intent.ACTION_VIEW)
@@ -174,13 +176,9 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
 
     companion object {
         private const val TAG = "HYS_IntroActivity"
-
         private const val MAIN_MOVE_DELAY = 1500L
-
         private const val PERMISSIONS_REQUEST_CODE = 100
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.RECORD_AUDIO)
-
         private const val APP_URI = "market://details?id="
-
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.RECORD_AUDIO)
     }
 }

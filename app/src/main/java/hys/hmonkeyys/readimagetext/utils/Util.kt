@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class Util {
-
+    // 앱 버전 코드
     fun getAppVersionCode(applicationContext: Context): Long {
         return try {
             val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
@@ -25,6 +25,7 @@ class Util {
         }
     }
 
+    // 앱 버전 이름
     fun getAppVersionName(applicationContext: Context): String {
         return try {
             val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
@@ -35,6 +36,7 @@ class Util {
         }
     }
 
+    // 현재 시간 ex) 2021-07-01
     fun getCurrentDate(): String {
         val now = System.currentTimeMillis()
         val date = Date(now)
@@ -51,13 +53,10 @@ class Util {
 
     companion object {
         private const val TAG = "HYS_Util"
-
         const val DATE_PATTERN = "yyyy-MM-dd"
         const val MAIN_TO_HISTORY_DEFAULT = "select_url"
-
         const val TEXT_LIMIT_EXCEEDED = "text_limit_exceeded"
         const val EXTRACTION_ERROR = "extraction_error"
-
         const val BLANK = "blank"
     }
 }
@@ -70,6 +69,7 @@ fun Char.isSpecialSymbols(): Boolean {
     return false
 }
 
+// 두번 클릭 방지
 fun View.setOnDuplicatePreventionClickListener(OnDuplicatePreventionClick: () -> Unit) {
     this.setOnClickListener {
         it.isEnabled = false

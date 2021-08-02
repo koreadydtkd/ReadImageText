@@ -12,6 +12,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface NaverTranslateApi {
+
     @FormUrlEncoded
     @POST("v1/papago/n2mt")
     fun transferPapago(

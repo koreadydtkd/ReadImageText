@@ -12,20 +12,17 @@ import hys.hmonkeyys.readimagetext.utils.Util
 import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.history.adapter.HistoryAdapter
-import hys.hmonkeyys.readimagetext.views.activity.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 internal class HistoryActivity : BaseActivity<HistoryViewModel>(
 
 ) {
-    private val binding: ActivityHistoryBinding by lazy {
-        ActivityHistoryBinding.inflate(layoutInflater)
-    }
-
-    override val viewModel: HistoryViewModel by viewModel()
+    private val binding: ActivityHistoryBinding by lazy { ActivityHistoryBinding.inflate(layoutInflater) }
 
     private lateinit var historyAdapter: HistoryAdapter
+
+    override val viewModel: HistoryViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,13 +61,8 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
     }
 
     private fun initViews() {
-        binding.backButton.setOnDuplicatePreventionClickListener {
-            finish()
-        }
-
-        binding.deleteAllButton.setOnDuplicatePreventionClickListener {
-            showDeleteDialog()
-        }
+        binding.backButton.setOnDuplicatePreventionClickListener { finish() }
+        binding.deleteAllButton.setOnDuplicatePreventionClickListener { showDeleteDialog() }
     }
 
     private fun initAdapter() {
@@ -114,7 +106,6 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
 
     companion object {
         private const val TAG = "HYS_HistoryActivity"
-
         private const val ALL = "all"
     }
 }

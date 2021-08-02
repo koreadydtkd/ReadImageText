@@ -23,6 +23,7 @@ internal class IntroViewModel(
         _introStateLiveData.postValue(IntroState.CheckPermission)
     }
 
+    // 7일 지난 방문기록 데이터 삭제
     fun deleteData() {
         viewModelScope.launch {
             historyDao.deleteDataOneWeeksAgo(Util().getDateWeeksAgo(1))
@@ -54,7 +55,6 @@ internal class IntroViewModel(
 
     companion object {
         private const val TAG = "HYS_IntroViewModel"
-
         private const val REMOTE_CONFIG_KEY = "app_version"
     }
 }

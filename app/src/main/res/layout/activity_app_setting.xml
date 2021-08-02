@@ -42,7 +42,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/settingUrlTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -60,9 +60,9 @@
         android:layout_marginStart="4dp"
         android:background="@drawable/ic_web_24"
         android:backgroundTint="@color/intro_text_blue"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        app:layout_constraintBottom_toBottomOf="@+id/settingUrlTextView"
+        app:layout_constraintStart_toEndOf="@+id/settingUrlTextView"
+        app:layout_constraintTop_toTopOf="@+id/settingUrlTextView" />
 
     <EditText
         android:id="@+id/settingUrlEditText"
@@ -78,7 +78,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/urlEditButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/settingUrlTextView"
         tools:text="www.google.com" />
 
     <androidx.cardview.widget.CardView
@@ -103,7 +103,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/speakSpeedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -121,9 +121,9 @@
         android:layout_marginStart="4dp"
         android:background="@drawable/ic_sound"
         android:backgroundTint="@color/intro_text_blue"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintBottom_toBottomOf="@+id/speakSpeedTextView"
+        app:layout_constraintStart_toEndOf="@+id/speakSpeedTextView"
+        app:layout_constraintTop_toTopOf="@+id/speakSpeedTextView" />
 
     <androidx.cardview.widget.CardView
         android:id="@id/speakSpeedCardView"
@@ -134,7 +134,7 @@
         android:elevation="8dp"
         app:cardCornerRadius="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/speakSpeedTextView">
 
         <Spinner
             android:id="@+id/speakSpeedSpinner"
