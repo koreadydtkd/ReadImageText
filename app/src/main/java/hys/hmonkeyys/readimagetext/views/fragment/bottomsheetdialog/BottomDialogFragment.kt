@@ -90,8 +90,28 @@ internal class BottomDialogFragment(
 
     // 각 뷰들 초기화
     private fun initViews() {
-        binding?.listenButton?.setOnDuplicatePreventionClickListener { readText() }
-        binding?.translateButton?.setOnDuplicatePreventionClickListener { translationEnglishToKorean() }
+        // 듣기 버튼
+        binding?.listenButton?.setOnDuplicatePreventionClickListener {
+            readText()
+        }
+
+        // 번역 버튼
+        binding?.translateButton?.setOnDuplicatePreventionClickListener {
+            translationEnglishToKorean()
+        }
+
+        // 노트 추가 버튼
+        binding?.addNoteButton?.setOnDuplicatePreventionClickListener {
+            val englishText = binding?.resultEditText?.text.toString()
+            val koreanText = binding?.resultTranslationEditText?.text.toString()
+            if (englishText.isEmpty() || koreanText.isEmpty()) {
+                Toast.makeText(requireContext(), getString(R.string.empty_text), Toast.LENGTH_SHORT).show()
+                return@setOnDuplicatePreventionClickListener
+            }
+
+            viewModel.insertNoteData(englishText, koreanText)
+            Toast.makeText(requireContext(), getString(R.string.add_note), Toast.LENGTH_SHORT).show()
+        }
     }
 
     // 텍스트 읽기

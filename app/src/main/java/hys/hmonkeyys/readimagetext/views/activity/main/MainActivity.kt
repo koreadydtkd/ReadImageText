@@ -23,6 +23,7 @@ import hys.hmonkeyys.readimagetext.utils.Util
 import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.appsetting.AppSettingActivity
+import hys.hmonkeyys.readimagetext.views.activity.note.NoteActivity
 import hys.hmonkeyys.readimagetext.views.fragment.bottomsheetdialog.BottomDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -125,6 +126,12 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             startForResult.launch(Intent(this, AppSettingActivity::class.java))
         }
 
+        // 단어 노트 플로팅 버튼
+        binding.noteFloatingButton.setOnDuplicatePreventionClickListener {
+            closeFloatingButtonWithAnimation()
+            startActivity(Intent(this@MainActivity, NoteActivity::class.java))
+        }
+
         // 스크린 캡처 플로팅 버튼
         binding.screenCaptureFloatingButton.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
@@ -173,6 +180,8 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.appSettingTextView, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.appSettingFloatingButton, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.noteTextView, TRANSLATION_Y, 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.noteFloatingButton, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.screenCaptureTextView, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.screenCaptureFloatingButton, TRANSLATION_Y, 0f).apply { start() }
         binding.mainFloatingButton.setImageResource(R.drawable.ic_add_24)
@@ -181,10 +190,12 @@ internal class MainActivity : BaseActivity<MainViewModel>(
 
     // 플로팅 열리면서 애니메이션 효과
     private fun openFloatingButtonWithAnimation() {
-        ObjectAnimator.ofFloat(binding.moveTopTextView, TRANSLATION_Y, -520f).apply { start() }
-        ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, -520f).apply { start() }
-        ObjectAnimator.ofFloat(binding.appSettingTextView, TRANSLATION_Y, -360f).apply { start() }
-        ObjectAnimator.ofFloat(binding.appSettingFloatingButton, TRANSLATION_Y, -360f).apply { start() }
+        ObjectAnimator.ofFloat(binding.moveTopTextView, TRANSLATION_Y, -680f).apply { start() }
+        ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, -680f).apply { start() }
+        ObjectAnimator.ofFloat(binding.appSettingTextView, TRANSLATION_Y, -520f).apply { start() }
+        ObjectAnimator.ofFloat(binding.appSettingFloatingButton, TRANSLATION_Y, -520f).apply { start() }
+        ObjectAnimator.ofFloat(binding.noteTextView, TRANSLATION_Y, -360f).apply { start() }
+        ObjectAnimator.ofFloat(binding.noteFloatingButton, TRANSLATION_Y, -360f).apply { start() }
         ObjectAnimator.ofFloat(binding.screenCaptureTextView, TRANSLATION_Y, -200f).apply { start() }
         ObjectAnimator.ofFloat(binding.screenCaptureFloatingButton, TRANSLATION_Y, -200f).apply { start() }
         binding.mainFloatingButton.setImageResource(R.drawable.ic_clear_24)

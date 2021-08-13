@@ -207,6 +207,43 @@
             tools:visibility="gone" />
 
         <TextView
+            android:id="@+id/noteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:autoSizeMaxTextSize="24sp"
+            android:gravity="center"
+            android:text="@string/main_fab_contents5"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@id/noteFloatingButton"
+            app:layout_constraintEnd_toStartOf="@+id/noteFloatingButton"
+            app:layout_constraintTop_toTopOf="@+id/noteFloatingButton"
+            tools:targetApi="o"
+            tools:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/noteFloatingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/fab_description"
+            android:elevation="4dp"
+            android:src="@drawable/ic_note_24"
+            android:visibility="@{isFabItemVisible == true ? View.VISIBLE : View.GONE}"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@id/mainFloatingButton"
+            app:layout_constraintEnd_toEndOf="@id/mainFloatingButton"
+            app:layout_constraintStart_toStartOf="@id/mainFloatingButton"
+            app:layout_constraintTop_toTopOf="@id/mainFloatingButton"
+            app:tint="@color/teal_200"
+            tools:visibility="gone" />
+
+        <TextView
             android:id="@+id/screenCaptureTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -241,7 +278,7 @@
             app:layout_constraintStart_toStartOf="@id/mainFloatingButton"
             app:layout_constraintTop_toTopOf="@id/mainFloatingButton"
             app:tint="@color/teal_200"
-            tools:visibility="gone" />
+            tools:visibility="gone"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/mainFloatingButton"
@@ -293,7 +330,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_id"
+            ads:adUnitId="@string/banner_ad_test_id"
             ads:layout_constraintBottom_toBottomOf="parent"
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintStart_toStartOf="parent" />

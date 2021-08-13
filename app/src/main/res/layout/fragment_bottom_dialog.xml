@@ -5,32 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/rounded_dialog"
-    android:padding="16dp">
+    android:padding="12dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/warningTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autoSizeMaxTextSize="18sp"
-        android:text="@string/bottom_sheet_text2"
-        android:textColor="@color/dark_gray"
-        android:textStyle="bold"
+        android:autoSizeMaxTextSize="12sp"
+        android:text="@string/bottom_sheet_text1"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:targetApi="o" />
 
     <TextView
-        android:layout_width="0dp"
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autoSizeMaxTextSize="14sp"
-        android:gravity="end"
-        android:text="@string/bottom_sheet_text1"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="4dp"
+        android:autoSizeMaxTextSize="18sp"
+        android:text="@string/bottom_sheet_text2"
+        android:textColor="@color/dark_gray"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/warningTextView"
         tools:targetApi="o" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/addNoteButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_note_add"
+        android:backgroundTint="@color/teal_200"
+        android:contentDescription="@string/main_fab_contents5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/resultEditText"
@@ -85,6 +95,18 @@
         tools:targetApi="o"
         tools:text="테스트" />
 
+    <TextView
+        android:id="@+id/addNoteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/add_note_explanation"
+        android:textColor="@color/dark_gray"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resultTranslationEditText" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/listenButton"
         android:layout_width="0dp"
@@ -96,7 +118,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/translateButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultTranslationEditText">
+        app:layout_constraintTop_toBottomOf="@+id/addNoteTextView">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -142,7 +164,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/listenButton"
-        app:layout_constraintTop_toBottomOf="@+id/resultTranslationEditText">
+        app:layout_constraintTop_toBottomOf="@+id/addNoteTextView">
 
         <LinearLayout
             android:layout_width="match_parent"

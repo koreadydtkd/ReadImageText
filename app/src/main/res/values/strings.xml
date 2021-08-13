@@ -16,6 +16,7 @@
     <string name="main_fab_contents2">방문 기록</string>
     <string name="main_fab_contents3">영역 선택</string>
     <string name="main_fab_contents4">맨 위로</string>
+    <string name="main_fab_contents5">번역 노트</string>
     <string name="fab_description">이미지가 확인되지 않습니다.</string>
     <string name="ocr_error">텍스트 추출에 실패하였습니다.</string>
     <string name="ocr_text_limit">최대 350자까지 추출이 가능합니다.\n다시 영역을 선택해주세요.</string>
@@ -33,6 +34,9 @@
     <string name="selected_translate_limit">번역완료.\n선택영역에 대한 번역은 3회까지 가능합니다.</string>
     <string name="translate_fail">오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.</string>
     <string name="no_text_have_been_changed">변경된 글자가 없습니다.</string>
+    <string name="add_note_explanation">다시 보고 싶은 문장은 우측 상단 버튼을 눌러주세요</string>
+    <string name="add_note">번역 노트에 추가되었습니다.</string>
+    <string name="empty_text">비어있는 문자가 있는지 확인해주세요.</string>
 
     <!-- History -->
     <string name="history_dialog_title">방문기록 모두 삭제</string>

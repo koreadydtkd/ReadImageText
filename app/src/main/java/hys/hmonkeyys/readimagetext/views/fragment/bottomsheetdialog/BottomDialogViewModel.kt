@@ -7,9 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import hys.hmonkeyys.readimagetext.db.dao.NoteDao
 import hys.hmonkeyys.readimagetext.retrofit2.kakao.KakaoTranslateApi
 import hys.hmonkeyys.readimagetext.model.network.KakaoTranslateResponse
 import hys.hmonkeyys.readimagetext.di.TTS
+import hys.hmonkeyys.readimagetext.model.entity.Note
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import hys.hmonkeyys.readimagetext.utils.Util
 import hys.hmonkeyys.readimagetext.utils.isSpecialSymbols
@@ -21,6 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 internal class BottomDialogViewModel(
+    private val noteDao: NoteDao,
     private val sharedPreferences: SharedPreferences,
     private val tts: TTS,
 ) : BaseViewModel() {
@@ -143,6 +146,10 @@ internal class BottomDialogViewModel(
             FirebaseCrashlytics.getInstance().recordException(e)
         }
 
+    }
+
+    fun insertNoteData(english: String, korean: String) = viewModelScope.launch {
+        noteDao.insertHistory(Note(null, english, korean))
     }
 
     companion object {

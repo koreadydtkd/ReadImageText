@@ -24,10 +24,8 @@ internal class HistoryViewModel(
         _historyStateLiveData.postValue(HistoryState.Initialized)
     }
 
-    fun getAllHistory() {
-        viewModelScope.launch {
-            convertList(historyDao.getAll())
-        }
+    fun getAllHistory() = viewModelScope.launch {
+        convertList(historyDao.getAll())
     }
 
     private fun convertList(list: MutableList<WebHistory>) {

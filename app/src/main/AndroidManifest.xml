@@ -16,9 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReadImageText"
         android:usesCleartextTraffic="true">
-
         <activity
-            android:name="hys.hmonkeyys.readimagetext.views.activity.intro.IntroActivity"
+            android:name=".views.activity.note.NoteActivity"
+            android:exported="true" />
+        <activity
+            android:name=".views.activity.intro.IntroActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -26,39 +28,31 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- OCR 관련 -->
+        </activity> <!-- OCR 관련 -->
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
-            android:value="ocr" />
-
-        <!-- 배너 광고 -->
+            android:value="ocr" /> <!-- 배너 광고 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id" />
 
         <activity
-            android:name="hys.hmonkeyys.readimagetext.views.activity.main.MainActivity"
+            android:name=".views.activity.main.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
-            android:name="hys.hmonkeyys.readimagetext.views.activity.history.HistoryActivity"
+            android:name=".views.activity.history.HistoryActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
-            android:name="hys.hmonkeyys.readimagetext.views.activity.licensedetail.LicenseDetailActivity"
+            android:name=".views.activity.licensedetail.LicenseDetailActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
-            android:name="hys.hmonkeyys.readimagetext.views.activity.appsetting.AppSettingActivity"
+            android:name=".views.activity.appsetting.AppSettingActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
     </application>
 
 </manifest>
