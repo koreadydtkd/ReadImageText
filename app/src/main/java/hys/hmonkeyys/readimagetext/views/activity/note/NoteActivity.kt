@@ -2,8 +2,6 @@ package hys.hmonkeyys.readimagetext.views.activity.note
 
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
-import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityNoteBinding
 import hys.hmonkeyys.readimagetext.model.entity.Note
 import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
@@ -27,7 +25,6 @@ internal class NoteActivity : BaseActivity<NoteViewModel>(
         viewModel.noteStateData.observe(this) {
             when (it) {
                 is NoteState.Initialized -> {
-                    initStatusBar()
                     viewModel.getAllNote()
                 }
                 is NoteState.GetNoteData -> {
@@ -43,15 +40,6 @@ internal class NoteActivity : BaseActivity<NoteViewModel>(
         }
     }
 
-    private fun initStatusBar() {
-        try {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = resources.getColor(R.color.teal_200, null)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
     private fun initRecyclerView(noteList: MutableList<Note>) {
         binding.backButton.setOnDuplicatePreventionClickListener {
             finish()
@@ -63,6 +51,9 @@ internal class NoteActivity : BaseActivity<NoteViewModel>(
                     viewModel.speakOut(it)
                 }
 
+            },
+            onItemDeleteClick = {
+                viewModel.deleteNote(it)
             }
         )
     }

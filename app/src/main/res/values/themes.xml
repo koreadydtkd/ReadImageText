@@ -17,6 +17,14 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <style name="Theme.statusBar.Teal200" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/teal_200</item>
+
+        <!-- 화면 맨위에 있는 bar 변경 -->
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
     <!-- BottomSheetDialog 커스텀 상단 둥글게 -->
     <style name="CustomBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>

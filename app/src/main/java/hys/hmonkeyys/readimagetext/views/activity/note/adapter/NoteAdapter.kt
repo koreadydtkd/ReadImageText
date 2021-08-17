@@ -8,8 +8,9 @@ import hys.hmonkeyys.readimagetext.model.entity.Note
 import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
 
 class NoteAdapter(
-    private val noteList: List<Note>,
-    val onItemClick: (String) -> Unit
+    private val noteList: MutableList<Note>,
+    val onItemClick: (String) -> Unit,
+    val onItemDeleteClick: (Note) -> Unit
 ) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -17,12 +18,17 @@ class NoteAdapter(
             binding.resultTextView.text = note.english
             binding.resultTranslationTextView.text = note.korean
 
-            binding.countTextView.text = "${layoutPosition + 1} / $itemCount"
-
-
             binding.listenButton.setOnDuplicatePreventionClickListener {
                 onItemClick(binding.resultTextView.text.toString())
             }
+
+            binding.deleteButton.setOnDuplicatePreventionClickListener {
+                noteList.removeAt(layoutPosition)
+                notifyItemRemoved(layoutPosition)
+
+                onItemDeleteClick(note)
+            }
+
         }
     }
 

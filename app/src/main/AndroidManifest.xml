@@ -16,12 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReadImageText"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".views.activity.note.NoteActivity"
-            android:exported="true" />
+
         <activity
             android:name=".views.activity.intro.IntroActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,15 +43,22 @@
         <activity
             android:name=".views.activity.history.HistoryActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".views.activity.licensedetail.LicenseDetailActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".views.activity.appsetting.AppSettingActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".views.activity.note.NoteActivity"
+            android:exported="true"
+            android:theme="@style/Theme.statusBar.Teal200" />
     </application>
 
 </manifest>

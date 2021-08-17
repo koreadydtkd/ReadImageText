@@ -10,7 +10,6 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -39,7 +38,6 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         viewModel.introLiveData.observe(this) {
             when (it) {
                 is IntroState.Initialized -> {
-                    initStatusBar()
                     initViews()
                 }
                 is IntroState.CheckPermission -> {
@@ -53,16 +51,6 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
                     }
                 }
             }
-        }
-    }
-
-    // 상태표시줄 초기화
-    private fun initStatusBar() {
-        try {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = getColor(R.color.teal_200)
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

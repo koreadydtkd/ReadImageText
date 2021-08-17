@@ -3,7 +3,6 @@ package hys.hmonkeyys.readimagetext.views.activity.appsetting
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -32,7 +31,6 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
         viewModel.appSettingLiveData.observe(this) {
             when (it) {
                 is AppSettingState.Initialized -> {
-                    initStatusBar()
                     initViews()
                     initSpinner()
                 }
@@ -43,15 +41,6 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
                     Toast.makeText(this, resources.getString(R.string.change_speed), Toast.LENGTH_SHORT).show()
                 }
             }
-        }
-    }
-
-    private fun initStatusBar() {
-        try {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = resources.getColor(R.color.teal_200, null)
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

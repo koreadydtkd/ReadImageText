@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
@@ -33,7 +32,6 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
         viewModel.historyStateData.observe(this) {
             when (it) {
                 is HistoryState.Initialized -> { // 초기화 작업
-                    initStatusBar()
                     initViews()
                     initAdapter()
                 }
@@ -51,14 +49,6 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
         }
     }
 
-    private fun initStatusBar() {
-        try {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = resources.getColor(R.color.teal_200, null)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     private fun initViews() {
         binding.backButton.setOnDuplicatePreventionClickListener { finish() }

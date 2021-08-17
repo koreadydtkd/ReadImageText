@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hys.hmonkeyys.readimagetext.db.dao.NoteDao
 import hys.hmonkeyys.readimagetext.di.TTS
+import hys.hmonkeyys.readimagetext.model.entity.Note
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import hys.hmonkeyys.readimagetext.views.BaseViewModel
-import hys.hmonkeyys.readimagetext.views.fragment.bottomsheetdialog.BottomDialogViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -29,6 +29,10 @@ internal class NoteViewModel(
 
     fun getAllNote() = viewModelScope.launch {
         _noteStateLiveData.postValue(NoteState.GetNoteData(noteDao.getAll()))
+    }
+
+    fun deleteNote(note: Note) = viewModelScope.launch {
+        noteDao.delete(note)
     }
 
     // 텍스트 읽기
