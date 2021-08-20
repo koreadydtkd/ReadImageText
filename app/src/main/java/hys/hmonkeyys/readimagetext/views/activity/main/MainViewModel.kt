@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizerOptions
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import hys.hmonkeyys.readimagetext.model.entity.WebHistory
 import hys.hmonkeyys.readimagetext.db.dao.HistoryDao
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst

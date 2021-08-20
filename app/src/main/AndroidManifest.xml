@@ -17,6 +17,16 @@
         android:theme="@style/Theme.ReadImageText"
         android:usesCleartextTraffic="true">
 
+        <!-- OCR 관련 -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr" />
+
+        <!-- 배너 광고 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id" />
+
         <activity
             android:name=".views.activity.intro.IntroActivity"
             android:screenOrientation="portrait"
@@ -27,38 +37,43 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- OCR 관련 -->
-        <meta-data
-            android:name="com.google.mlkit.vision.DEPENDENCIES"
-            android:value="ocr" /> <!-- 배너 광고 -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/admob_app_id" />
+        </activity>
 
         <activity
             android:name=".views.activity.main.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".views.activity.history.HistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".views.activity.licensedetail.LicenseDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".views.activity.appsetting.AppSettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".views.activity.note.NoteActivity"
-            android:exported="true"
-            android:theme="@style/Theme.statusBar.Teal200" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.statusBar.Teal200"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".views.activity.guide.GuideActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.statusBar.Teal200"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>
