@@ -19,12 +19,28 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
 
     private val binding: ActivityAppSettingBinding by lazy { ActivityAppSettingBinding.inflate(layoutInflater) }
-
     override val viewModel: AppSettingViewModel by viewModel()
+
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        if (activityResult.resultCode == 200) {
+            val data = activityResult.data
+            data ?: return@registerForActivityResult
+
+            val selectUrl = data.getStringExtra(MAIN_TO_HISTORY_DEFAULT).toString()
+
+            val intent = Intent()
+            intent.putExtra(MAIN_TO_HISTORY_DEFAULT, selectUrl)
+            setResult(200, intent)
+            finish()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        // 설정된 주소 셋팅
+        binding.settingUrlEditText.setText(viewModel.getDefaultUrl())
     }
 
     override fun observeData() {
@@ -44,26 +60,30 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
         }
     }
 
+    /** 뷰 초기화 */
     private fun initViews() {
+        // 뒤로 가기 버튼
         binding.backButton.setOnDuplicatePreventionClickListener {
             finish()
         }
 
-        binding.settingUrlEditText.setText(viewModel.getDefaultUrl())
-
+        // 주소 설정 버튼
         binding.urlEditButton.setOnDuplicatePreventionClickListener {
             viewModel.saveDefaultUrl(binding.settingUrlEditText.text.toString())
         }
 
+        // 방문기록 버튼
         binding.historyButton.setOnDuplicatePreventionClickListener {
             startForResult.launch(Intent(this, HistoryActivity::class.java))
         }
 
+        // 라이센스 이용약관 버튼
         binding.licenseDetailButton.setOnDuplicatePreventionClickListener {
             startActivity(Intent(this, LicenseDetailActivity::class.java))
         }
     }
 
+    /** 읽기 속도 스피너 초기화 */
     private fun initSpinner() {
         val items = resources.getStringArray(R.array.spinner_items)
         val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, items)
@@ -81,20 +101,6 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
             }
         }
 
-    }
-
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-        if (activityResult.resultCode == 200) {
-            val data = activityResult.data
-            data ?: return@registerForActivityResult
-
-            val selectUrl = data.getStringExtra(MAIN_TO_HISTORY_DEFAULT).toString()
-
-            val intent = Intent()
-            intent.putExtra(MAIN_TO_HISTORY_DEFAULT, selectUrl)
-            setResult(200, intent)
-            finish()
-        }
     }
 
     companion object {

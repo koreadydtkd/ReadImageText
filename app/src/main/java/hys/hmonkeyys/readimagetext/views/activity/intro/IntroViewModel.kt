@@ -23,7 +23,7 @@ internal class IntroViewModel(
         _introStateLiveData.postValue(IntroState.CheckPermission)
     }
 
-    // 7일 지난 방문기록 데이터 삭제
+    /** 7일 지난 방문기록 데이터 삭제 */
     fun deleteData() {
         viewModelScope.launch {
             historyDao.deleteDataOneWeeksAgo(getDateWeeksAgo(1))
@@ -32,6 +32,7 @@ internal class IntroViewModel(
         }
     }
 
+    /** 업데이트 버전 체크 */
     fun checkUpdateVersion(currentVersion: Long) {
         val remoteConfig = Firebase.remoteConfig
         remoteConfig.fetchAndActivate()

@@ -3,8 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/drawable-v24/rounded_white_bottom_12.xml" value="0.3848958333333333" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/drawable/border_background.xml" value="0.3848958333333333" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/drawable/clicked_background.xml" value="0.3848958333333333" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/drawable/custom_dialog.xml" value="0.3848958333333333" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/drawable/edittext_light_gray_background.xml" value="0.3848958333333333" />
         <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/drawable/ic_add_24.xml" value="0.3848958333333333" />
-        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/activity_app_setting.xml" value="0.36367753623188404" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/drawable/rounded_blue.xml" value="0.3848958333333333" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/drawable/rounded_dialog.xml" value="0.3848958333333333" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/drawable/rounded_white_16.xml" value="0.3848958333333333" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/activity_app_setting.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/activity_guide.xml" value="0.36875" />
         <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/activity_history.xml" value="0.36614583333333334" />
         <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/activity_intro.xml" value="0.36594202898550726" />
@@ -13,8 +21,10 @@
         <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/activity_note.xml" value="0.3515625" />
         <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/dialog_custom.xml" value="0.36594202898550726" />
         <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/fragment_bottom_dialog.xml" value="0.36614583333333334" />
-        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/item_note.xml" value="0.36614583333333334" />
-        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/item_web.xml" value="0.36875" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/item_date.xml" value="0.36875" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/item_note.xml" value="0.5" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/item_vocabulary.xml" value="0.36875" />
+        <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/layout/item_web.xml" value="0.5" />
         <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3848958333333333" />
         <entry key="..\:/AndroidStudioProjecct/ReadImageText/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3848958333333333" />
       </map>

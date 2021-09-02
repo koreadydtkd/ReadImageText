@@ -2,6 +2,7 @@ package hys.hmonkeyys.readimagetext.views.activity.note.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import hys.hmonkeyys.readimagetext.databinding.ItemNoteBinding
 import hys.hmonkeyys.readimagetext.model.entity.Note
@@ -13,8 +14,9 @@ class NoteAdapter(
     val onItemDeleteClick: (Note) -> Unit
 ) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
+    var isShowKoreanText = false
+
     inner class ViewHolder(private val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
-        // todo 접혀있다가 누르면 펼치도록
         fun bind(note: Note) {
             binding.resultTextView.text = note.english
             binding.resultTranslationTextView.text = note.korean
@@ -30,6 +32,20 @@ class NoteAdapter(
                 onItemDeleteClick(note)
             }
 
+            binding.root.setOnDuplicatePreventionClickListener {
+                if (!isShowKoreanText) {
+                    binding.textView2.isVisible = true
+                    binding.resultTranslationTextView.isVisible = true
+
+                    isShowKoreanText = isShowKoreanText.not()
+                } else {
+                    binding.textView2.isVisible = false
+                    binding.resultTranslationTextView.isVisible = false
+
+                    isShowKoreanText = isShowKoreanText.not()
+                }
+
+            }
         }
     }
 

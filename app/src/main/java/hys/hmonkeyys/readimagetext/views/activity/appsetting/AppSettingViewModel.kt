@@ -21,13 +21,16 @@ internal class AppSettingViewModel(
         _appSettingLiveData.postValue(AppSettingState.Initialized)
     }
 
+    /** 셋팅 URL 반환 - 없는 경우 기본 URL 반환 */
     fun getDefaultUrl(): String = sharedPreferences.getString(SharedPreferencesConst.SETTING_URL, DEFAULT_URL) ?: DEFAULT_URL
 
+    /** 셋팅 URl 저장 */
     fun saveDefaultUrl(url: String) {
         sharedPreferences.edit().putString(SharedPreferencesConst.SETTING_URL, url).apply()
         _appSettingLiveData.postValue(AppSettingState.UrlChangeComplete)
     }
 
+    /** TTS 속도 반환 */
     fun getTTsSpeed(): Int {
         var position = 0
         when (sharedPreferences.getFloat(SharedPreferencesConst.TTS_SPEED, TTS_DEFAULT)) {
@@ -43,6 +46,7 @@ internal class AppSettingViewModel(
         return position
     }
 
+    /** TTS 속도 저장 */
     fun saveTTSSpeed(position: Int) {
         var speed = 0.8f
         when (position) {

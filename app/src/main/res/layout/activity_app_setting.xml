@@ -49,14 +49,14 @@
         android:layout_marginTop="24dp"
         android:text="@string/default_url"
         android:textColor="@color/dark_gray"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleBar" />
 
     <View
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="4dp"
         android:background="@drawable/ic_web_24"
         android:backgroundTint="@color/intro_text_blue"
@@ -69,55 +69,52 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/shape_address_bar"
-        android:inputType="textUri"
+        android:ellipsize="end"
+        android:inputType="textUri|textMultiLine"
+        android:maxLines="2"
         android:paddingHorizontal="10dp"
         android:paddingVertical="8dp"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/urlEditButton"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingUrlTextView"
-        tools:text="www.google.com" />
+        tools:text="www.google.com/google.com/google.com/google.com/google.com/google.com"
+        tools:ignore="Autofill,LabelFor" />
 
-    <androidx.cardview.widget.CardView
+    <TextView
         android:id="@+id/urlEditButton"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="56dp"
+        android:layout_height="26dp"
+        android:layout_margin="4dp"
+        android:background="@drawable/rounded_white_16"
         android:backgroundTint="@color/teal_200"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="14dp"
-        app:layout_constraintBottom_toBottomOf="@id/settingUrlEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/settingUrlEditText">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
-            android:background="@drawable/ic_check_24"
-            android:backgroundTint="@color/white" />
-
-    </androidx.cardview.widget.CardView>
+        android:gravity="center"
+        android:text="@string/edit"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toTopOf="@+id/settingUrlEditText"
+        app:layout_constraintEnd_toEndOf="@+id/settingUrlEditText" />
 
     <TextView
         android:id="@+id/speakSpeedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:text="@string/speech_speed"
         android:textColor="@color/dark_gray"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingUrlEditText" />
 
     <View
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="4dp"
         android:background="@drawable/ic_sound"
         android:backgroundTint="@color/intro_text_blue"
@@ -127,18 +124,20 @@
 
     <androidx.cardview.widget.CardView
         android:id="@id/speakSpeedCardView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
         android:elevation="8dp"
         app:cardCornerRadius="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/speakSpeedTextView">
 
         <Spinner
             android:id="@+id/speakSpeedSpinner"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/Spinner"
             tools:listitem="@layout/support_simple_spinner_dropdown_item" />
@@ -150,17 +149,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:text="@string/history"
         android:textColor="@color/dark_gray"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/speakSpeedCardView" />
 
     <View
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="4dp"
         android:background="@drawable/ic_history_24"
         android:backgroundTint="@color/intro_text_blue"
@@ -170,14 +169,17 @@
 
     <Button
         android:id="@+id/historyButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="@color/teal_200"
         android:text="@string/look"
         android:textColor="@color/white"
+        android:textSize="17sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/historyTextView" />
 
@@ -186,17 +188,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:text="@string/license"
         android:textColor="@color/dark_gray"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/historyButton" />
 
     <View
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="4dp"
         android:background="@drawable/ic_description_24"
         android:backgroundTint="@color/intro_text_blue"
@@ -206,14 +208,17 @@
 
     <Button
         android:id="@+id/licenseDetailButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="@color/teal_200"
         android:text="@string/terms_of_service"
         android:textColor="@color/white"
+        android:textSize="17sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/licenseTextView" />
 

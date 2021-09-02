@@ -12,6 +12,8 @@ import hys.hmonkeyys.readimagetext.retrofit2.kakao.KakaoTranslateApi
 import hys.hmonkeyys.readimagetext.model.network.KakaoTranslateResponse
 import hys.hmonkeyys.readimagetext.di.TTS
 import hys.hmonkeyys.readimagetext.model.entity.Note
+import hys.hmonkeyys.readimagetext.model.network.ResultTransferPapago
+import hys.hmonkeyys.readimagetext.retrofit2.RetrofitService
 import hys.hmonkeyys.readimagetext.utils.Expansion.isSpecialSymbols
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import hys.hmonkeyys.readimagetext.utils.Utility.BLANK
@@ -28,11 +30,9 @@ internal class BottomDialogViewModel(
     private val tts: TTS,
 ) : BaseViewModel() {
 
-    // 화면 상태
     private var _bottomDialogStateLiveData = MutableLiveData<BottomDialogState>()
     val bottomDialogStateLiveData: LiveData<BottomDialogState> = _bottomDialogStateLiveData
 
-    // 번역 카운트
     private var _translateCount = MutableLiveData<Int>()
     val translateCount: LiveData<Int> = _translateCount
 
@@ -40,7 +40,7 @@ internal class BottomDialogViewModel(
         _translateCount.value = 0
     }
 
-    // 거의 대문자인지 체크
+    /** 거의 대문자인지 체크 */
     fun isAlmostUpperText(text: String): Boolean {
         val onlyEnglishText = Regex("[^A-Za-z]").replace(text, "")
 
@@ -53,7 +53,7 @@ internal class BottomDialogViewModel(
         return onlyEnglishText.length - 3 < textUpperCount
     }
 
-    // . ? ! 뒤에 문자는 대문자로 변경
+    /** . ? ! 뒤에 문자는 대문자로 변경 */
     fun getDotTextSort(resultText: String): String {
         try {
             var result = resultText.substring(0, 1).uppercase() + resultText.substring(1).lowercase()
@@ -83,18 +83,18 @@ internal class BottomDialogViewModel(
 
     }
 
-    // 번역 횟수 증가
+    /** 번역 횟수 증가 */
     fun increaseCount() {
         _translateCount.value = _translateCount.value?.plus(1)
     }
 
-    // 번역 횟수 초기화
+    /** 번역 횟수 초기화 */
     fun translateCountInit() {
         tts.textToSpeech.stop()
         _translateCount.value = 0
     }
 
-    // 텍스트 읽기
+    /** TTS 실행 */
     fun speakOut(extractedResults: String) {
         try {
             tts.textToSpeech.apply {
@@ -108,38 +108,60 @@ internal class BottomDialogViewModel(
         }
     }
 
-    // 텍스트 읽기 실행중인지
+    /** TTS 실행 여부 */
     fun isSpeaking(): Boolean = tts.textToSpeech.isSpeaking
 
-    // 카카오 번역
+    /** 카카오 번역 */
     fun translateKakao(translateText: String) {
-        val replaceText = translateText.replace("\n", " ")
-
         try {
-            KakaoTranslateApi.create().translateKakao(replaceText, SRC_LANG, TARGET_LANG).enqueue(object :
-                Callback<KakaoTranslateResponse> {
-                override fun onResponse(call: Call<KakaoTranslateResponse>, response: Response<KakaoTranslateResponse>) {
-                    if (response.isSuccessful.not()) {
-                        _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
-                        return
-                    }
+            val replaceText = translateText.replace("\n", " ")
 
-                    response.body()?.let { translateKakaoModel ->
-                        val sb: StringBuilder = StringBuilder()
-                        val items = translateKakaoModel.translatedText?.get(0)
-                        items?.forEach {
-                            sb.append("$it ")
+            RetrofitService.create(KAKAO_API_NAME).translateKakao(replaceText, SRC_LANG, TARGET_LANG)
+                .enqueue(object : Callback<KakaoTranslateResponse> {
+                    override fun onResponse(call: Call<KakaoTranslateResponse>, response: Response<KakaoTranslateResponse>) {
+                        if (response.isSuccessful.not()) {
+                            _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
+                            return
                         }
-                        _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(true, sb.toString()))
-                        increaseCount()
-                    }
-                }
 
-                override fun onFailure(call: Call<KakaoTranslateResponse>, t: Throwable) {
-                    FirebaseCrashlytics.getInstance().recordException(t)
-                    _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
-                }
-            })
+                        response.body()?.let { translateKakaoModel ->
+                            val sb: StringBuilder = StringBuilder()
+                            val items = translateKakaoModel.translatedText?.get(0)
+                            items?.forEach {
+                                sb.append("$it ")
+                            }
+                            _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(true, sb.toString()))
+                            increaseCount()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<KakaoTranslateResponse>, t: Throwable) {
+                        FirebaseCrashlytics.getInstance().recordException(t)
+                        _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
+                    }
+                })
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
+    }
+
+    /** 네이버 번역 api 추후 사용 시 수정 필요 */
+    fun translateNaver(translateText: String) {
+        try {
+            val replaceText = translateText.replace("\n", " ")
+
+            RetrofitService.create(NAVER_API_NAME).translatePapago(replaceText, SRC_LANG, TARGET_LANG)
+                .enqueue(object : Callback<ResultTransferPapago> {
+                    override fun onResponse(call: Call<ResultTransferPapago>, response: Response<ResultTransferPapago>) {
+
+                    }
+
+                    override fun onFailure(call: Call<ResultTransferPapago>, t: Throwable) {
+
+                    }
+                })
         } catch (e: Exception) {
             e.printStackTrace()
             _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
@@ -148,6 +170,7 @@ internal class BottomDialogViewModel(
 
     }
 
+    /** 데이터 삽입 */
     fun insertNoteData(english: String, korean: String) = viewModelScope.launch {
         noteDao.insertHistory(Note(null, english, korean))
     }
@@ -160,5 +183,8 @@ internal class BottomDialogViewModel(
 
         private const val SRC_LANG = "en"
         private const val TARGET_LANG = "kr"
+
+        private const val KAKAO_API_NAME = "kakao"
+        private const val NAVER_API_NAME = "naver"
     }
 }

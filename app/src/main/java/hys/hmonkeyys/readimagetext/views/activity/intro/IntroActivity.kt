@@ -55,7 +55,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         }
     }
 
-    // 각 뷰들 초기화
+    /** 각 뷰들 초기화 */
     private fun initViews() {
         binding.mainTextView.apply {
             val str = getString(R.string.intro_main_contents)
@@ -72,7 +72,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         binding.appVersionTextView.text = getString(R.string.app_version, getAppVersionName(this@IntroActivity))
     }
 
-    // 권한 체크
+    /** 권한 체크 */
     private fun checkPermissions() {
         try {
             val rejectedPermissionList = ArrayList<String>()
@@ -101,7 +101,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         }
     }
 
-    // 퍼미션 권한 허용 요청에 대한 결과
+    /** 퍼미션 권한 허용 요청에 대한 결과 */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -134,7 +134,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         }
     }
 
-    // 메인 화면으로 이동
+    /** 메인 화면으로 이동 */
     private fun goMainActivity() {
         Handler(mainLooper).postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
@@ -142,7 +142,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         }, MAIN_MOVE_DELAY)
     }
 
-    // 취소 못하는 업데이트 다이얼로그 띄우기
+    /** 취소 못하는 업데이트 다이얼로그 띄우기 */
     private fun showUpdateDialog() {
         val customDialog = CustomDialog(dialogClickedListener = {
             goPlayStore()
@@ -151,7 +151,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
         customDialog.show(supportFragmentManager, customDialog.tag)
     }
 
-    // 플레이스토어로 이동
+    /** 플레이스토어로 이동 */
     private fun goPlayStore() {
         try {
             val intent = Intent(Intent.ACTION_VIEW)

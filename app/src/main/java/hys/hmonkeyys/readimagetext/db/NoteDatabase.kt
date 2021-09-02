@@ -2,7 +2,6 @@ package hys.hmonkeyys.readimagetext.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import hys.hmonkeyys.readimagetext.db.dao.HistoryDao
 import hys.hmonkeyys.readimagetext.db.dao.NoteDao
 import hys.hmonkeyys.readimagetext.model.entity.Note
 

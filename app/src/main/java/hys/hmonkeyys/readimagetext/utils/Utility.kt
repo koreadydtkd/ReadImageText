@@ -2,23 +2,21 @@ package hys.hmonkeyys.readimagetext.utils
 
 import android.content.Context
 import android.content.pm.PackageInfo
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.View
 import androidx.core.content.pm.PackageInfoCompat
 import java.text.SimpleDateFormat
 import java.util.*
 
 object Utility {
     private const val TAG = "HYS_Util"
-    const val DATE_PATTERN = "yyyy-MM-dd"
+
+    private const val DATE_PATTERN = "yyyy-MM-dd"
     const val MAIN_TO_HISTORY_DEFAULT = "select_url"
     const val TEXT_LIMIT_EXCEEDED = "text_limit_exceeded"
     const val EXTRACTION_ERROR = "extraction_error"
     const val BLANK = "blank"
 
-    // 앱 버전 코드
+    /** 앱 버전 코드 */
     fun getAppVersionCode(applicationContext: Context): Long {
         return try {
             val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
@@ -32,7 +30,7 @@ object Utility {
         }
     }
 
-    // 앱 버전 이름
+    /** 앱 버전 이름 */
     fun getAppVersionName(applicationContext: Context): String {
         return try {
             val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
@@ -43,7 +41,7 @@ object Utility {
         }
     }
 
-    // 현재 시간 ex) 2021-07-01
+    /** 현재 시간 반환 */
     fun getCurrentDate(): String {
         val now = System.currentTimeMillis()
         val date = Date(now)
@@ -51,7 +49,7 @@ object Utility {
         return sdf.format(date)
     }
 
-    // 7일 전 날짜 가져오기
+    /** 7일 전 날짜 반환 */
     fun getDateWeeksAgo(selectWeek: Int): String {
         val week = Calendar.getInstance()
         week.add(Calendar.DATE, (selectWeek * -7))

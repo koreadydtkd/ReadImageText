@@ -20,10 +20,9 @@ internal class BottomDialogFragment(
 ) : BaseBottomSheetDialogFragment<BottomDialogViewModel>() {
 
     private var binding: FragmentBottomDialogBinding? = null
+    override val viewModel: BottomDialogViewModel by viewModel()
 
     private var ocrResultText = ""
-
-    override val viewModel: BottomDialogViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +55,8 @@ internal class BottomDialogFragment(
             }
         }
 
-        // 번역 횟수 3번으로 제한
         viewModel.translateCount.observe(this) { count ->
-            Log.i(TAG, "카운트: $count")
+            // 번역 횟수 3번으로 제한
             if (count == 3) {
                 binding?.translateButton?.apply {
                     setBackgroundResource(R.drawable.clicked_background)
@@ -72,7 +70,7 @@ internal class BottomDialogFragment(
         }
     }
 
-    // 추출된 문자 초기화
+    /** 추출된 문자 초기화 */
     private fun initResultText() {
         val replaceText = extractionText.replace("\n", " ")
 
@@ -88,7 +86,7 @@ internal class BottomDialogFragment(
         }
     }
 
-    // 각 뷰들 초기화
+    /** 각 뷰들 초기화 */
     private fun initViews() {
         // 듣기 버튼
         binding?.listenButton?.setOnDuplicatePreventionClickListener {
@@ -114,13 +112,13 @@ internal class BottomDialogFragment(
         }
     }
 
-    // 텍스트 읽기
+    /** TTS 실행 */
     private fun readText() {
         if (viewModel.isSpeaking()) return
         viewModel.speakOut(binding?.resultEditText?.text.toString())
     }
 
-    // 추출한 문자 번역
+    /** 추출한 문자 번역 */
     private fun translationEnglishToKorean() {
         if (binding?.progressBar?.isVisible == true) {
             Toast.makeText(requireContext(), getString(R.string.wait_please), Toast.LENGTH_SHORT).show()

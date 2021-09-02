@@ -13,13 +13,13 @@ import retrofit2.http.POST
 
 interface KakaoTranslateApi {
 
-    @FormUrlEncoded
+   /* @FormUrlEncoded
     @POST("v2/translation/translate")
     fun translateKakao(
         @Field("query") query: String,
         @Field("src_lang") src_lang: String,
         @Field("target_lang") target_lang: String,
-    ): Call<KakaoTranslateResponse>
+    ): Call<KakaoTranslateResponse>*/
 
     companion object {
         private const val REST_API_KEY = "2e6b4f725807e0427ecd3a19d2ca6125"

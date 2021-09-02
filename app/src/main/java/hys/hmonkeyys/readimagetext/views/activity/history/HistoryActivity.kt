@@ -18,10 +18,9 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
 
 ) {
     private val binding: ActivityHistoryBinding by lazy { ActivityHistoryBinding.inflate(layoutInflater) }
+    override val viewModel: HistoryViewModel by viewModel()
 
     private lateinit var historyAdapter: HistoryAdapter
-
-    override val viewModel: HistoryViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +39,7 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
                 }
                 is HistoryState.Delete -> { // 방문기록 삭제(All or Select)
                     if (it.isAll) {
-                        changeView()
+                        changeViewAfterDataAllDelete()
                     } else {
                         historyAdapter.notifyDataSetChanged()
                     }
@@ -49,12 +48,13 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
         }
     }
 
-
+    /** 뷰 초기화 */
     private fun initViews() {
         binding.backButton.setOnDuplicatePreventionClickListener { finish() }
         binding.deleteAllButton.setOnDuplicatePreventionClickListener { showDeleteDialog() }
     }
 
+    /** History Adapter 초기화 */
     private fun initAdapter() {
         historyAdapter = HistoryAdapter(
             deleteSelectItemListener = { uid, loadUrl ->
@@ -68,6 +68,7 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
         viewModel.getAllHistory()
     }
 
+    /** 방문기록 삭제 다이얼로그 보여주기 */
     private fun showDeleteDialog() {
         AlertDialog.Builder(this)
             .setTitle(resources.getString(R.string.history_dialog_title))
@@ -79,6 +80,7 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
             }.show()
     }
 
+    /** 선택 URL 이동 */
     private fun selectURLGoToMainWebView(url: String) {
         Log.i(TAG, url)
         val intent = Intent()
@@ -87,7 +89,8 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
         finish()
     }
 
-    private fun changeView() {
+    /** 데이터 모두 삭제 후 화면 변경 */
+    private fun changeViewAfterDataAllDelete() {
         binding.textView.visibility = View.GONE
         binding.historyRecyclerView.visibility = View.GONE
 

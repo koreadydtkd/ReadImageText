@@ -34,10 +34,19 @@ internal class MainActivity : BaseActivity<MainViewModel>(
 
 ) {
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-
     override val viewModel: MainViewModel by viewModel()
 
     private var backPressTime = 0L
+
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        if (activityResult.resultCode == 200) {
+            val data = activityResult.data
+            data ?: return@registerForActivityResult
+
+            val selectUrl = data.getStringExtra(MAIN_TO_HISTORY_DEFAULT).toString()
+            binding.webView.loadUrl(selectUrl)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +71,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }
     }
 
-    // 상단 툴바 초기화
+    /** 상단 툴바 초기화 */
     private fun initToolbar() {
         binding.goHomeButton.setOnDuplicatePreventionClickListener {
             binding.webView.loadUrl(viewModel.getSettingUrl())
@@ -91,7 +100,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }
     }
 
-    // 뷰 초기화
+    /** 뷰 초기화 */
     @SuppressLint("SetJavaScriptEnabled")
     private fun initViews() {
         // 아래로 스와이프 - 새로고침
@@ -99,6 +108,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             binding.webView.reload()
         }
 
+        // 웹뷰 초기화
         binding.webView.apply {
             webViewClient = WebViewClient()
             webChromeClient = WebChromeClient()
@@ -107,12 +117,12 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             // 앱 실행 시 마지막 방문한 페이지로 이동
             loadUrl(viewModel.getLastUrl())
 
-            // todo 스크롤에 따라 사이트 번역 상단 액션바 스크롤 - 모션레이아웃
             setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 binding.scrollValue = scrollY
             }
         }
 
+        // 메인 플로팅 버튼
         binding.mainFloatingButton.setOnDuplicatePreventionClickListener {
             toggleFab()
         }
@@ -148,7 +158,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
 
     }
 
-    // 하단 배너광고 초기화
+    /** 하단 배너광고 초기화 */
     private fun initAdmob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
@@ -169,7 +179,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }
     }
 
-    // 플로팅 Toggle(on/off) Animation
+    /** 플로팅 Toggle(on/off) Animation */
     private fun toggleFab() {
         when (binding.isFabItemVisible) {
             true, null -> closeFloatingButtonWithAnimation()
@@ -177,7 +187,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }
     }
 
-    // 플로팅 닫히면서 애니메이션 효과
+    /** 플로팅 off Animation */
     private fun closeFloatingButtonWithAnimation() {
         ObjectAnimator.ofFloat(binding.moveTopTextView, TRANSLATION_Y, 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, 0f).apply { start() }
@@ -191,7 +201,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         binding.isFabItemVisible = false
     }
 
-    // 플로팅 열리면서 애니메이션 효과
+    /** 플로팅 on Animation */
     private fun openFloatingButtonWithAnimation() {
         ObjectAnimator.ofFloat(binding.moveTopTextView, TRANSLATION_Y, -680f).apply { start() }
         ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, -680f).apply { start() }
@@ -205,7 +215,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         binding.isFabItemVisible = true
     }
 
-    // 화면 캡처
+    /** 사용자 전체 화면 캡처 */
     private fun showCaptureScreen() {
         Handler(mainLooper).postDelayed({
             val rootView = window.decorView.rootView
@@ -216,7 +226,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }, CAPTURE_DELAY)
     }
 
-    // 캡처된 화면 텍스트 추출
+    /** 캡처된 화면 텍스트 추출 */
     private fun textExtractionFromCapture() {
         val selectedBitmap = binding.cropImageView.croppedImage
         selectedBitmap ?: return
@@ -225,15 +235,20 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         binding.isCropImageViewVisible = false
     }
 
-    // 추출결과에 따른 분기
+    /** 추출결과에 따른 분기 */
     private fun extractionComplete(extractionResult: String) {
         when (extractionResult) {
+            // 너무 많은 글자 추출
             TEXT_LIMIT_EXCEEDED -> {
                 Toast.makeText(this, getString(R.string.ocr_text_limit), Toast.LENGTH_SHORT).show()
             }
+
+            // 텍스트 추출 에러
             EXTRACTION_ERROR -> {
                 Toast.makeText(this, getString(R.string.ocr_error), Toast.LENGTH_SHORT).show()
             }
+
+            // 정상
             else -> {
                 val bottomDialogFragment = BottomDialogFragment(extractionResult)
                 bottomDialogFragment.show(supportFragmentManager, bottomDialogFragment.tag)
@@ -297,17 +312,6 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             super.onProgressChanged(view, newProgress)
 
             binding.progressBar.progress = newProgress
-        }
-    }
-
-    // 앱 설정 화면으로 이동
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-        if (activityResult.resultCode == 200) {
-            val data = activityResult.data
-            data ?: return@registerForActivityResult
-
-            val selectUrl = data.getStringExtra(MAIN_TO_HISTORY_DEFAULT).toString()
-            binding.webView.loadUrl(selectUrl)
         }
     }
 

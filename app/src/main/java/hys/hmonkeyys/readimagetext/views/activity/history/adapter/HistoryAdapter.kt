@@ -14,6 +14,7 @@ class HistoryAdapter(
 
     private var historyList = mutableListOf<HistoryType>()
 
+    /** 방문주소, 삭제 뷰 표시 */
     inner class UrlViewHolder(private val binding: ItemWebBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UrlType?) {
             item ?: return
@@ -48,6 +49,7 @@ class HistoryAdapter(
         }
     }
 
+    /** 방문날짜 표시 */
     inner class DateViewHolder(private val binding: ItemDateBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DateType?) {
             item ?: return

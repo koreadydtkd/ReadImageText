@@ -25,18 +25,20 @@ internal val appModule = module {
     single { Dispatchers.Main }
     single { Dispatchers.IO }
 
-    // WebDatabase 초기화
+    // WebDatabase 셋팅
     single { historyDB(androidApplication()) }
     single { historyDao(get()) }
 
-    // NoteDatabase 초기화
+    // NoteDatabase 셋팅
     single { noteDB(androidApplication()) }
     single { noteDao(get()) }
 
     single { sharedPreferences(androidApplication()) }
 
     single { TTS(androidApplication()) }
+}
 
+internal val viewModelModule = module {
     // Activity
     viewModel { IntroViewModel(get()) }
     viewModel { MainViewModel(get(), get()) }
@@ -46,7 +48,6 @@ internal val appModule = module {
 
     // Fragment
     viewModel { BottomDialogViewModel(get(), get(), get()) }
-
 }
 
 internal fun historyDB(context: Context): WebDatabase {

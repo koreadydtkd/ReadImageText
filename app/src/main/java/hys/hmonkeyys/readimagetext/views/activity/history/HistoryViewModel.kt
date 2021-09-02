@@ -24,10 +24,12 @@ internal class HistoryViewModel(
         _historyStateLiveData.postValue(HistoryState.Initialized)
     }
 
+    /** 방문기록 데이터 반환 */
     fun getAllHistory() = viewModelScope.launch {
         convertList(historyDao.getAll())
     }
 
+    /** 방문기록 데이터 변경 */
     private fun convertList(list: MutableList<WebHistory>) {
         var prefDate: String? = ""
         val historyList = mutableListOf<HistoryType>()
@@ -54,9 +56,11 @@ internal class HistoryViewModel(
             )
         }
 
+        // 새로 변경한 리스트 반환
         _historyStateLiveData.postValue(HistoryState.GetHistoryData(historyList))
     }
 
+    /** 방문기록 데이터 삭제 */
     fun deleteHistory(uid: Int, loadUrl: String) {
         viewModelScope.launch {
             if (uid == 0 && loadUrl == ALL) {
