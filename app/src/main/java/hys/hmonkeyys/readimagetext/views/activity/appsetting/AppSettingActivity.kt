@@ -9,8 +9,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityAppSettingBinding
-import hys.hmonkeyys.readimagetext.utils.Util
-import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Utility.MAIN_TO_HISTORY_DEFAULT
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.history.HistoryActivity
 import hys.hmonkeyys.readimagetext.views.activity.licensedetail.LicenseDetailActivity
@@ -88,10 +88,10 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
             val data = activityResult.data
             data ?: return@registerForActivityResult
 
-            val selectUrl = data.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT).toString()
+            val selectUrl = data.getStringExtra(MAIN_TO_HISTORY_DEFAULT).toString()
 
             val intent = Intent()
-            intent.putExtra(Util.MAIN_TO_HISTORY_DEFAULT, selectUrl)
+            intent.putExtra(MAIN_TO_HISTORY_DEFAULT, selectUrl)
             setResult(200, intent)
             finish()
         }

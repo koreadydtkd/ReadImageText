@@ -10,8 +10,8 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding
-import hys.hmonkeyys.readimagetext.utils.Util
-import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Utility.BLANK
 import hys.hmonkeyys.readimagetext.views.BaseBottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -77,7 +77,7 @@ internal class BottomDialogFragment(
         val replaceText = extractionText.replace("\n", " ")
 
         if (viewModel.isAlmostUpperText(extractionText)) {
-            if (viewModel.getDotTextSort(replaceText) == Util.BLANK) {
+            if (viewModel.getDotTextSort(replaceText) == BLANK) {
                 Toast.makeText(requireContext(), getString(R.string.no_results), Toast.LENGTH_SHORT).show()
                 dismiss()
             } else {

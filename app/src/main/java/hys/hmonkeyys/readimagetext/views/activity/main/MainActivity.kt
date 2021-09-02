@@ -19,8 +19,10 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
-import hys.hmonkeyys.readimagetext.utils.Util
-import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Utility.EXTRACTION_ERROR
+import hys.hmonkeyys.readimagetext.utils.Utility.MAIN_TO_HISTORY_DEFAULT
+import hys.hmonkeyys.readimagetext.utils.Utility.TEXT_LIMIT_EXCEEDED
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.appsetting.AppSettingActivity
 import hys.hmonkeyys.readimagetext.views.activity.note.NoteActivity
@@ -105,6 +107,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             // 앱 실행 시 마지막 방문한 페이지로 이동
             loadUrl(viewModel.getLastUrl())
 
+            // todo 스크롤에 따라 사이트 번역 상단 액션바 스크롤 - 모션레이아웃
             setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 binding.scrollValue = scrollY
             }
@@ -225,10 +228,10 @@ internal class MainActivity : BaseActivity<MainViewModel>(
     // 추출결과에 따른 분기
     private fun extractionComplete(extractionResult: String) {
         when (extractionResult) {
-            Util.TEXT_LIMIT_EXCEEDED -> {
+            TEXT_LIMIT_EXCEEDED -> {
                 Toast.makeText(this, getString(R.string.ocr_text_limit), Toast.LENGTH_SHORT).show()
             }
-            Util.EXTRACTION_ERROR -> {
+            EXTRACTION_ERROR -> {
                 Toast.makeText(this, getString(R.string.ocr_error), Toast.LENGTH_SHORT).show()
             }
             else -> {
@@ -303,7 +306,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             val data = activityResult.data
             data ?: return@registerForActivityResult
 
-            val selectUrl = data.getStringExtra(Util.MAIN_TO_HISTORY_DEFAULT).toString()
+            val selectUrl = data.getStringExtra(MAIN_TO_HISTORY_DEFAULT).toString()
             binding.webView.loadUrl(selectUrl)
         }
     }

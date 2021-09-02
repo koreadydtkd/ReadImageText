@@ -12,9 +12,9 @@ import hys.hmonkeyys.readimagetext.retrofit2.kakao.KakaoTranslateApi
 import hys.hmonkeyys.readimagetext.model.network.KakaoTranslateResponse
 import hys.hmonkeyys.readimagetext.di.TTS
 import hys.hmonkeyys.readimagetext.model.entity.Note
+import hys.hmonkeyys.readimagetext.utils.Expansion.isSpecialSymbols
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
-import hys.hmonkeyys.readimagetext.utils.Util
-import hys.hmonkeyys.readimagetext.utils.isSpecialSymbols
+import hys.hmonkeyys.readimagetext.utils.Utility.BLANK
 import hys.hmonkeyys.readimagetext.views.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -76,7 +76,7 @@ internal class BottomDialogViewModel(
             e.printStackTrace()
             FirebaseCrashlytics.getInstance().recordException(e)
             if (resultText.isBlank()) {
-                return Util.BLANK
+                return BLANK
             }
             return resultText
         }

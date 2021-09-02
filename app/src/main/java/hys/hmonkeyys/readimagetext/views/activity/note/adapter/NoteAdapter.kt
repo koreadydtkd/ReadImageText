@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hys.hmonkeyys.readimagetext.databinding.ItemNoteBinding
 import hys.hmonkeyys.readimagetext.model.entity.Note
-import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
 
 class NoteAdapter(
     private val noteList: MutableList<Note>,
@@ -14,6 +14,7 @@ class NoteAdapter(
 ) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
+        // todo 접혀있다가 누르면 펼치도록
         fun bind(note: Note) {
             binding.resultTextView.text = note.english
             binding.resultTranslationTextView.text = note.korean

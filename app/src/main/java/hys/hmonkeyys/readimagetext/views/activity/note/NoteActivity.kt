@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import hys.hmonkeyys.readimagetext.databinding.ActivityNoteBinding
 import hys.hmonkeyys.readimagetext.model.entity.Note
-import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.note.adapter.NoteAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel

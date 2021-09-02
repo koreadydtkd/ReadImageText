@@ -14,7 +14,9 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import hys.hmonkeyys.readimagetext.model.entity.WebHistory
 import hys.hmonkeyys.readimagetext.db.dao.HistoryDao
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
-import hys.hmonkeyys.readimagetext.utils.Util
+import hys.hmonkeyys.readimagetext.utils.Utility.EXTRACTION_ERROR
+import hys.hmonkeyys.readimagetext.utils.Utility.TEXT_LIMIT_EXCEEDED
+import hys.hmonkeyys.readimagetext.utils.Utility.getCurrentDate
 import hys.hmonkeyys.readimagetext.views.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -35,9 +37,9 @@ internal class MainViewModel(
     // 중복 확인 후 db 삽입
     fun insertAfterDuplicateDataLookup(url: String?) = viewModelScope.launch {
         // 중복 확인 쿼리 -> 0 반환 시 데이터 없음
-        val haveData = historyDao.findByHistory(url ?: "", Util().getCurrentDate())
+        val haveData = historyDao.findByHistory(url ?: "", getCurrentDate())
         if (haveData < 1) {
-            historyDao.insertHistory(WebHistory(null, url, Util().getCurrentDate()))
+            historyDao.insertHistory(WebHistory(null, url, getCurrentDate()))
         }
     }
 
@@ -61,7 +63,7 @@ internal class MainViewModel(
                 .addOnSuccessListener {
                     // 최대 추출 제한(350자)
                     if (it.text.length > OCR_TEXT_LIMIT) {
-                        _mainStateLiveData.postValue(MainState.TextExtractionComplete(Util.TEXT_LIMIT_EXCEEDED))
+                        _mainStateLiveData.postValue(MainState.TextExtractionComplete(TEXT_LIMIT_EXCEEDED))
                     } else {
                         // 추출 성공
                         _mainStateLiveData.postValue(MainState.TextExtractionComplete(it.text))
@@ -70,13 +72,13 @@ internal class MainViewModel(
                 .addOnFailureListener {
                     it.printStackTrace()
                     FirebaseCrashlytics.getInstance().recordException(it)
-                    _mainStateLiveData.postValue(MainState.TextExtractionComplete(Util.EXTRACTION_ERROR))
+                    _mainStateLiveData.postValue(MainState.TextExtractionComplete(EXTRACTION_ERROR))
                 }
 
         } catch (e: IOException) {
             e.printStackTrace()
             FirebaseCrashlytics.getInstance().recordException(e)
-            _mainStateLiveData.postValue(MainState.TextExtractionComplete(Util.EXTRACTION_ERROR))
+            _mainStateLiveData.postValue(MainState.TextExtractionComplete(EXTRACTION_ERROR))
         }
     }
 

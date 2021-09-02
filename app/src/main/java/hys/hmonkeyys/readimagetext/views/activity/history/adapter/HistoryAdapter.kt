@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hys.hmonkeyys.readimagetext.databinding.ItemDateBinding
 import hys.hmonkeyys.readimagetext.databinding.ItemWebBinding
-import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
 
 class HistoryAdapter(
     val deleteSelectItemListener: (Int, String) -> Unit,

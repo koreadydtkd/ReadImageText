@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hys.hmonkeyys.readimagetext.databinding.DialogCustomBinding
-import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
 
 class CustomDialog(
     val dialogClickedListener: () -> Unit,

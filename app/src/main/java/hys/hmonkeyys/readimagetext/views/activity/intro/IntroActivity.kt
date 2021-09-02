@@ -15,8 +15,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityIntroBinding
+import hys.hmonkeyys.readimagetext.utils.Utility.getAppVersionCode
+import hys.hmonkeyys.readimagetext.utils.Utility.getAppVersionName
 import hys.hmonkeyys.readimagetext.views.dialog.CustomDialog
-import hys.hmonkeyys.readimagetext.utils.Util
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -68,7 +69,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
             text = ssb
         }
 
-        binding.appVersionTextView.text = getString(R.string.app_version, Util().getAppVersionName(this@IntroActivity))
+        binding.appVersionTextView.text = getString(R.string.app_version, getAppVersionName(this@IntroActivity))
     }
 
     // 권한 체크
@@ -92,7 +93,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
                 Log.i(TAG, "권한 모두 허용")
                 viewModel.deleteData()
 
-                val currentVersion = Util().getAppVersionCode(this)
+                val currentVersion = getAppVersionCode(this)
                 viewModel.checkUpdateVersion(currentVersion)
             }
         } catch (e: Exception) {

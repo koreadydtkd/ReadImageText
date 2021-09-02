@@ -7,8 +7,8 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
-import hys.hmonkeyys.readimagetext.utils.Util
-import hys.hmonkeyys.readimagetext.utils.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
+import hys.hmonkeyys.readimagetext.utils.Utility.MAIN_TO_HISTORY_DEFAULT
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.history.adapter.HistoryAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -82,7 +82,7 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
     private fun selectURLGoToMainWebView(url: String) {
         Log.i(TAG, url)
         val intent = Intent()
-        intent.putExtra(Util.MAIN_TO_HISTORY_DEFAULT, url)
+        intent.putExtra(MAIN_TO_HISTORY_DEFAULT, url)
         setResult(200, intent)
         finish()
     }

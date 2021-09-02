@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import hys.hmonkeyys.readimagetext.db.dao.HistoryDao
-import hys.hmonkeyys.readimagetext.utils.Util
+import hys.hmonkeyys.readimagetext.utils.Utility.getDateWeeksAgo
 import hys.hmonkeyys.readimagetext.views.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ internal class IntroViewModel(
     // 7일 지난 방문기록 데이터 삭제
     fun deleteData() {
         viewModelScope.launch {
-            historyDao.deleteDataOneWeeksAgo(Util().getDateWeeksAgo(1))
+            historyDao.deleteDataOneWeeksAgo(getDateWeeksAgo(1))
         }.invokeOnCompletion {
             Log.i(TAG, "7일이 지난 데이터 삭제 완료")
         }
