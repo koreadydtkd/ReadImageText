@@ -73,10 +73,13 @@ internal class MainActivity : BaseActivity<MainViewModel>(
 
     /** 상단 툴바 초기화 */
     private fun initToolbar() {
+
+        // 홈 버튼
         binding.goHomeButton.setOnDuplicatePreventionClickListener {
             binding.webView.loadUrl(viewModel.getSettingUrl())
         }
 
+        // 주소창 입력 후 done 클릭 시
         binding.addressBar.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val loadingUrl = v.text.toString()
@@ -91,10 +94,12 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             return@setOnEditorActionListener false
         }
 
+        // 뒤로가기 버튼
         binding.goBackButton.setOnDuplicatePreventionClickListener {
             binding.webView.goBack()
         }
 
+        // 앞으로가기 버튼
         binding.goForwardButton.setOnDuplicatePreventionClickListener {
             binding.webView.goForward()
         }
@@ -168,12 +173,12 @@ internal class MainActivity : BaseActivity<MainViewModel>(
             adListener = object : AdListener() {
                 override fun onAdLoaded() {
                     super.onAdLoaded()
-                    Log.i(TAG, "광고가 문제 없이 로드됨 onAdLoaded")
+                    Log.i(TAG, "광고 로드 성공 onAdLoaded")
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
                     super.onAdFailedToLoad(error)
-                    Log.e(TAG, "광고 로드에 문제 발생 onAdFailedToLoad ${error.message}")
+                    Log.e(TAG, "광고 로드 문제 발생 onAdFailedToLoad ${error.message}")
                 }
             }
         }
@@ -226,7 +231,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }, CAPTURE_DELAY)
     }
 
-    /** 캡처된 화면 텍스트 추출 */
+    /** 화면 캡처 후 텍스트 추출 */
     private fun textExtractionFromCapture() {
         val selectedBitmap = binding.cropImageView.croppedImage
         selectedBitmap ?: return
@@ -263,6 +268,10 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         viewModel.setLastUrl(binding.addressBar.text.toString())
     }
 
+    /** 뒤로가기 실행 시
+     * 웹뷰에서 뒤로갈 수 있다면 이전 웹사이트로 이동
+     * 없다면 1.5초 안에 2번 실행 시 종료
+     * */
     override fun onBackPressed() {
         if (binding.cropImageView.isVisible) {
             binding.isCropImageViewVisible = false
@@ -282,6 +291,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
     }
 
     inner class WebViewClient : android.webkit.WebViewClient() {
+
         // 페이지 로드 시작
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
@@ -310,7 +320,7 @@ internal class MainActivity : BaseActivity<MainViewModel>(
     inner class WebChromeClient : android.webkit.WebChromeClient() {
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
-
+            // 사이트 로드 상황에 따라 프로그레스바 업데이트
             binding.progressBar.progress = newProgress
         }
     }

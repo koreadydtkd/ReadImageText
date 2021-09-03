@@ -11,6 +11,7 @@ class ReadImageText : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // 의존성 주입
         startKoin {
             androidLogger()
             androidContext(this@ReadImageText)

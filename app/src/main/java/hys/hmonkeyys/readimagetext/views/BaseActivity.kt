@@ -23,7 +23,6 @@ internal abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
         if (fetchJob.isActive) {
             fetchJob.cancel()
         }
-
         super.onDestroy()
     }
 

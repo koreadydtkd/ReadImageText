@@ -8,12 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hys.hmonkeyys.readimagetext.db.dao.NoteDao
-import hys.hmonkeyys.readimagetext.retrofit2.kakao.KakaoTranslateApi
+import hys.hmonkeyys.readimagetext.retrofit2.KakaoTranslateApi
 import hys.hmonkeyys.readimagetext.model.network.KakaoTranslateResponse
 import hys.hmonkeyys.readimagetext.di.TTS
 import hys.hmonkeyys.readimagetext.model.entity.Note
-import hys.hmonkeyys.readimagetext.model.network.ResultTransferPapago
-import hys.hmonkeyys.readimagetext.retrofit2.RetrofitService
 import hys.hmonkeyys.readimagetext.utils.Expansion.isSpecialSymbols
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import hys.hmonkeyys.readimagetext.utils.Utility.BLANK
@@ -83,11 +81,6 @@ internal class BottomDialogViewModel(
 
     }
 
-    /** 번역 횟수 증가 */
-    fun increaseCount() {
-        _translateCount.value = _translateCount.value?.plus(1)
-    }
-
     /** 번역 횟수 초기화 */
     fun translateCountInit() {
         tts.textToSpeech.stop()
@@ -112,11 +105,11 @@ internal class BottomDialogViewModel(
     fun isSpeaking(): Boolean = tts.textToSpeech.isSpeaking
 
     /** 카카오 번역 */
-    fun translateKakao(translateText: String) {
+    fun translate(translateText: String) {
         try {
             val replaceText = translateText.replace("\n", " ")
 
-            RetrofitService.create(KAKAO_API_NAME).translateKakao(replaceText, SRC_LANG, TARGET_LANG)
+            KakaoTranslateApi.create().translateKakao(replaceText, SRC_LANG, TARGET_LANG)
                 .enqueue(object : Callback<KakaoTranslateResponse> {
                     override fun onResponse(call: Call<KakaoTranslateResponse>, response: Response<KakaoTranslateResponse>) {
                         if (response.isSuccessful.not()) {
@@ -130,8 +123,10 @@ internal class BottomDialogViewModel(
                             items?.forEach {
                                 sb.append("$it ")
                             }
+
+                            // 번역한 데이터 전달, 번역 횟수 1 증가
                             _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(true, sb.toString()))
-                            increaseCount()
+                            _translateCount.value = _translateCount.value?.plus(1)
                         }
                     }
 
@@ -147,29 +142,6 @@ internal class BottomDialogViewModel(
         }
     }
 
-    /** 네이버 번역 api 추후 사용 시 수정 필요 */
-    fun translateNaver(translateText: String) {
-        try {
-            val replaceText = translateText.replace("\n", " ")
-
-            RetrofitService.create(NAVER_API_NAME).translatePapago(replaceText, SRC_LANG, TARGET_LANG)
-                .enqueue(object : Callback<ResultTransferPapago> {
-                    override fun onResponse(call: Call<ResultTransferPapago>, response: Response<ResultTransferPapago>) {
-
-                    }
-
-                    override fun onFailure(call: Call<ResultTransferPapago>, t: Throwable) {
-
-                    }
-                })
-        } catch (e: Exception) {
-            e.printStackTrace()
-            _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
-            FirebaseCrashlytics.getInstance().recordException(e)
-        }
-
-    }
-
     /** 데이터 삽입 */
     fun insertNoteData(english: String, korean: String) = viewModelScope.launch {
         noteDao.insertHistory(Note(null, english, korean))
@@ -183,8 +155,5 @@ internal class BottomDialogViewModel(
 
         private const val SRC_LANG = "en"
         private const val TARGET_LANG = "kr"
-
-        private const val KAKAO_API_NAME = "kakao"
-        private const val NAVER_API_NAME = "naver"
     }
 }

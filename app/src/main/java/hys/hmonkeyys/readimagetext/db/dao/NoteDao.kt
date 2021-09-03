@@ -10,6 +10,7 @@ interface NoteDao {
     @Query("SELECT * FROM note ORDER BY uid DESC")
     suspend fun getAll(): MutableList<Note>
 
+
     // 데이터 삽입
     @Insert
     suspend fun insertHistory(note: Note)
@@ -19,10 +20,7 @@ interface NoteDao {
     @Query("DELETE FROM note")
     suspend fun deleteAll()
 
-    // 데이터 하나만 삭제
+    // 데이터 삭제
     @Delete
     suspend fun delete(note: Note)
-
-    @Query("DELETE FROM note WHERE uid LIKE :uid")
-    suspend fun deleteSelectedItem(uid: Int)
 }

@@ -20,6 +20,7 @@ class CustomDialog(
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogCustomBinding.inflate(inflater, container, false)
 
+        // view 영역 외 투명처리
         try {
             dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         } catch (e: Exception) {
@@ -33,6 +34,7 @@ class CustomDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 업데이트 버튼 클릭
         binding?.updateButton?.setOnDuplicatePreventionClickListener {
             dialogClickedListener()
         }

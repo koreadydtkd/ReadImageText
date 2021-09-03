@@ -32,10 +32,7 @@ interface HistoryDao {
     @Query("DELETE FROM web WHERE CAST(strftime('%s', visit_date) AS integer) < CAST(strftime('%s', :twoWeeksAgo) AS integer)")
     suspend fun deleteDataTwoWeeksAgo(twoWeeksAgo: String)
 
-    // 데이터 하나만 삭제
-    @Delete
-    suspend fun delete(webHistory: WebHistory)
-
+    // uid, loadUrl 조건에 해당하는 데이터 삭제
     @Query("DELETE FROM web WHERE uid LIKE :uid AND load_url LIKE :loadUrl")
     suspend fun deleteSelectedItem(uid: Int, loadUrl: String)
 }

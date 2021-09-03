@@ -20,6 +20,13 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import java.util.*
 
+/** module - inject(주입)될 대상을 정의 */
+
+/**
+ * App 기본 모듈 설정
+ * @single - 한번만 객체를 생성
+ * @factory - 호출 될때마다 객체 생성
+ */
 internal val appModule = module {
 
     single { Dispatchers.Main }
@@ -33,11 +40,14 @@ internal val appModule = module {
     single { noteDB(androidApplication()) }
     single { noteDao(get()) }
 
-    single { sharedPreferences(androidApplication()) }
+    // sharedPreferences 셋팅
+    single { setSharedPreferences(androidApplication()) }
 
+    // TTS - Text to Speech(텍스트 읽어주는 기능) 셋팅
     single { TTS(androidApplication()) }
 }
 
+/** ViewModel 모듈 설정 */
 internal val viewModelModule = module {
     // Activity
     viewModel { IntroViewModel(get()) }
@@ -50,23 +60,24 @@ internal val viewModelModule = module {
     viewModel { BottomDialogViewModel(get(), get(), get()) }
 }
 
+/** history DB 셋팅 */
 internal fun historyDB(context: Context): WebDatabase {
     return Room.databaseBuilder(context, WebDatabase::class.java, WebDatabase.DB_NAME).build()
 }
 internal fun historyDao(database: WebDatabase) = database.historyDao()
 
-
+/** note DB 셋팅 */
 internal fun noteDB(context: Context): NoteDatabase {
     return Room.databaseBuilder(context, NoteDatabase::class.java, NoteDatabase.DB_NAME).build()
 }
 internal fun noteDao(database: NoteDatabase) = database.noteDao()
 
-
-internal fun sharedPreferences(context: Context): SharedPreferences {
+/** SharedPreferences 셋팅 */
+internal fun setSharedPreferences(context: Context): SharedPreferences {
     return context.getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
 }
 
-
+/** TTS - Text to Speech(텍스트 읽어주는 기능) 셋팅 */
 internal class TTS(context: Context) : TextToSpeech.OnInitListener {
     val textToSpeech = TextToSpeech(context, this)
 

@@ -2,7 +2,6 @@ package hys.hmonkeyys.readimagetext.views.fragment.bottomsheetdialog
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,8 +54,9 @@ internal class BottomDialogFragment(
             }
         }
 
+        // 번역 횟수 데이터 변화 감지
         viewModel.translateCount.observe(this) { count ->
-            // 번역 횟수 3번으로 제한
+            // 선택한 영역에 대한 번역 횟수 3회 제한
             if (count == 3) {
                 binding?.translateButton?.apply {
                     setBackgroundResource(R.drawable.clicked_background)
@@ -100,15 +100,8 @@ internal class BottomDialogFragment(
 
         // 노트 추가 버튼
         binding?.addNoteButton?.setOnDuplicatePreventionClickListener {
-            val englishText = binding?.resultEditText?.text.toString()
-            val koreanText = binding?.resultTranslationEditText?.text.toString()
-            if (englishText.isEmpty() || koreanText.isEmpty()) {
-                Toast.makeText(requireContext(), getString(R.string.empty_text), Toast.LENGTH_SHORT).show()
-                return@setOnDuplicatePreventionClickListener
-            }
+            addNoteData(binding?.resultEditText?.text.toString(), binding?.resultTranslationEditText?.text.toString())
 
-            viewModel.insertNoteData(englishText, koreanText)
-            Toast.makeText(requireContext(), getString(R.string.add_note), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -127,11 +120,22 @@ internal class BottomDialogFragment(
                 ocrResultText = binding?.resultEditText?.text.toString()
 
                 binding?.progressBar?.visibility = View.VISIBLE
-                viewModel.translateKakao(ocrResultText)
+                viewModel.translate(ocrResultText)
             } else {
                 Toast.makeText(requireContext(), getString(R.string.no_text_have_been_changed), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    /** 번역 노트 DB에 데이터 추가 */
+    private fun addNoteData(englishText: String, koreanText: String) {
+        if (englishText.isEmpty() || koreanText.isEmpty()) {
+            Toast.makeText(requireContext(), getString(R.string.empty_text), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        viewModel.insertNoteData(englishText, koreanText)
+        Toast.makeText(requireContext(), getString(R.string.add_note), Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
