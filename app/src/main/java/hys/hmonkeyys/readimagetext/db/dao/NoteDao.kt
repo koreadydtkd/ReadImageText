@@ -1,7 +1,7 @@
 package hys.hmonkeyys.readimagetext.db.dao
 
 import androidx.room.*
-import hys.hmonkeyys.readimagetext.model.entity.Note
+import hys.hmonkeyys.readimagetext.db.entity.Note
 
 @Dao
 interface NoteDao {

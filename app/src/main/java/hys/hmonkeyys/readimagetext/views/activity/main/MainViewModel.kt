@@ -11,7 +11,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import hys.hmonkeyys.readimagetext.model.entity.WebHistory
+import hys.hmonkeyys.readimagetext.db.entity.WebHistory
 import hys.hmonkeyys.readimagetext.db.dao.HistoryDao
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import hys.hmonkeyys.readimagetext.utils.Utility.EXTRACTION_ERROR
@@ -34,7 +34,7 @@ internal class MainViewModel(
         _mainStateLiveData.postValue(MainState.Initialized)
     }
 
-    // 중복 확인 후 db 삽입
+    /** 중복 확인 후 db 삽입 */
     fun insertAfterDuplicateDataLookup(url: String?) = viewModelScope.launch {
         // 중복 확인 쿼리 -> 0 반환 시 데이터 없음
         val haveData = historyDao.findByHistory(url ?: "", getCurrentDate())
@@ -43,7 +43,7 @@ internal class MainViewModel(
         }
     }
 
-    // View -> Bitmap
+    /** View -> Bitmap 변경 */
     fun getBitmapFromView(view: View): Bitmap? {
         val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -82,13 +82,13 @@ internal class MainViewModel(
         }
     }
 
-    // 사용자가 설정한 페이지 가져오기
+    /** 설정한 페이지 가져오기 */
     fun getSettingUrl(): String = sharedPreferences.getString(SharedPreferencesConst.SETTING_URL, DEFAULT_URL) ?: DEFAULT_URL
 
-    // 마지막 방문 페이지 가져오기
+    /** 마지막 방문 페이지 가져오기 */
     fun getLastUrl(): String = sharedPreferences.getString(SharedPreferencesConst.LAST_URL, getSettingUrl()) ?: DEFAULT_URL
 
-    // 마지막 방푼 페이지 저장하기
+    /** 마지막 방문 페이지 저장하기 */
     fun setLastUrl(url: String) {
         sharedPreferences.edit().putString(SharedPreferencesConst.LAST_URL, url).apply()
     }

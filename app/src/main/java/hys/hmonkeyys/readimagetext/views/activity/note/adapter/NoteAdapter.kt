@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import hys.hmonkeyys.readimagetext.databinding.ItemNoteBinding
-import hys.hmonkeyys.readimagetext.model.entity.Note
+import hys.hmonkeyys.readimagetext.db.entity.Note
 import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
 
 class NoteAdapter(
@@ -14,6 +14,7 @@ class NoteAdapter(
     val onItemDeleteClick: (Note) -> Unit
 ) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
+    // 클릭에 따라 번역내용 On / Off
     var isShowKoreanText = false
 
     inner class ViewHolder(private val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -21,10 +22,12 @@ class NoteAdapter(
             binding.resultTextView.text = note.english
             binding.resultTranslationTextView.text = note.korean
 
+            // 듣기 버튼
             binding.listenButton.setOnDuplicatePreventionClickListener {
                 onItemClick(binding.resultTextView.text.toString())
             }
 
+            // 듣기 삭제
             binding.deleteButton.setOnDuplicatePreventionClickListener {
                 noteList.removeAt(layoutPosition)
                 notifyItemRemoved(layoutPosition)
@@ -32,6 +35,7 @@ class NoteAdapter(
                 onItemDeleteClick(note)
             }
 
+            // 아이템 클릭
             binding.root.setOnDuplicatePreventionClickListener {
                 if (!isShowKoreanText) {
                     binding.textView2.isVisible = true

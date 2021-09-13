@@ -1,7 +1,7 @@
 package hys.hmonkeyys.readimagetext.db.dao
 
 import androidx.room.*
-import hys.hmonkeyys.readimagetext.model.entity.WebHistory
+import hys.hmonkeyys.readimagetext.db.entity.WebHistory
 
 @Dao
 interface HistoryDao {

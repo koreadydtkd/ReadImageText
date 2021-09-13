@@ -44,6 +44,7 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel>(
                         historyAdapter.notifyDataSetChanged()
                     }
                 }
+                else -> { }
             }
         }
     }

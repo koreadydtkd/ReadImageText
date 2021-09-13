@@ -8,10 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hys.hmonkeyys.readimagetext.db.dao.NoteDao
-import hys.hmonkeyys.readimagetext.retrofit2.KakaoTranslateApi
-import hys.hmonkeyys.readimagetext.model.network.KakaoTranslateResponse
+import hys.hmonkeyys.readimagetext.network.models.KakaoTranslationResponse
 import hys.hmonkeyys.readimagetext.di.TTS
-import hys.hmonkeyys.readimagetext.model.entity.Note
+import hys.hmonkeyys.readimagetext.db.entity.Note
+import hys.hmonkeyys.readimagetext.network.Repository
 import hys.hmonkeyys.readimagetext.utils.Expansion.isSpecialSymbols
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import hys.hmonkeyys.readimagetext.utils.Utility.BLANK
@@ -104,37 +104,36 @@ internal class BottomDialogViewModel(
     /** TTS 실행 여부 */
     fun isSpeaking(): Boolean = tts.textToSpeech.isSpeaking
 
+    /** 번역노트(Room DB) 저장 */
+    fun insertNoteData(english: String, korean: String) = viewModelScope.launch {
+        noteDao.insertHistory(Note(null, english, korean))
+    }
+
     /** 카카오 번역 */
     fun translate(translateText: String) {
         try {
             val replaceText = translateText.replace("\n", " ")
 
-            KakaoTranslateApi.create().translateKakao(replaceText, SRC_LANG, TARGET_LANG)
-                .enqueue(object : Callback<KakaoTranslateResponse> {
-                    override fun onResponse(call: Call<KakaoTranslateResponse>, response: Response<KakaoTranslateResponse>) {
+            Repository.translateEnglishToKorean(replaceText, SRC_LANG, TARGET_LANG)
+                .enqueue(object : Callback<KakaoTranslationResponse> {
+                    override fun onResponse(call: Call<KakaoTranslationResponse>, response: Response<KakaoTranslationResponse>) {
                         if (response.isSuccessful.not()) {
                             _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
                             return
                         }
 
-                        response.body()?.let { translateKakaoModel ->
-                            val sb: StringBuilder = StringBuilder()
-                            val items = translateKakaoModel.translatedText?.get(0)
-                            items?.forEach {
-                                sb.append("$it ")
-                            }
-
-                            // 번역한 데이터 전달, 번역 횟수 1 증가
-                            _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(true, sb.toString()))
-                            _translateCount.value = _translateCount.value?.plus(1)
+                        response.body()?.let {
+                            completedTranslate(it)
                         }
                     }
 
-                    override fun onFailure(call: Call<KakaoTranslateResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<KakaoTranslationResponse>, t: Throwable) {
                         FirebaseCrashlytics.getInstance().recordException(t)
                         _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
                     }
                 })
+
+
         } catch (e: Exception) {
             e.printStackTrace()
             _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(false))
@@ -142,9 +141,17 @@ internal class BottomDialogViewModel(
         }
     }
 
-    /** 데이터 삽입 */
-    fun insertNoteData(english: String, korean: String) = viewModelScope.launch {
-        noteDao.insertHistory(Note(null, english, korean))
+    /** 번역완료 */
+    private fun completedTranslate(translateModel: KakaoTranslationResponse) {
+        val sb: StringBuilder = StringBuilder()
+        val items = translateModel.translatedText?.get(0)
+        items?.forEach {
+            sb.append("$it ")
+        }
+
+        // 번역한 데이터 전달, 번역 횟수 1 증가
+        _bottomDialogStateLiveData.postValue(BottomDialogState.TranslateComplete(true, sb.toString()))
+        _translateCount.value = _translateCount.value?.plus(1)
     }
 
     companion object {

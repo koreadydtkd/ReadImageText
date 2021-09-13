@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import hys.hmonkeyys.readimagetext.model.entity.WebHistory
+import hys.hmonkeyys.readimagetext.db.entity.WebHistory
 import hys.hmonkeyys.readimagetext.db.dao.HistoryDao
 import hys.hmonkeyys.readimagetext.views.BaseViewModel
 import hys.hmonkeyys.readimagetext.views.activity.history.adapter.DateType

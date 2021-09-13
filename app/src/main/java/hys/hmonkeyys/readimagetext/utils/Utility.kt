@@ -3,6 +3,9 @@ package hys.hmonkeyys.readimagetext.utils
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.pm.PackageInfoCompat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -54,6 +57,14 @@ object Utility {
         val week = Calendar.getInstance()
         week.add(Calendar.DATE, (selectWeek * -7))
         return SimpleDateFormat(DATE_PATTERN, Locale.getDefault()).format(week.time)
+    }
+
+
+    /** 키보드, 커서 숨기기 */
+    fun hideKeyboardAndCursor(context: Context, view: View) {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0) // 키보드 숨기기
+        view.clearFocus() // 커서 숨기기
     }
 
 }

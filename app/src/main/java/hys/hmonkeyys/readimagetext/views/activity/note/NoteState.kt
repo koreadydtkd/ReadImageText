@@ -1,6 +1,6 @@
 package hys.hmonkeyys.readimagetext.views.activity.note
 
-import hys.hmonkeyys.readimagetext.model.entity.Note
+import hys.hmonkeyys.readimagetext.db.entity.Note
 
 sealed class NoteState {
     object Initialized : NoteState()

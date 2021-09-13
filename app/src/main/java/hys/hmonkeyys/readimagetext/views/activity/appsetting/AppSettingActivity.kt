@@ -3,6 +3,7 @@ package hys.hmonkeyys.readimagetext.views.activity.appsetting
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -11,6 +12,7 @@ import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityAppSettingBinding
 import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.utils.Utility.MAIN_TO_HISTORY_DEFAULT
+import hys.hmonkeyys.readimagetext.utils.Utility.hideKeyboardAndCursor
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.history.HistoryActivity
 import hys.hmonkeyys.readimagetext.views.activity.licensedetail.LicenseDetailActivity
@@ -38,9 +40,6 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        // 설정된 주소 셋팅
-        binding.settingUrlEditText.setText(viewModel.getDefaultUrl())
     }
 
     override fun observeData() {
@@ -62,6 +61,9 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
 
     /** 뷰 초기화 */
     private fun initViews() {
+        // 설정된 주소 셋팅
+        binding.settingUrlEditText.setText(viewModel.getDefaultUrl())
+
         // 뒤로 가기 버튼
         binding.backButton.setOnDuplicatePreventionClickListener {
             finish()
@@ -70,6 +72,11 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
         // 주소 설정 버튼
         binding.urlEditButton.setOnDuplicatePreventionClickListener {
             viewModel.saveDefaultUrl(binding.settingUrlEditText.text.toString())
+
+            // 키보드, 커서 숨기기
+            currentFocus?.let { view ->
+                hideKeyboardAndCursor(this, view)
+            }
         }
 
         // 방문기록 버튼

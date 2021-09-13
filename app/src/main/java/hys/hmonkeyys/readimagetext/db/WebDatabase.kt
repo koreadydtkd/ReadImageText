@@ -2,7 +2,7 @@ package hys.hmonkeyys.readimagetext.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import hys.hmonkeyys.readimagetext.model.entity.WebHistory
+import hys.hmonkeyys.readimagetext.db.entity.WebHistory
 import hys.hmonkeyys.readimagetext.db.dao.HistoryDao
 
 // db 구조가 바뀔 때(Column 이 추가 되거나 이름이 바뀌거나) Version 올려줘야함

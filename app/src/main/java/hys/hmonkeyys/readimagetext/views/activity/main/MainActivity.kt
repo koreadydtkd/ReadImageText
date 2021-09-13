@@ -23,6 +23,7 @@ import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClick
 import hys.hmonkeyys.readimagetext.utils.Utility.EXTRACTION_ERROR
 import hys.hmonkeyys.readimagetext.utils.Utility.MAIN_TO_HISTORY_DEFAULT
 import hys.hmonkeyys.readimagetext.utils.Utility.TEXT_LIMIT_EXCEEDED
+import hys.hmonkeyys.readimagetext.utils.Utility.hideKeyboardAndCursor
 import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.appsetting.AppSettingActivity
 import hys.hmonkeyys.readimagetext.views.activity.note.NoteActivity
@@ -71,17 +72,38 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         }
     }
 
+    /** 뒤로가기 실행 시
+     * 웹뷰에서 뒤로갈 수 있다면 이전 웹사이트로 이동
+     * 없다면 1.5초 안에 2번 실행 시 종료
+     * */
+    override fun onBackPressed() {
+        if (binding.cropImageView.isVisible) {
+            binding.isCropImageViewVisible = false
+        } else {
+            if (binding.webView.canGoBack()) {
+                binding.webView.goBack()
+            } else {
+                val time = System.currentTimeMillis()
+                if (time - backPressTime > ONE_POINT_FIVE_SECOND) {
+                    Toast.makeText(this, resources.getString(R.string.backward_finish), Toast.LENGTH_SHORT).show()
+                    backPressTime = time
+                } else {
+                    super.onBackPressed()
+                }
+            }
+        }
+    }
+
     /** 상단 툴바 초기화 */
     private fun initToolbar() {
-
         // 홈 버튼
         binding.goHomeButton.setOnDuplicatePreventionClickListener {
             binding.webView.loadUrl(viewModel.getSettingUrl())
         }
 
-        // 주소창 입력 후 done 클릭 시
+        // Keyboard search 클릭 시
         binding.addressBar.setOnEditorActionListener { v, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val loadingUrl = v.text.toString()
 
                 if (URLUtil.isNetworkUrl(loadingUrl)) {
@@ -90,8 +112,12 @@ internal class MainActivity : BaseActivity<MainViewModel>(
                     binding.webView.loadUrl("http://$loadingUrl")
                 }
 
+                // 키보드, 커서 숨기기
+                currentFocus?.let { view ->
+                    hideKeyboardAndCursor(this, view)
+                }
             }
-            return@setOnEditorActionListener false
+            true
         }
 
         // 뒤로가기 버튼
@@ -266,28 +292,6 @@ internal class MainActivity : BaseActivity<MainViewModel>(
 
         // 마지막 접속한 페이지 저장
         viewModel.setLastUrl(binding.addressBar.text.toString())
-    }
-
-    /** 뒤로가기 실행 시
-     * 웹뷰에서 뒤로갈 수 있다면 이전 웹사이트로 이동
-     * 없다면 1.5초 안에 2번 실행 시 종료
-     * */
-    override fun onBackPressed() {
-        if (binding.cropImageView.isVisible) {
-            binding.isCropImageViewVisible = false
-        } else {
-            if (binding.webView.canGoBack()) {
-                binding.webView.goBack()
-            } else {
-                val time = System.currentTimeMillis()
-                if (time - backPressTime > ONE_POINT_FIVE_SECOND) {
-                    Toast.makeText(this, resources.getString(R.string.backward_finish), Toast.LENGTH_SHORT).show()
-                    backPressTime = time
-                } else {
-                    super.onBackPressed()
-                }
-            }
-        }
     }
 
     inner class WebViewClient : android.webkit.WebViewClient() {

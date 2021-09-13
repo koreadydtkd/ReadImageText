@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hys.hmonkeyys.readimagetext.db.dao.NoteDao
 import hys.hmonkeyys.readimagetext.di.TTS
-import hys.hmonkeyys.readimagetext.model.entity.Note
+import hys.hmonkeyys.readimagetext.db.entity.Note
 import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
 import hys.hmonkeyys.readimagetext.views.BaseViewModel
 import kotlinx.coroutines.Job
@@ -27,15 +27,17 @@ internal class NoteViewModel(
         _noteStateLiveData.postValue(NoteState.Initialized)
     }
 
+    /** 번역노트(Room DB) 모두 가져오기 */
     fun getAllNote() = viewModelScope.launch {
         _noteStateLiveData.postValue(NoteState.GetNoteData(noteDao.getAll()))
     }
 
+    /** 번역노트(Room DB) 한개 삭제 */
     fun deleteNote(note: Note) = viewModelScope.launch {
         noteDao.delete(note)
     }
 
-    // 텍스트 읽기
+    /** 텍스트 읽기 */
     fun speakOut(extractedResults: String) {
         try {
             tts.textToSpeech.apply {
@@ -49,9 +51,10 @@ internal class NoteViewModel(
         }
     }
 
-    // 텍스트 읽기 실행중인지
+    /** tts 실행여부 */
     fun isSpeaking(): Boolean = tts.textToSpeech.isSpeaking
 
+    /** tts 정지 */
     fun ttsStop() {
         if(isSpeaking()) {
             tts.textToSpeech.stop()

@@ -70,6 +70,14 @@ internal class BottomDialogFragment(
         }
     }
 
+    override fun onDestroy() {
+        // 번역 횟수 초기화
+        viewModel.translateCountInit()
+
+        binding = null
+        super.onDestroy()
+    }
+
     /** 추출된 문자 초기화 */
     private fun initResultText() {
         val replaceText = extractionText.replace("\n", " ")
@@ -136,14 +144,6 @@ internal class BottomDialogFragment(
 
         viewModel.insertNoteData(englishText, koreanText)
         Toast.makeText(requireContext(), getString(R.string.add_note), Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onDestroy() {
-        // 번역 횟수 초기화
-        viewModel.translateCountInit()
-
-        binding = null
-        super.onDestroy()
     }
 
     companion object {
