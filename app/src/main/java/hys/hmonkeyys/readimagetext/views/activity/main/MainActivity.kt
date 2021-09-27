@@ -57,6 +57,13 @@ internal class MainActivity : BaseActivity<MainViewModel>(
         binding.isCropImageViewVisible = false
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        // 마지막 접속한 페이지 저장
+        viewModel.setLastUrl(binding.addressBar.text.toString())
+    }
+
     override fun observeData() {
         viewModel.mainStateLiveData.observe(this) {
             when (it) {
@@ -285,13 +292,6 @@ internal class MainActivity : BaseActivity<MainViewModel>(
                 bottomDialogFragment.show(supportFragmentManager, bottomDialogFragment.tag)
             }
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        // 마지막 접속한 페이지 저장
-        viewModel.setLastUrl(binding.addressBar.text.toString())
     }
 
     inner class WebViewClient : android.webkit.WebViewClient() {

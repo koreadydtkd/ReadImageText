@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isGone
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityAppSettingBinding
 import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
@@ -17,6 +18,7 @@ import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.history.HistoryActivity
 import hys.hmonkeyys.readimagetext.views.activity.licensedetail.LicenseDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
 
@@ -90,22 +92,31 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel>() {
         }
     }
 
-    /** 읽기 속도 스피너 초기화 */
+    /** 읽기 속도 스피너 초기화
+     * 한국어 설정인 경우 -> 읽기 속도 변경 그대로
+     * 영어 설정인 경우 -> 읽기를 사용하지 않기 때문에 속도조절 없애기
+     * */
     private fun initSpinner() {
-        val items = resources.getStringArray(R.array.spinner_items)
-        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, items)
+        if (Locale.getDefault().language == "ko") {
+            val items = resources.getStringArray(R.array.spinner_items)
+            val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, items)
 
-        binding.speakSpeedSpinner.apply {
-            adapter = spinnerAdapter
+            binding.speakSpeedSpinner.apply {
+                adapter = spinnerAdapter
 
-            setSelection(viewModel.getTTsSpeed(), false)
+                setSelection(viewModel.getTTsSpeed(), false)
 
-            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    viewModel.saveTTSSpeed(position)
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        viewModel.saveTTSSpeed(position)
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) { }
                 }
-                override fun onNothingSelected(parent: AdapterView<*>?) { }
             }
+        } else {
+            binding.speakSpeedTextView.isGone = true
+            binding.speakSpeedView.isGone = true
+            binding.speakSpeedCardView.isGone = true
         }
 
     }

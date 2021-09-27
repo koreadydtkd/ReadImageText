@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.FragmentBottomDialogBinding
 import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.utils.Utility.BLANK
+import hys.hmonkeyys.readimagetext.utils.Utility.hideKeyboardAndCursor
 import hys.hmonkeyys.readimagetext.views.BaseBottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 internal class BottomDialogFragment(
     private val extractionText: String,
@@ -96,13 +99,20 @@ internal class BottomDialogFragment(
 
     /** 각 뷰들 초기화 */
     private fun initViews() {
-        // 듣기 버튼
-        binding?.listenButton?.setOnDuplicatePreventionClickListener {
-            readText()
+        // 듣기 버튼 (영어 사용자는 한국어 듣기 기능 없음)
+        if (Locale.getDefault().language != "ko") {
+            binding?.listenButton?.isGone = true
+        } else {
+            binding?.listenButton?.setOnDuplicatePreventionClickListener {
+                readText()
+            }
         }
 
         // 번역 버튼
         binding?.translateButton?.setOnDuplicatePreventionClickListener {
+            requireActivity().currentFocus?.let { view ->
+                hideKeyboardAndCursor(requireContext(), view)
+            }
             translationEnglishToKorean()
         }
 

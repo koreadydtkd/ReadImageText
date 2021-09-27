@@ -60,8 +60,6 @@ internal class AppSettingViewModel(
             7 -> speed = 0.5f
         }
 
-        Log.e(TAG, "++ $speed ++")
-
         sharedPreferences.edit().putFloat(SharedPreferencesConst.TTS_SPEED, speed).apply()
         _appSettingLiveData.postValue(AppSettingState.SpeedChangeComplete)
     }

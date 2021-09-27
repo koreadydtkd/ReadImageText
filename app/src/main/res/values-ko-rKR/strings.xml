@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Site Translation</string>
+    <string name="app_name">사이트 번역</string>
 
     <!-- Admob -->
     <string name="admob_app_id">ca-app-pub-3924676263890790~2654234603</string>
@@ -7,71 +8,71 @@
     <string name="banner_ad_test_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- Intro -->
-    <string name="intro_main_contents">Web site\ntranslate</string>
-    <string name="intro_contents">Let\'s translate what\nwe want to translate into Korean!</string>
+    <string name="intro_main_contents">영어 사이트\n번역하고\n듣기</string>
+    <string name="intro_contents">영어 웹툰, 해외 뉴스 등\n웹사이트 서핑 중 모르는 부분을\n번역하고 Listening 과 함께 공부하자 !!</string>
     <string name="app_version">Version %s</string>
 
     <!-- Main -->
-    <string name="main_fab_contents1">App Setting</string>
-    <string name="main_fab_contents2">Visit record</string>
-    <string name="main_fab_contents3">Choose an area</string>
-    <string name="main_fab_contents4">Top</string>
-    <string name="main_fab_contents5">Translation Note</string>
-    <string name="fab_description">no image.</string>
-    <string name="ocr_error">Text extraction failed.</string>
-    <string name="ocr_text_limit">Up to 350 characters can be extracted.\nPlease select the area again.</string>
-    <string name="backward_finish">If you run Go Back one more time, it will end.</string>
+    <string name="main_fab_contents1">앱 설정</string>
+    <string name="main_fab_contents2">방문 기록</string>
+    <string name="main_fab_contents3">영역 선택</string>
+    <string name="main_fab_contents4">맨 위로</string>
+    <string name="main_fab_contents5">번역 노트</string>
+    <string name="fab_description">이미지가 확인되지 않습니다.</string>
+    <string name="ocr_error">텍스트 추출에 실패하였습니다.</string>
+    <string name="ocr_text_limit">최대 350자까지 추출이 가능합니다.\n다시 영역을 선택해주세요.</string>
+    <string name="backward_finish">뒤로가기를 한번 더 실행하면 앱이 종료 됩니다.</string>
 
     <!-- BottomSheetDialog -->
-    <string name="tts_error">An unexpected error occurred.\nPlease try again in a little while.</string>
-    <string name="no_results">There are no extracted results.</string>
-    <string name="bottom_sheet_text1">Please check if there are any characters extracted incorrectly and translate them.</string>
-    <string name="bottom_sheet_text2">Extraction results</string>
-    <string name="bottom_sheet_text3">Translation results</string>
+    <string name="tts_error">예기치 못한 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.</string>
+    <string name="no_results">추출된 결과가 없습니다.</string>
+    <string name="bottom_sheet_text1">잘못 추출된 글자가 있는지 확인 후 번역해주세요.</string>
+    <string name="bottom_sheet_text2">추출 결과</string>
+    <string name="bottom_sheet_text3">번역 결과</string>
     <string name="bottom_sheet_text4">듣기</string>
-    <string name="bottom_sheet_button">Translation</string>
-    <string name="wait_please">Hold on a moment, please.</string>
-    <string name="selected_translate_limit">Translation complete.\nTranslation of the selected area can be done up to three times.</string>
-    <string name="translate_fail">An error has occurred.\nPlease try again in a little while.</string>
-    <string name="no_text_have_been_changed">There are no changed letters.</string>
-    <string name="add_note_explanation">You can add it to the translation note by pressing the top right button.</string>
-    <string name="add_note">It has been added to the translation note.</string>
-    <string name="empty_text">Please check if there are any empty characters.</string>
+    <string name="bottom_sheet_button">번역</string>
+    <string name="wait_please">잠시만 기다려주세요.</string>
+    <string name="selected_translate_limit">번역완료.\n선택영역에 대한 번역은 3회까지 가능합니다.</string>
+    <string name="translate_fail">오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.</string>
+    <string name="no_text_have_been_changed">변경된 글자가 없습니다.</string>
+    <string name="add_note_explanation">다시 보고 싶은 문장은 우측 상단 버튼을 눌러주세요</string>
+    <string name="add_note">번역 노트에 추가되었습니다.</string>
+    <string name="empty_text">비어있는 문자가 있는지 확인해주세요.</string>
 
     <!-- History -->
-    <string name="history_item_label">If you press the area, the translation result will be displayed.</string>
-    <string name="history_dialog_title">Delete all visit records.</string>
-    <string name="history_dialog_message">Are you sure you want to delete all visit records?</string>
-    <string name="before_seven_days">※ You can only see it until the 7th.\nRecords that have passed 7 days will be deleted.</string>
-    <string name="delete_all">All of them have all been deleted.</string>
-    <string name="no_data">no data.</string>
+    <string name="history_item_label">해당 영역을 누르면 번역결과가 표시됩니다.</string>
+    <string name="history_dialog_title">방문기록 모두 삭제</string>
+    <string name="history_dialog_message">방문기록을 모두 삭제하시겠습니까?</string>
+    <string name="before_seven_days">※ 지난 7일까지만 볼 수 있습니다.\n더 지난 기록은 삭제됩니다.</string>
+    <string name="delete_all">모두 삭제되었습니다.</string>
+    <string name="no_data">데이터가 없습니다.</string>
 
     <!-- AppInformation -->
     <string name="change_speed">속도가 변경되었습니다.</string>
-    <string name="change_default_url">The default address has been updated.</string>
+    <string name="change_default_url">기본 주소가 변경되었습니다.</string>
     <string name="speech_speed">읽기속도</string>
-    <string name="change">change</string>
-    <string name="look">Reading</string>
-    <string name="default_url">The default address</string>
-    <string name="terms_of_service">Terms and conditions.</string>
-    <string name="history">Visit record.</string>
-    <string name="license">License</string>
+    <string name="change">변경</string>
+    <string name="look">보기</string>
+    <string name="default_url">기본주소</string>
+    <string name="terms_of_service">이용약관</string>
+    <string name="history">방문기록</string>
+    <string name="license">라이센스</string>
 
     <!-- Note -->
-    <string name="note_no_item">There is no sentence added.</string>
+    <string name="note_no_item">추가한 문장이 없습니다.</string>
 
     <!-- Permissions -->
-    <string name="decline_permissions">It can be used after permission is allowed.</string>
+    <string name="decline_permissions">권한 허용 후 이용할 수 있습니다.</string>
 
     <!-- Default -->
-    <string name="check">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="delete">Delete</string>
-    <string name="update">Update</string>
-    <string name="edit">Edit</string>
+    <string name="check">확인</string>
+    <string name="cancel">취소</string>
+    <string name="delete">삭제</string>
+    <string name="update">업데이트</string>
+    <string name="edit">수정</string>
 
     <!-- Custom Dialog -->
-    <string name="custom_dialog_text">A new version has been released.\nTry using a new feature.</string>
+    <string name="custom_dialog_text">새로운 버전이 출시되었습니다.\n새로운 기능을 사용해보세요.</string>
 
     <!-- License -->
     <string name="license_contents">

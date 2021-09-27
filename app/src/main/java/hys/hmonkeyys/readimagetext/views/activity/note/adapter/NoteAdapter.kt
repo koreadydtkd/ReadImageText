@@ -2,6 +2,7 @@ package hys.hmonkeyys.readimagetext.views.activity.note.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import hys.hmonkeyys.readimagetext.databinding.ItemNoteBinding
@@ -10,6 +11,7 @@ import hys.hmonkeyys.readimagetext.utils.Expansion.setOnDuplicatePreventionClick
 
 class NoteAdapter(
     private val noteList: MutableList<Note>,
+    private val isLanguageKorean: Boolean,
     val onItemClick: (String) -> Unit,
     val onItemDeleteClick: (Note) -> Unit
 ) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
@@ -22,12 +24,7 @@ class NoteAdapter(
             binding.resultTextView.text = note.english
             binding.resultTranslationTextView.text = note.korean
 
-            // 듣기 버튼
-            binding.listenButton.setOnDuplicatePreventionClickListener {
-                onItemClick(binding.resultTextView.text.toString())
-            }
-
-            // 듣기 삭제
+            // 삭제
             binding.deleteButton.setOnDuplicatePreventionClickListener {
                 noteList.removeAt(layoutPosition)
                 notifyItemRemoved(layoutPosition)
@@ -35,21 +32,35 @@ class NoteAdapter(
                 onItemDeleteClick(note)
             }
 
-            // 아이템 클릭
-            binding.root.setOnDuplicatePreventionClickListener {
-                if (!isShowKoreanText) {
-                    binding.textView2.isVisible = true
-                    binding.resultTranslationTextView.isVisible = true
-
-                    isShowKoreanText = isShowKoreanText.not()
-                } else {
-                    binding.textView2.isVisible = false
-                    binding.resultTranslationTextView.isVisible = false
-
-                    isShowKoreanText = isShowKoreanText.not()
+            // 영어 언어 사용자는 듣기 안되게
+            if (isLanguageKorean.not()) {
+                binding.listenButton.isGone = true
+                binding.textView2.isVisible = true
+                binding.resultTranslationTextView.isVisible = true
+            } else {
+                // 듣기 버튼
+                binding.listenButton.setOnDuplicatePreventionClickListener {
+                    onItemClick(binding.resultTextView.text.toString())
                 }
 
+                // 아이템 클릭
+                binding.root.setOnDuplicatePreventionClickListener {
+                    if (!isShowKoreanText) {
+                        binding.textView2.isVisible = true
+                        binding.resultTranslationTextView.isVisible = true
+
+                        isShowKoreanText = isShowKoreanText.not()
+                    } else {
+                        binding.textView2.isVisible = false
+                        binding.resultTranslationTextView.isVisible = false
+
+                        isShowKoreanText = isShowKoreanText.not()
+                    }
+
+                }
             }
+
+
         }
     }
 

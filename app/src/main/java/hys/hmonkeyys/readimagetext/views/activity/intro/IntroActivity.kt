@@ -90,7 +90,8 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
                 val array = arrayOfNulls<String>(rejectedPermissionList.size)
                 ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), PERMISSIONS_REQUEST_CODE)
             } else {
-                Log.i(TAG, "권한 모두 허용")
+                // 권한 모두 허용
+
                 viewModel.deleteData()
 
                 val currentVersion = getAppVersionCode(this)
@@ -122,7 +123,6 @@ internal class IntroActivity : BaseActivity<IntroViewModel>(
                             goMainActivity()
                         } else {
                             // 권한 불허
-                            Log.e(TAG, "권한 미 허용")
                             Toast.makeText(this, resources.getString(R.string.decline_permissions), Toast.LENGTH_LONG).show()
                             finish()
                         }

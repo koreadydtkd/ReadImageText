@@ -14,6 +14,7 @@ import hys.hmonkeyys.readimagetext.views.BaseActivity
 import hys.hmonkeyys.readimagetext.views.activity.main.MainActivity
 import hys.hmonkeyys.readimagetext.views.activity.note.adapter.NoteAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 internal class NoteActivity : BaseActivity<NoteViewModel>(
 
@@ -78,7 +79,8 @@ internal class NoteActivity : BaseActivity<NoteViewModel>(
             finish()
         }
 
-        binding.recyclerView.adapter = NoteAdapter(noteList,
+        val currentLanguage = Locale.getDefault().language
+        binding.recyclerView.adapter = NoteAdapter(noteList, currentLanguage == "ko",
             onItemClick = {
                 if (!viewModel.isSpeaking()) {
                     viewModel.speakOut(it)
