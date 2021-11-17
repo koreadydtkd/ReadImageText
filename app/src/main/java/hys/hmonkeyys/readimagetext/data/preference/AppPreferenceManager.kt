@@ -5,6 +5,23 @@ import android.content.Context
 class AppPreferenceManager(
     context: Context,
 ) {
+
+    companion object {
+        const val APP_DEFAULT_KEY = "default_key"
+
+        private const val DEFAULT_VALUE_STRING = ""
+        private const val DEFAULT_VALUE_BOOLEAN = false
+        private const val DEFAULT_VALUE_INT = -1
+        private const val DEFAULT_VALUE_LONG = -1L
+        private const val DEFAULT_VALUE_FLOAT = -1f
+
+        private const val DEFAULT_TTS_SPEED = 0.8f
+
+        const val TTS_SPEED = "tts_speed"
+        const val SETTING_URL = "setting_url"
+        const val LAST_URL = "last_url"
+    }
+
     private val prefs by lazy { context.getSharedPreferences(APP_DEFAULT_KEY, Context.MODE_PRIVATE) }
     private val editor by lazy { prefs.edit() }
 
@@ -77,20 +94,4 @@ class AppPreferenceManager(
     /** TTS 속도 가져오기 */
     fun getTTSSpeed(key: String?): Float = prefs.getFloat(key, DEFAULT_TTS_SPEED)
 
-
-    companion object {
-        const val APP_DEFAULT_KEY = "default_key" // Pref 이름
-
-        private const val DEFAULT_VALUE_STRING = ""
-        private const val DEFAULT_VALUE_BOOLEAN = false
-        private const val DEFAULT_VALUE_INT = -1
-        private const val DEFAULT_VALUE_LONG = -1L
-        private const val DEFAULT_VALUE_FLOAT = -1f
-
-        private const val DEFAULT_TTS_SPEED = 0.8f
-
-        const val TTS_SPEED = "tts_speed"
-        const val SETTING_URL = "setting_url"
-        const val LAST_URL = "last_url"
-    }
 }

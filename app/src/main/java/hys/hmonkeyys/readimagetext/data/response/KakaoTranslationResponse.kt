@@ -1,4 +1,4 @@
-package hys.hmonkeyys.readimagetext.model
+package hys.hmonkeyys.readimagetext.data.response
 
 
 import com.google.gson.annotations.SerializedName

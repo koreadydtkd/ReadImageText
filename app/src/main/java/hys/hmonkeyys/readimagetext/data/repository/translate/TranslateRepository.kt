@@ -1,7 +1,6 @@
 package hys.hmonkeyys.readimagetext.data.repository.translate
 
-import hys.hmonkeyys.readimagetext.model.KakaoTranslationResponse
-import retrofit2.http.Field
+import hys.hmonkeyys.readimagetext.data.response.KakaoTranslationResponse
 
 interface TranslateRepository {
 

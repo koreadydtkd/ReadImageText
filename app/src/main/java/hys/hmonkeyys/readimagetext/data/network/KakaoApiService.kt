@@ -1,12 +1,10 @@
 package hys.hmonkeyys.readimagetext.data.network
 
 import hys.hmonkeyys.readimagetext.data.url.KakaoUrl
-import hys.hmonkeyys.readimagetext.model.KakaoTranslationResponse
-import retrofit2.Call
+import hys.hmonkeyys.readimagetext.data.response.KakaoTranslationResponse
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface KakaoApiService {

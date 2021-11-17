@@ -1,12 +1,9 @@
 package hys.hmonkeyys.readimagetext.data.repository.translate
 
 import hys.hmonkeyys.readimagetext.data.network.KakaoApiService
-import hys.hmonkeyys.readimagetext.model.KakaoTranslationResponse
+import hys.hmonkeyys.readimagetext.data.response.KakaoTranslationResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class DefaultTranslateRepository(
     private val kakaoApiService: KakaoApiService,
@@ -18,7 +15,12 @@ class DefaultTranslateRepository(
         src_lang: String,
         target_lang: String
     ): KakaoTranslationResponse? = withContext(ioDispatcher) {
-        val response = kakaoApiService.translateKakao(query, src_lang, target_lang)
+
+        val response = kakaoApiService.translateKakao(
+            query = query,
+            src_lang = src_lang,
+            target_lang = target_lang
+        )
 
         if (response.isSuccessful) {
             response.body()

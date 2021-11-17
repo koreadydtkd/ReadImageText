@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import hys.hmonkeyys.readimagetext.model.KakaoTranslationResponse
+import hys.hmonkeyys.readimagetext.data.response.KakaoTranslationResponse
 import hys.hmonkeyys.readimagetext.di.TTS
 import hys.hmonkeyys.readimagetext.data.db.entity.Note
 import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager
