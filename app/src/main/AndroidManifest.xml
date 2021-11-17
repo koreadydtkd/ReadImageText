@@ -28,7 +28,7 @@
             android:value="@string/admob_app_id" />
 
         <activity
-            android:name=".views.activity.intro.IntroActivity"
+            android:name=".screen.views.intro.IntroActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity">
@@ -40,40 +40,35 @@
         </activity>
 
         <activity
-            android:name=".views.activity.main.MainActivity"
+            android:name=".screen.views.main.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".views.activity.history.HistoryActivity"
+            android:name="hys.hmonkeyys.readimagetext.screen.views.main.appsetting.history.HistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".views.activity.licensedetail.LicenseDetailActivity"
+            android:name="hys.hmonkeyys.readimagetext.screen.views.main.appsetting.licensedetail.LicenseDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".views.activity.appsetting.AppSettingActivity"
+            android:name="hys.hmonkeyys.readimagetext.screen.views.main.appsetting.AppSettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".views.activity.note.NoteActivity"
+            android:name="hys.hmonkeyys.readimagetext.screen.views.main.note.NoteActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.statusBar.Teal200"
             tools:ignore="LockedOrientationActivity" />
 
-        <activity
-            android:name=".views.activity.guide.GuideActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.statusBar.Teal200"
-            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

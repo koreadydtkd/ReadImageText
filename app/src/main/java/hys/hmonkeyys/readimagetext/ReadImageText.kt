@@ -1,6 +1,7 @@
 package hys.hmonkeyys.readimagetext
 
 import android.app.Application
+import android.content.Context
 import hys.hmonkeyys.readimagetext.di.appModule
 import hys.hmonkeyys.readimagetext.di.viewModelModule
 import org.koin.android.ext.koin.androidContext

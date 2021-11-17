@@ -47,9 +47,9 @@
     <string name="no_data">no data.</string>
 
     <!-- AppInformation -->
-    <string name="change_speed">속도가 변경되었습니다.</string>
+    <string name="change_speed">The speed has changed.</string>
     <string name="change_default_url">The default address has been updated.</string>
-    <string name="speech_speed">읽기속도</string>
+    <string name="speech_speed">Reading speed.</string>
     <string name="change">change</string>
     <string name="look">Reading</string>
     <string name="default_url">The default address</string>

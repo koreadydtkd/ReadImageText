@@ -2,31 +2,21 @@ package hys.hmonkeyys.readimagetext.utils
 
 import android.content.Context
 import android.content.pm.PackageInfo
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
+import android.widget.Toast
 import androidx.core.content.pm.PackageInfoCompat
+import hys.hmonkeyys.readimagetext.utils.Pattern.DATE_PATTERN
 import java.text.SimpleDateFormat
 import java.util.*
 
 object Utility {
-    private const val TAG = "HYS_Util"
-
-    private const val DATE_PATTERN = "yyyy-MM-dd"
-    const val MAIN_TO_HISTORY_DEFAULT = "select_url"
-    const val TEXT_LIMIT_EXCEEDED = "text_limit_exceeded"
-    const val EXTRACTION_ERROR = "extraction_error"
-    const val BLANK = "blank"
 
     /** 앱 버전 코드 */
     fun getAppVersionCode(applicationContext: Context): Long {
         return try {
             val info: PackageInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
-            val currentVersionCode = PackageInfoCompat.getLongVersionCode(info)
-            Log.i(TAG, "$currentVersionCode")
-
-            currentVersionCode
+            PackageInfoCompat.getLongVersionCode(info)
         } catch (e: Exception) {
             e.printStackTrace()
             0L
@@ -67,4 +57,16 @@ object Utility {
         view.clearFocus() // 커서 숨기기
     }
 
+    /** 한국어 언어 설정 여부 */
+    fun isKorean(): Boolean = Locale.getDefault().language == "ko"
+
+    /** 짧은 토스트 뛰우기 */
+    fun toast(context: Context, msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    /** 짧은 토스트 뛰우기 */
+    fun longToast(context: Context, msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+    }
 }

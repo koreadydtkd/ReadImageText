@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/teal_200"
-    tools:context=".views.activity.intro.IntroActivity">
+    tools:context=".screen.views.intro.IntroActivity">
 
     <TextView
         android:id="@+id/mainTextView"

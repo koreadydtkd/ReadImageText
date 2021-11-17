@@ -1,19 +1,21 @@
 package hys.hmonkeyys.readimagetext.di
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import androidx.room.Room
-import hys.hmonkeyys.readimagetext.db.NoteDatabase
-import hys.hmonkeyys.readimagetext.db.WebDatabase
-import hys.hmonkeyys.readimagetext.views.fragment.bottomsheetdialog.BottomDialogViewModel
-import hys.hmonkeyys.readimagetext.utils.SharedPreferencesConst
-import hys.hmonkeyys.readimagetext.views.activity.appsetting.AppSettingViewModel
-import hys.hmonkeyys.readimagetext.views.activity.history.HistoryViewModel
-import hys.hmonkeyys.readimagetext.views.activity.intro.IntroViewModel
-import hys.hmonkeyys.readimagetext.views.activity.main.MainViewModel
-import hys.hmonkeyys.readimagetext.views.activity.note.NoteViewModel
+import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager
+import hys.hmonkeyys.readimagetext.data.repository.history.DefaultHistoryRepository
+import hys.hmonkeyys.readimagetext.data.repository.history.HistoryRepository
+import hys.hmonkeyys.readimagetext.data.repository.note.DefaultNoteRepository
+import hys.hmonkeyys.readimagetext.data.repository.note.NoteRepository
+import hys.hmonkeyys.readimagetext.data.repository.translate.DefaultTranslateRepository
+import hys.hmonkeyys.readimagetext.data.repository.translate.TranslateRepository
+import hys.hmonkeyys.readimagetext.screen.views.main.bottomsheetdialog.BottomDialogViewModel
+import hys.hmonkeyys.readimagetext.screen.views.main.appsetting.AppSettingViewModel
+import hys.hmonkeyys.readimagetext.screen.views.main.appsetting.history.HistoryViewModel
+import hys.hmonkeyys.readimagetext.screen.views.intro.IntroViewModel
+import hys.hmonkeyys.readimagetext.screen.views.main.MainViewModel
+import hys.hmonkeyys.readimagetext.screen.views.main.note.NoteViewModel
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -41,10 +43,23 @@ internal val appModule = module {
     single { noteDao(get()) }
 
     // sharedPreferences 셋팅
-    single { setSharedPreferences(androidApplication()) }
+    single { AppPreferenceManager(androidApplication()) }
+
+    // retrofit 셋팅
+    single { provideGsonConvertFactory() }
+    single { buildOkHttpClient() }
+    single { provideKakaoRetrofit(get(), get()) }
+    single { provideKakaoApiService(get()) }
 
     // TTS - Text to Speech(텍스트 읽어주는 기능) 셋팅
     single { TTS(androidApplication()) }
+
+    // Repository - Api
+    single<TranslateRepository> { DefaultTranslateRepository(get(), get()) }
+
+    // Repository - Room
+    single<HistoryRepository> { DefaultHistoryRepository(get(), get()) }
+    single<NoteRepository> { DefaultNoteRepository(get(), get()) }
 }
 
 /** ViewModel 모듈 설정 */
@@ -57,24 +72,7 @@ internal val viewModelModule = module {
     viewModel { NoteViewModel(get(), get(), get()) }
 
     // Fragment
-    viewModel { BottomDialogViewModel(get(), get(), get()) }
-}
-
-/** history DB 셋팅 */
-internal fun historyDB(context: Context): WebDatabase {
-    return Room.databaseBuilder(context, WebDatabase::class.java, WebDatabase.DB_NAME).build()
-}
-internal fun historyDao(database: WebDatabase) = database.historyDao()
-
-/** note DB 셋팅 */
-internal fun noteDB(context: Context): NoteDatabase {
-    return Room.databaseBuilder(context, NoteDatabase::class.java, NoteDatabase.DB_NAME).build()
-}
-internal fun noteDao(database: NoteDatabase) = database.noteDao()
-
-/** SharedPreferences 셋팅 */
-internal fun setSharedPreferences(context: Context): SharedPreferences {
-    return context.getSharedPreferences(SharedPreferencesConst.APP_DEFAULT_KEY, Context.MODE_PRIVATE)
+    viewModel { BottomDialogViewModel(get(), get(), get(), get()) }
 }
 
 /** TTS - Text to Speech(텍스트 읽어주는 기능) 셋팅 */
@@ -86,7 +84,7 @@ internal class TTS(context: Context) : TextToSpeech.OnInitListener {
             val ttsLang = textToSpeech.setLanguage(Locale.ENGLISH)
 
             if (ttsLang == TextToSpeech.LANG_MISSING_DATA || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.e(TAG, "This Language is not supported")
+                Log.e(TAG, "이 언어는 되지 않음")
             }
         } else {
             Log.e(TAG, "Initialization Failed!")
