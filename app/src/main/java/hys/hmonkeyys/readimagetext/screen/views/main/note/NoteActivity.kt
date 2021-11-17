@@ -2,6 +2,8 @@ package hys.hmonkeyys.readimagetext.screen.views.main.note
 
 import android.util.Log
 import android.view.View
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
@@ -29,9 +31,7 @@ internal class NoteActivity : BaseActivity<NoteViewModel, ActivityNoteBinding>()
         adapter = NoteAdapter(
             isLanguageKorean = isKorean(),
             onItemClick = {
-                if (!viewModel.isSpeaking()) {
-                    viewModel.speakOut(it)
-                }
+                if (viewModel.isSpeaking().not()) viewModel.speak(it)
             },
             onItemDeleteClick = {
                 viewModel.deleteNote(it)
@@ -76,17 +76,14 @@ internal class NoteActivity : BaseActivity<NoteViewModel, ActivityNoteBinding>()
 
     /** noteList 비워져 있는지 여부 확인 후 보여주기 */
     private fun showNoteList(noteList: MutableList<Note>) {
-        if (noteList.isEmpty()) {
-            binding.noItemTextView.visibility = View.VISIBLE
-        } else {
-            binding.noItemTextView.visibility = View.GONE
-            adapter.setList(noteList)
-        }
+        binding.noItemTextView.isVisible = noteList.isEmpty()
+        adapter.setList(noteList)
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.ttsStop()
+
+        if(viewModel.isSpeaking()) viewModel.ttsStop()
     }
 
     companion object {

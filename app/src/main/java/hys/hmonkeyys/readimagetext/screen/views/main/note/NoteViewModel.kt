@@ -10,6 +10,7 @@ import hys.hmonkeyys.readimagetext.data.db.entity.Note
 import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager
 import hys.hmonkeyys.readimagetext.data.repository.note.NoteRepository
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
+import hys.hmonkeyys.readimagetext.screen.views.main.note.adapter.NoteAdapter
 import hys.hmonkeyys.readimagetext.utils.Constant.TTS_PITCH
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -24,11 +25,7 @@ internal class NoteViewModel(
     val noteStateData: LiveData<NoteState> = _noteStateLiveData
 
     override fun fetchData(): Job = viewModelScope.launch {
-        getAllNote()
-    }
-
-    /** 번역노트(Room DB) 모두 가져오기 */
-    private fun getAllNote() = viewModelScope.launch {
+        // 번역노트(Room DB) 모두 가져오기
         _noteStateLiveData.postValue(NoteState.GetNoteData(noteRepository.getNotes()))
     }
 
@@ -37,8 +34,8 @@ internal class NoteViewModel(
         noteRepository.deleteItem(note)
     }
 
-    /** 텍스트 읽기 */
-    fun speakOut(extractedResults: String) {
+    /** TTS 실행 */
+    fun speak(extractedResults: String) {
         try {
             val ttsSpeed = appPreferenceManager.getTTSSpeed(AppPreferenceManager.TTS_SPEED)
             tts.textToSpeech.apply {
@@ -57,12 +54,10 @@ internal class NoteViewModel(
 
     /** tts 정지 */
     fun ttsStop() {
-        if(isSpeaking()) {
-            tts.textToSpeech.stop()
-        }
+        tts.textToSpeech.stop()
     }
 
     companion object {
-        private const val TAG = "HYS_NoteViewModel"
+//        private const val TAG = "HYS_NoteViewModel"
     }
 }

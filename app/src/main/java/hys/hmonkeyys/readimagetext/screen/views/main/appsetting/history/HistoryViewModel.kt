@@ -25,8 +25,7 @@ internal class HistoryViewModel(
 
     /** 방문기록 데이터 반환 */
     fun getAllHistory() = viewModelScope.launch {
-        val historyList = historyRepository.getHistories()
-        convertList(historyList)
+        convertList(historyRepository.getHistories())
     }
 
     /** 방문기록 데이터 변경 */
@@ -56,7 +55,7 @@ internal class HistoryViewModel(
             )
         }
 
-        // 새로 변경한 리스트 반환
+        // 새로 변경한 리스트 State 에 전달
         _historyStateLiveData.postValue(HistoryState.GetHistoryData(historyList))
     }
 

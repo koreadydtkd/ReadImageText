@@ -105,13 +105,13 @@ internal class BottomDialogFragment(
     /** 번역 성공 */
     private fun translationSuccess(translation: String) {
         binding.resultTranslationEditText.setText(translation)
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.isGone = true
     }
 
     /** TTS 실행 */
     private fun readText() {
         if (viewModel.isSpeaking()) return
-        viewModel.speakOut(binding.resultEditText.text.toString())
+        viewModel.speak(binding.resultEditText.text.toString())
     }
 
     /** 추출한 문자 번역 */
@@ -124,7 +124,7 @@ internal class BottomDialogFragment(
             if (ocrResultText != binding.resultEditText.text.toString()) {
                 ocrResultText = binding.resultEditText.text.toString()
 
-                binding.progressBar.visibility = View.VISIBLE
+                binding.progressBar.isVisible = true
                 viewModel.translate(ocrResultText)
             } else {
                 toast(requireContext(), getString(R.string.no_text_have_been_changed))

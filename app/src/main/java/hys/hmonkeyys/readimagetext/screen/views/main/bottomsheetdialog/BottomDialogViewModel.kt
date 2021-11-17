@@ -84,7 +84,7 @@ internal class BottomDialogViewModel(
     }
 
     /** TTS 실행 */
-    fun speakOut(extractedResults: String) {
+    fun speak(extractedResults: String) {
         try {
             val ttsSpeed = appPreferenceManager.getTTSSpeed(AppPreferenceManager.TTS_SPEED)
             tts.textToSpeech.apply {

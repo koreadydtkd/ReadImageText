@@ -2,8 +2,9 @@ package hys.hmonkeyys.readimagetext.screen.views.main.appsetting.history
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
 import hys.hmonkeyys.readimagetext.extensions.setOnDuplicatePreventionClickListener
@@ -59,7 +60,8 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel, ActivityHistoryB
             .setMessage(getString(R.string.history_dialog_message))
             .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 viewModel.deleteHistory(0, ALL)
-            }.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }
@@ -75,9 +77,9 @@ internal class HistoryActivity : BaseActivity<HistoryViewModel, ActivityHistoryB
 
     /** 데이터 모두 삭제 */
     private fun historyDeleteAll() {
-        binding.textView.visibility = View.GONE
-        binding.historyRecyclerView.visibility = View.GONE
-        binding.noDataTextView.visibility = View.VISIBLE
+        binding.textView.isGone = true
+        binding.historyRecyclerView.isGone = true
+        binding.noDataTextView.isVisible = true
     }
 
     companion object {

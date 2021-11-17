@@ -80,8 +80,8 @@ internal class IntroActivity : BaseActivity<IntroViewModel, ActivityIntroBinding
                 // 1주일 지난 히스토리 삭제
                 viewModel.deleteDataOlderThanOneWeek()
 
-                val currentVersion = getAppVersionCode(this)
-                viewModel.checkUpdateVersion(currentVersion)
+                // 버전 체크
+                viewModel.checkUpdateVersion(getAppVersionCode(this))
             }
         } catch (e: Exception) {
             e.printStackTrace()

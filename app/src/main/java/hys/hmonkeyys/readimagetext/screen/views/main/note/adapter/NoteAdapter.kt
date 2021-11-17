@@ -1,5 +1,6 @@
 package hys.hmonkeyys.readimagetext.screen.views.main.note.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
@@ -73,8 +74,10 @@ class NoteAdapter(
 
     override fun getItemCount(): Int = noteList.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setList(noteList: MutableList<Note>) {
         this.noteList = noteList
         notifyDataSetChanged()
     }
+
 }

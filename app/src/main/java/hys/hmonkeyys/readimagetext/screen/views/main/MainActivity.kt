@@ -9,7 +9,6 @@ import android.os.Handler
 import android.view.inputmethod.EditorInfo
 import android.webkit.URLUtil
 import android.webkit.WebView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import com.google.android.gms.ads.AdListener
@@ -46,6 +45,11 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(
         }
     }
 
+    private val floatingButtons by lazy {
+        listOf(binding.moveTopTextView, binding.moveTopFloatingButton, binding.appSettingTextView, binding.appSettingFloatingButton,
+            binding.noteTextView, binding.noteFloatingButton, binding.screenCaptureTextView, binding.screenCaptureFloatingButton)
+    }
+
     private var backPressTime = 0L
 
     /** 뷰 초기화 */
@@ -65,11 +69,8 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val loadingUrl = v.text.toString()
 
-                val url = if (URLUtil.isNetworkUrl(loadingUrl)) {
-                    loadingUrl
-                } else {
-                    "http://$loadingUrl"
-                }
+                // https 주소 체크
+                val url = if (URLUtil.isNetworkUrl(loadingUrl)) loadingUrl else "http://$loadingUrl"
                 webView.loadUrl(url)
 
                 // 키보드, 커서 숨기기
@@ -181,28 +182,18 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(
 
     /** 플로팅 off Animation */
     private fun closeFloatingButtonWithAnimation() {
-        ObjectAnimator.ofFloat(binding.moveTopTextView, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.appSettingTextView, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.appSettingFloatingButton, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.noteTextView, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.noteFloatingButton, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.screenCaptureTextView, TRANSLATION_Y, 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.screenCaptureFloatingButton, TRANSLATION_Y, 0f).apply { start() }
+        floatingButtons.forEach {
+            ObjectAnimator.ofFloat(it, TRANSLATION_Y, 0f).apply { start() }
+        }
         binding.mainFloatingButton.setImageResource(R.drawable.ic_add_24)
         binding.isFabItemVisible = false
     }
 
     /** 플로팅 on Animation */
     private fun openFloatingButtonWithAnimation() {
-        ObjectAnimator.ofFloat(binding.moveTopTextView, TRANSLATION_Y, -680f).apply { start() }
-        ObjectAnimator.ofFloat(binding.moveTopFloatingButton, TRANSLATION_Y, -680f).apply { start() }
-        ObjectAnimator.ofFloat(binding.appSettingTextView, TRANSLATION_Y, -520f).apply { start() }
-        ObjectAnimator.ofFloat(binding.appSettingFloatingButton, TRANSLATION_Y, -520f).apply { start() }
-        ObjectAnimator.ofFloat(binding.noteTextView, TRANSLATION_Y, -360f).apply { start() }
-        ObjectAnimator.ofFloat(binding.noteFloatingButton, TRANSLATION_Y, -360f).apply { start() }
-        ObjectAnimator.ofFloat(binding.screenCaptureTextView, TRANSLATION_Y, -200f).apply { start() }
-        ObjectAnimator.ofFloat(binding.screenCaptureFloatingButton, TRANSLATION_Y, -200f).apply { start() }
+        floatingButtons.forEach {
+            ObjectAnimator.ofFloat(it, TRANSLATION_Y, it.tag.toString().toFloat()).apply { start() }
+        }
         binding.mainFloatingButton.setImageResource(R.drawable.ic_clear_24)
         binding.isFabItemVisible = true
     }
@@ -210,8 +201,7 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(
     /** 사용자 전체 화면 캡처 */
     private fun showCaptureScreen() {
         Handler(mainLooper).postDelayed({
-            val rootView = window.decorView.rootView
-            val bitmap = viewModel.getBitmapFromView(rootView)
+            val bitmap = viewModel.getBitmapFromView(window.decorView.rootView)
 
             binding.cropImageView.setImageBitmap(bitmap)
             binding.isCropImageViewVisible = true
@@ -220,11 +210,10 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(
 
     /** 화면 캡처 후 텍스트 추출 */
     private fun textExtractionFromCapture() {
-        val selectedBitmap = binding.cropImageView.croppedImage
-        selectedBitmap ?: return
-
-        viewModel.readImageTextBitmap(selectedBitmap)
-        binding.isCropImageViewVisible = false
+        binding.cropImageView.croppedImage?.let { selectedBitmap ->
+            viewModel.readImageTextBitmap(selectedBitmap)
+            binding.isCropImageViewVisible = false
+        }
     }
 
     /** 추출결과에 따른 분기 */
@@ -237,11 +226,14 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(
             EXTRACTION_ERROR -> toast(this, getString(R.string.ocr_error))
 
             // 정상
-            else -> {
-                val bottomDialogFragment = BottomDialogFragment(extractionResult)
-                bottomDialogFragment.show(supportFragmentManager, bottomDialogFragment.tag)
-            }
+            else -> showBottomDialog(extractionResult)
         }
+    }
+
+    /** 하단 다이얼로그 띄우기 */
+    private fun showBottomDialog(extractionResult: String) {
+        val bottomDialogFragment = BottomDialogFragment(extractionResult)
+        bottomDialogFragment.show(supportFragmentManager, bottomDialogFragment.tag)
     }
 
     /** WebViewClient 설정
@@ -313,7 +305,7 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(
     }
 
     companion object {
-//        private const val TAG = "HYS_MainActivity"
+        //        private const val TAG = "HYS_MainActivity"
         private const val TRANSLATION_Y = "translationY"
         private const val ONE_POINT_FIVE_SECOND = 1500L
         private const val CAPTURE_DELAY = 400L

@@ -23,10 +23,8 @@ internal class IntroViewModel(
     }
 
     /** 7일 지난 방문기록 데이터 삭제 */
-    fun deleteDataOlderThanOneWeek() {
-        viewModelScope.launch {
-            historyRepository.deleteDataOneWeeksAgo(getDateWeeksAgo(1))
-        }
+    fun deleteDataOlderThanOneWeek() = viewModelScope.launch {
+        historyRepository.deleteDataOneWeeksAgo(getDateWeeksAgo(1))
     }
 
     /** 업데이트 버전 체크
