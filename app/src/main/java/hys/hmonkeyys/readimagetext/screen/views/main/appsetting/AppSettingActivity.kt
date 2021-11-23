@@ -4,9 +4,10 @@ import android.content.Intent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.view.isGone
+import dagger.hilt.android.AndroidEntryPoint
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityAppSettingBinding
 import hys.hmonkeyys.readimagetext.extensions.setOnDuplicatePreventionClickListener
@@ -17,12 +18,12 @@ import hys.hmonkeyys.readimagetext.utils.Constant.MAIN_TO_HISTORY_DEFAULT
 import hys.hmonkeyys.readimagetext.utils.Utility.hideKeyboardAndCursor
 import hys.hmonkeyys.readimagetext.utils.Utility.isKorean
 import hys.hmonkeyys.readimagetext.utils.Utility.toast
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
+@AndroidEntryPoint
 internal class AppSettingActivity : BaseActivity<AppSettingViewModel, ActivityAppSettingBinding>() {
 
-    override val viewModel: AppSettingViewModel by viewModel()
+    override val viewModel: AppSettingViewModel by viewModels()
     override fun getViewBinding(): ActivityAppSettingBinding = ActivityAppSettingBinding.inflate(layoutInflater)
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->

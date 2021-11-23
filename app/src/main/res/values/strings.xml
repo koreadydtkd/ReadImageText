@@ -37,6 +37,8 @@
     <string name="add_note_explanation">You can add it to the translation note by pressing the top right button.</string>
     <string name="add_note">It has been added to the translation note.</string>
     <string name="empty_text">Please check if there are any empty characters.</string>
+    <string name="not_support_language">The language you are using is not supported.</string>
+    <string name="tts_init_fail">TTS initialization failed.</string>
 
     <!-- History -->
     <string name="history_item_label">If you press the area, the translation result will be displayed.</string>

@@ -58,12 +58,6 @@ class HistoryAdapter(
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun setHistoryList(list: MutableList<HistoryType>) {
-        this.historyList = list
-        this.notifyDataSetChanged()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == HistoryType.DATE) {
             val binding = ItemDateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -84,4 +78,10 @@ class HistoryAdapter(
     override fun getItemCount(): Int = historyList.size
 
     override fun getItemViewType(position: Int): Int = historyList[position].type
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setHistoryList(list: MutableList<HistoryType>) {
+        this.historyList = list
+        this.notifyDataSetChanged()
+    }
 }

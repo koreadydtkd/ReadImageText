@@ -2,22 +2,22 @@ package hys.hmonkeyys.readimagetext.screen.views.main.appsetting.history
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import dagger.hilt.android.AndroidEntryPoint
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityHistoryBinding
 import hys.hmonkeyys.readimagetext.extensions.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.screen.BaseActivity
 import hys.hmonkeyys.readimagetext.screen.views.main.appsetting.history.adapter.HistoryAdapter
 import hys.hmonkeyys.readimagetext.utils.Constant.MAIN_TO_HISTORY_DEFAULT
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@AndroidEntryPoint
+internal class HistoryActivity : BaseActivity<HistoryViewModel, ActivityHistoryBinding>() {
 
-internal class HistoryActivity : BaseActivity<HistoryViewModel, ActivityHistoryBinding>(
-
-) {
-    override val viewModel: HistoryViewModel by viewModel()
+    override val viewModel: HistoryViewModel by viewModels()
     override fun getViewBinding(): ActivityHistoryBinding = ActivityHistoryBinding.inflate(layoutInflater)
 
     private lateinit var adapter: HistoryAdapter

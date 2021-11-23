@@ -4,8 +4,9 @@ import hys.hmonkeyys.readimagetext.data.db.dao.NoteDao
 import hys.hmonkeyys.readimagetext.data.db.entity.Note
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DefaultNoteRepository(
+class DefaultNoteRepository @Inject constructor(
     private val noteDao: NoteDao,
     private val ioDispatcher: CoroutineDispatcher,
 ) : NoteRepository {

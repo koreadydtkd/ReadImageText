@@ -38,6 +38,8 @@
     <string name="add_note_explanation">다시 보고 싶은 문장은 우측 상단 버튼을 눌러주세요</string>
     <string name="add_note">번역 노트에 추가되었습니다.</string>
     <string name="empty_text">비어있는 문자가 있는지 확인해주세요.</string>
+    <string name="not_support_language">현재 사용중인 언어는 지원되지 않습니다.</string>
+    <string name="tts_init_fail">TTS 초기화에 실패하였습니다.</string>
 
     <!-- History -->
     <string name="history_item_label">해당 영역을 누르면 번역결과가 표시됩니다.</string>

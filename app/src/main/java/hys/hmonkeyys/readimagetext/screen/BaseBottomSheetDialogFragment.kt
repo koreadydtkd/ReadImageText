@@ -8,7 +8,7 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.Job
 
-internal abstract class BaseBottomSheetDialogFragment<VM : BaseViewModel, VB: ViewBinding> : BottomSheetDialogFragment() {
+internal abstract class BaseBottomSheetDialogFragment<VM : BaseViewModel, VB : ViewBinding> : BottomSheetDialogFragment() {
 
     abstract val viewModel: VM
 

@@ -1,29 +1,27 @@
 package hys.hmonkeyys.readimagetext.screen.views.main.bottomsheetdialog
 
-import android.speech.tts.TextToSpeech
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import hys.hmonkeyys.readimagetext.data.response.KakaoTranslationResponse
-import hys.hmonkeyys.readimagetext.di.TTS
+import dagger.hilt.android.lifecycle.HiltViewModel
 import hys.hmonkeyys.readimagetext.data.db.entity.Note
 import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager
-import hys.hmonkeyys.readimagetext.data.repository.note.NoteRepository
-import hys.hmonkeyys.readimagetext.data.repository.translate.TranslateRepository
+import hys.hmonkeyys.readimagetext.data.repository.note.DefaultNoteRepository
+import hys.hmonkeyys.readimagetext.data.repository.translate.DefaultTranslateRepository
 import hys.hmonkeyys.readimagetext.extensions.isSpecialSymbols
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
 import hys.hmonkeyys.readimagetext.utils.Constant.BLANK
-import hys.hmonkeyys.readimagetext.utils.Constant.TTS_PITCH
 import hys.hmonkeyys.readimagetext.utils.Pattern.ALPHABET_PATTERN
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-internal class BottomDialogViewModel(
-    private val translateRepository: TranslateRepository,
-    private val noteRepository: NoteRepository,
-    private val appPreferenceManager: AppPreferenceManager,
-    private val tts: TTS,
+@HiltViewModel
+internal class BottomDialogViewModel @Inject constructor(
+    private val translateRepository: DefaultTranslateRepository,
+    private val noteRepository: DefaultNoteRepository,
+    private val pref: AppPreferenceManager,
 ) : BaseViewModel() {
 
     private var _bottomDialogStateLiveData = MutableLiveData<BottomDialogState>()
@@ -77,29 +75,13 @@ internal class BottomDialogViewModel(
         }
     }
 
+    /** 설정한 TTS 속도 가져오기 */
+    fun getTTSSpeed(): Float = pref.getTTSSpeed(AppPreferenceManager.TTS_SPEED)
+
     /** 번역 횟수 초기화 */
     fun translateCountInit() {
-        tts.textToSpeech.stop()
         _translateCount.value = 0
     }
-
-    /** TTS 실행 */
-    fun speak(extractedResults: String) {
-        try {
-            val ttsSpeed = appPreferenceManager.getTTSSpeed(AppPreferenceManager.TTS_SPEED)
-            tts.textToSpeech.apply {
-                setSpeechRate(ttsSpeed)
-                setPitch(TTS_PITCH)
-                speak(extractedResults, TextToSpeech.QUEUE_FLUSH, null, "id1")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            FirebaseCrashlytics.getInstance().recordException(e)
-        }
-    }
-
-    /** TTS 실행 여부 */
-    fun isSpeaking(): Boolean = tts.textToSpeech.isSpeaking
 
     /** 번역노트(Room DB) 저장 */
     fun insertNoteData(english: String, korean: String) = viewModelScope.launch {
@@ -111,9 +93,9 @@ internal class BottomDialogViewModel(
     fun translate(translateText: String) = viewModelScope.launch {
         try {
             val replaceText = translateText.replace("\n", " ")
-
             val translateResult = translateRepository.getTranslateResult(replaceText, SRC_LANG, TARGET_LANG)
-            translateResult?.let {
+
+            translateResult?.translatedText?.get(0)?.let {
                 completedTranslate(it)
             } ?: kotlin.run {
                 _bottomDialogStateLiveData.postValue(BottomDialogState.TranslationFailed)
@@ -127,12 +109,11 @@ internal class BottomDialogViewModel(
     }
 
     /** 번역완료 */
-    private fun completedTranslate(translateModel: KakaoTranslationResponse) {
-        val resultList = translateModel.translatedText?.get(0)
-
+    private fun completedTranslate(translateList: List<String>) {
         val sb: StringBuilder = StringBuilder()
-        resultList?.forEach { result ->
-            sb.append("$result ")
+
+        translateList.forEach {
+            sb.append("$it ")
         }
 
         // 번역 횟수 1 증가

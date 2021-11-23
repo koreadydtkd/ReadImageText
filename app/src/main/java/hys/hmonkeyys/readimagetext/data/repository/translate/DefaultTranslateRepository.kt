@@ -1,19 +1,20 @@
 package hys.hmonkeyys.readimagetext.data.repository.translate
 
-import hys.hmonkeyys.readimagetext.data.network.KakaoApiService
+import hys.hmonkeyys.readimagetext.data.api.KakaoApiService
 import hys.hmonkeyys.readimagetext.data.response.KakaoTranslationResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DefaultTranslateRepository(
+class DefaultTranslateRepository @Inject constructor(
     private val kakaoApiService: KakaoApiService,
-    private val ioDispatcher: CoroutineDispatcher
-): TranslateRepository {
+    private val ioDispatcher: CoroutineDispatcher,
+) : TranslateRepository {
 
     override suspend fun getTranslateResult(
         query: String,
         src_lang: String,
-        target_lang: String
+        target_lang: String,
     ): KakaoTranslationResponse? = withContext(ioDispatcher) {
 
         val response = kakaoApiService.translateKakao(

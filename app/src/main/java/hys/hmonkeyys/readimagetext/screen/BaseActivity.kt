@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.Job
 
-internal abstract class BaseActivity<VM : BaseViewModel, VB: ViewBinding> : AppCompatActivity() {
+internal abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatActivity() {
 
     abstract val viewModel: VM
 

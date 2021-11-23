@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ReadImageText"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:fullBackupContent="@xml/backup_descriptor">
 
         <!-- OCR 관련 -->
         <meta-data
@@ -31,7 +32,8 @@
             android:name=".screen.views.intro.IntroActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.statusBar.Teal200"
-            tools:ignore="LockedOrientationActivity">
+            tools:ignore="LockedOrientationActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

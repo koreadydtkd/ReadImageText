@@ -5,14 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
+import dagger.hilt.android.lifecycle.HiltViewModel
+import hys.hmonkeyys.readimagetext.data.repository.history.DefaultHistoryRepository
 import hys.hmonkeyys.readimagetext.data.repository.history.HistoryRepository
 import hys.hmonkeyys.readimagetext.utils.Utility.getDateWeeksAgo
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-internal class IntroViewModel(
-    private val historyRepository: HistoryRepository
+@HiltViewModel
+internal class IntroViewModel @Inject constructor(
+    private val historyRepository: DefaultHistoryRepository
 ) : BaseViewModel() {
 
     private var _introStateLiveData = MutableLiveData<IntroState>()

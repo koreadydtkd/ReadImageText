@@ -1,24 +1,21 @@
 package hys.hmonkeyys.readimagetext.screen.views.main.note
 
-import android.speech.tts.TextToSpeech
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import hys.hmonkeyys.readimagetext.di.TTS
+import dagger.hilt.android.lifecycle.HiltViewModel
 import hys.hmonkeyys.readimagetext.data.db.entity.Note
 import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager
-import hys.hmonkeyys.readimagetext.data.repository.note.NoteRepository
+import hys.hmonkeyys.readimagetext.data.repository.note.DefaultNoteRepository
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
-import hys.hmonkeyys.readimagetext.screen.views.main.note.adapter.NoteAdapter
-import hys.hmonkeyys.readimagetext.utils.Constant.TTS_PITCH
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-internal class NoteViewModel(
-    private val appPreferenceManager: AppPreferenceManager,
-    private val noteRepository: NoteRepository,
-    private val tts: TTS,
+@HiltViewModel
+internal class NoteViewModel @Inject constructor(
+    private val pref: AppPreferenceManager,
+    private val noteRepository: DefaultNoteRepository,
 ) : BaseViewModel() {
 
     private var _noteStateLiveData = MutableLiveData<NoteState>()
@@ -34,28 +31,8 @@ internal class NoteViewModel(
         noteRepository.deleteItem(note)
     }
 
-    /** TTS 실행 */
-    fun speak(extractedResults: String) {
-        try {
-            val ttsSpeed = appPreferenceManager.getTTSSpeed(AppPreferenceManager.TTS_SPEED)
-            tts.textToSpeech.apply {
-                setSpeechRate(ttsSpeed)
-                setPitch(TTS_PITCH)
-                speak(extractedResults, TextToSpeech.QUEUE_FLUSH, null, "id1")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            FirebaseCrashlytics.getInstance().recordException(e)
-        }
-    }
-
-    /** tts 실행여부 */
-    fun isSpeaking(): Boolean = tts.textToSpeech.isSpeaking
-
-    /** tts 정지 */
-    fun ttsStop() {
-        tts.textToSpeech.stop()
-    }
+    /** 설정한 TTS 속도 가져오기 */
+    fun getTTSSpeed(): Float = pref.getTTSSpeed(AppPreferenceManager.TTS_SPEED)
 
     companion object {
 //        private const val TAG = "HYS_NoteViewModel"

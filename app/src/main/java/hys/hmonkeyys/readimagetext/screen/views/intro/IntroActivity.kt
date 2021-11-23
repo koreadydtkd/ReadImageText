@@ -8,22 +8,24 @@ import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import dagger.hilt.android.AndroidEntryPoint
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityIntroBinding
-import hys.hmonkeyys.readimagetext.utils.Utility.getAppVersionCode
-import hys.hmonkeyys.readimagetext.screen.dialog.CustomDialog
 import hys.hmonkeyys.readimagetext.screen.BaseActivity
+import hys.hmonkeyys.readimagetext.screen.dialog.CustomDialog
 import hys.hmonkeyys.readimagetext.screen.views.main.MainActivity
+import hys.hmonkeyys.readimagetext.utils.Utility.getAppVersionCode
 import hys.hmonkeyys.readimagetext.utils.Utility.getAppVersionName
 import hys.hmonkeyys.readimagetext.utils.Utility.toast
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.ArrayList
+import java.util.*
 
+@AndroidEntryPoint
 internal class IntroActivity : BaseActivity<IntroViewModel, ActivityIntroBinding>() {
 
-    override val viewModel: IntroViewModel by viewModel()
+    override val viewModel: IntroViewModel by viewModels()
     override fun getViewBinding(): ActivityIntroBinding = ActivityIntroBinding.inflate(layoutInflater)
 
     /** 각 뷰들 초기화 */

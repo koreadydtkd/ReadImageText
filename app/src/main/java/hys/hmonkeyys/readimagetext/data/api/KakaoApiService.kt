@@ -1,4 +1,4 @@
-package hys.hmonkeyys.readimagetext.data.network
+package hys.hmonkeyys.readimagetext.data.api
 
 import hys.hmonkeyys.readimagetext.data.url.KakaoUrl
 import hys.hmonkeyys.readimagetext.data.response.KakaoTranslationResponse

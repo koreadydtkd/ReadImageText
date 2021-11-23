@@ -3,18 +3,19 @@ package hys.hmonkeyys.readimagetext.screen.views.main
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.graphics.Bitmap
 import android.os.Handler
 import android.view.inputmethod.EditorInfo
 import android.webkit.URLUtil
 import android.webkit.WebView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import dagger.hilt.android.AndroidEntryPoint
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import hys.hmonkeyys.readimagetext.extensions.setOnDuplicatePreventionClickListener
@@ -29,10 +30,10 @@ import hys.hmonkeyys.readimagetext.utils.Utility.hideKeyboardAndCursor
 import hys.hmonkeyys.readimagetext.utils.Utility.toast
 import java.util.*
 
-internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(
+@AndroidEntryPoint
+internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
-) {
-    override val viewModel: MainViewModel by viewModel()
+    override val viewModel: MainViewModel by viewModels()
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->

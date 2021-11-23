@@ -10,9 +10,10 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import hys.hmonkeyys.readimagetext.data.db.entity.WebHistory
 import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager
-import hys.hmonkeyys.readimagetext.data.repository.history.HistoryRepository
+import hys.hmonkeyys.readimagetext.data.repository.history.DefaultHistoryRepository
 import hys.hmonkeyys.readimagetext.utils.Utility.getCurrentDate
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
 import hys.hmonkeyys.readimagetext.utils.Constant.EXTRACTION_ERROR
@@ -20,10 +21,12 @@ import hys.hmonkeyys.readimagetext.utils.Constant.TEXT_LIMIT_EXCEEDED
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.IOException
+import javax.inject.Inject
 
-internal class MainViewModel(
-    private val historyRepository: HistoryRepository,
-    private val appPreferenceManager: AppPreferenceManager
+@HiltViewModel
+internal class MainViewModel @Inject constructor(
+    private val historyRepository: DefaultHistoryRepository,
+    private val pref: AppPreferenceManager,
 ) : BaseViewModel() {
 
     private var _mainStateLiveData = MutableLiveData<MainState>()
@@ -82,14 +85,14 @@ internal class MainViewModel(
     }
 
     /** 설정한 페이지 가져오기 */
-    fun getSettingUrl(): String = appPreferenceManager.getUrl(AppPreferenceManager.SETTING_URL) ?: DEFAULT_URL
+    fun getSettingUrl(): String = pref.getUrl(AppPreferenceManager.SETTING_URL) ?: DEFAULT_URL
 
     /** 마지막 방문 페이지 가져오기 */
-    fun getLastUrl(): String = appPreferenceManager.getUrl(AppPreferenceManager.LAST_URL) ?: getSettingUrl()
+    fun getLastUrl(): String = pref.getUrl(AppPreferenceManager.LAST_URL) ?: getSettingUrl()
 
     /** 마지막 방문 페이지 저장하기 */
     fun setLastUrl(url: String) {
-        appPreferenceManager.setUrl(AppPreferenceManager.LAST_URL, url)
+        pref.setUrl(AppPreferenceManager.LAST_URL, url)
     }
 
     companion object {

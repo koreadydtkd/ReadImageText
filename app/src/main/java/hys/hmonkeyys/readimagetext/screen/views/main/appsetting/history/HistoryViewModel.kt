@@ -3,7 +3,9 @@ package hys.hmonkeyys.readimagetext.screen.views.main.appsetting.history
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import hys.hmonkeyys.readimagetext.data.db.entity.WebHistory
+import hys.hmonkeyys.readimagetext.data.repository.history.DefaultHistoryRepository
 import hys.hmonkeyys.readimagetext.data.repository.history.HistoryRepository
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
 import hys.hmonkeyys.readimagetext.screen.views.main.appsetting.history.adapter.DateType
@@ -11,9 +13,11 @@ import hys.hmonkeyys.readimagetext.screen.views.main.appsetting.history.adapter.
 import hys.hmonkeyys.readimagetext.screen.views.main.appsetting.history.adapter.UrlType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-internal class HistoryViewModel(
-    private val historyRepository: HistoryRepository
+@HiltViewModel
+internal class HistoryViewModel @Inject constructor(
+    private val historyRepository: DefaultHistoryRepository
 ) : BaseViewModel() {
 
     private var _historyStateLiveData = MutableLiveData<HistoryState>()
