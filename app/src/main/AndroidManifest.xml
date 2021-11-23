@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReadImageText"
         android:usesCleartextTraffic="true"
-        android:fullBackupContent="@xml/backup_descriptor">
+        tools:ignore="AllowBackup">
 
         <!-- OCR 관련 -->
         <meta-data
