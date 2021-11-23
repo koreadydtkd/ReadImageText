@@ -10,7 +10,7 @@ Used
 - Room
 - DataBinding & ViewBinding
 - ViewModel & LiveData
-- Koin
+- Hilt
 - Coroutine
 
 # Creator : YongSang Han
