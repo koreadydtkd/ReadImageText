@@ -11,13 +11,14 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object HiltAppModule {
+object AppModule {
 
     @Singleton
     @Provides
-    fun createMainDispatchers(): MainCoroutineDispatcher = Dispatchers.Main
+    fun provideMainDispatchers(): MainCoroutineDispatcher = Dispatchers.Main
 
     @Singleton
     @Provides
-    fun createIODispatchers(): CoroutineDispatcher = Dispatchers.IO
+    fun provideIoDispatchers(): CoroutineDispatcher = Dispatchers.IO
+
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hys.hmonkeyys.readimagetext.data.db.entity.WebHistory
-import hys.hmonkeyys.readimagetext.data.repository.history.DefaultHistoryRepository
 import hys.hmonkeyys.readimagetext.data.repository.history.HistoryRepository
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
 import hys.hmonkeyys.readimagetext.screen.views.main.appsetting.history.adapter.DateType
@@ -17,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class HistoryViewModel @Inject constructor(
-    private val historyRepository: DefaultHistoryRepository
+    private val historyRepository: HistoryRepository
 ) : BaseViewModel() {
 
     private var _historyStateLiveData = MutableLiveData<HistoryState>()

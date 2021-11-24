@@ -4,9 +4,8 @@ import hys.hmonkeyys.readimagetext.data.db.dao.HistoryDao
 import hys.hmonkeyys.readimagetext.data.db.entity.WebHistory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class DefaultHistoryRepository @Inject constructor(
+class DefaultHistoryRepository (
     private val historyDao: HistoryDao,
     private val ioDispatcher: CoroutineDispatcher,
 ) : HistoryRepository {

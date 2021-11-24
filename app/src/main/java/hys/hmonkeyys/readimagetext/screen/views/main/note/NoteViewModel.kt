@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hys.hmonkeyys.readimagetext.data.db.entity.Note
 import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager
-import hys.hmonkeyys.readimagetext.data.repository.note.DefaultNoteRepository
+import hys.hmonkeyys.readimagetext.data.repository.note.NoteRepository
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class NoteViewModel @Inject constructor(
     private val pref: AppPreferenceManager,
-    private val noteRepository: DefaultNoteRepository,
+    private val noteRepository: NoteRepository,
 ) : BaseViewModel() {
 
     private var _noteStateLiveData = MutableLiveData<NoteState>()

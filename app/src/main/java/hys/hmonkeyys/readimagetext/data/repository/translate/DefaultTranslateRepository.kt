@@ -4,9 +4,8 @@ import hys.hmonkeyys.readimagetext.data.api.KakaoApiService
 import hys.hmonkeyys.readimagetext.data.response.KakaoTranslationResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class DefaultTranslateRepository @Inject constructor(
+class DefaultTranslateRepository (
     private val kakaoApiService: KakaoApiService,
     private val ioDispatcher: CoroutineDispatcher,
 ) : TranslateRepository {

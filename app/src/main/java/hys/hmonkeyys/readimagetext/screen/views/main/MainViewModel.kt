@@ -13,7 +13,7 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hys.hmonkeyys.readimagetext.data.db.entity.WebHistory
 import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager
-import hys.hmonkeyys.readimagetext.data.repository.history.DefaultHistoryRepository
+import hys.hmonkeyys.readimagetext.data.repository.history.HistoryRepository
 import hys.hmonkeyys.readimagetext.utils.Utility.getCurrentDate
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
 import hys.hmonkeyys.readimagetext.utils.Constant.EXTRACTION_ERROR
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
-    private val historyRepository: DefaultHistoryRepository,
+    private val historyRepository: HistoryRepository,
     private val pref: AppPreferenceManager,
 ) : BaseViewModel() {
 

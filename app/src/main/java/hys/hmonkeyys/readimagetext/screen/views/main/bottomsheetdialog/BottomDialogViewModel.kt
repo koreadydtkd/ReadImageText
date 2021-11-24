@@ -7,8 +7,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hys.hmonkeyys.readimagetext.data.db.entity.Note
 import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager
-import hys.hmonkeyys.readimagetext.data.repository.note.DefaultNoteRepository
-import hys.hmonkeyys.readimagetext.data.repository.translate.DefaultTranslateRepository
+import hys.hmonkeyys.readimagetext.data.repository.note.NoteRepository
+import hys.hmonkeyys.readimagetext.data.repository.translate.TranslateRepository
 import hys.hmonkeyys.readimagetext.extensions.isSpecialSymbols
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
 import hys.hmonkeyys.readimagetext.utils.Constant.BLANK
@@ -19,8 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class BottomDialogViewModel @Inject constructor(
-    private val translateRepository: DefaultTranslateRepository,
-    private val noteRepository: DefaultNoteRepository,
+    private val translateRepository: TranslateRepository,
+    private val noteRepository: NoteRepository,
     private val pref: AppPreferenceManager,
 ) : BaseViewModel() {
 

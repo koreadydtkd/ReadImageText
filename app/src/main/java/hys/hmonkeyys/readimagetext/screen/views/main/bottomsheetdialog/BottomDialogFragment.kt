@@ -61,10 +61,7 @@ internal class BottomDialogFragment(
             addNoteData(resultEditText.text.toString(), resultTranslationEditText.text.toString())
         }
 
-        // TTS 초기화
-        initTTS()
-
-        // 추출된 문자 setting
+        // 추출한 text setting
         setResultText()
     }
 
@@ -113,11 +110,6 @@ internal class BottomDialogFragment(
         viewModel.insertNoteData(englishText, koreanText)
     }
 
-    /** 한번 실행시켜 초기화 되도록 */
-    private fun initTTS() {
-        tts?.speak("" ,TextToSpeech.QUEUE_FLUSH, null, "id1")
-    }
-
     /** 추출된 문자 초기화 */
     private fun setResultText() {
         val replaceText = extractionText.replace("\n", " ")
@@ -139,6 +131,8 @@ internal class BottomDialogFragment(
     override fun observeData() {
         viewModel.bottomDialogStateLiveData.observe(this) {
             when (it) {
+                is BottomDialogState.Initialized -> initTTS()
+
                 is BottomDialogState.TranslationComplete -> translationSuccess(it.translateText)
 
                 is BottomDialogState.TranslationFailed -> toast(requireContext(), getString(R.string.translate_fail))
@@ -161,6 +155,11 @@ internal class BottomDialogFragment(
                 toast(requireContext(), getString(R.string.selected_translate_limit))
             }
         }
+    }
+
+    /** 한번 실행시켜 초기화 되도록 */
+    private fun initTTS() {
+        tts?.speak("" ,TextToSpeech.QUEUE_FLUSH, null, "id1")
     }
 
     /** 번역 성공 */
