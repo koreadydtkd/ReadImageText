@@ -15,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityIntroBinding
 import hys.hmonkeyys.readimagetext.screen.BaseActivity
-import hys.hmonkeyys.readimagetext.screen.dialog.CustomDialog
 import hys.hmonkeyys.readimagetext.screen.views.main.MainActivity
 import hys.hmonkeyys.readimagetext.utils.Utility.getAppVersionCode
 import hys.hmonkeyys.readimagetext.utils.Utility.getAppVersionName
@@ -132,11 +131,7 @@ internal class IntroActivity : BaseActivity<IntroViewModel, ActivityIntroBinding
 
     /** 취소 못하는 업데이트 다이얼로그 띄우기 */
     private fun showUpdateDialog() {
-        val customDialog = CustomDialog(dialogClickedListener = {
-            goPlayStore()
-        })
-        customDialog.isCancelable = false
-        customDialog.show(supportFragmentManager, customDialog.tag)
+        // todo 강제 업데이트 다이얼로그 띄우기
     }
 
     /** 플레이스토어로 이동 */

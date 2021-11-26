@@ -13,6 +13,7 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hys.hmonkeyys.readimagetext.data.db.entity.WebHistory
 import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager
+import hys.hmonkeyys.readimagetext.data.preference.AppPreferenceManager.Companion.IS_FIRST
 import hys.hmonkeyys.readimagetext.data.repository.history.HistoryRepository
 import hys.hmonkeyys.readimagetext.utils.Utility.getCurrentDate
 import hys.hmonkeyys.readimagetext.screen.BaseViewModel
@@ -34,6 +35,19 @@ internal class MainViewModel @Inject constructor(
 
     override fun fetchData(): Job = viewModelScope.launch {
         _mainStateLiveData.postValue(MainState.Initialized)
+    }
+
+    /** 첫 실행인지 확인 */
+    fun isFirst(): Boolean = pref.getIsFirst(IS_FIRST)
+
+    /** 첫 실행 false */
+    fun setFirst() {
+        pref.setIsFirst(IS_FIRST, false)
+    }
+
+    /** 방문 페이지 저장하기 */
+    fun setUrl(url: String) {
+        pref.setUrl(AppPreferenceManager.LAST_URL, url)
     }
 
     /** 중복 확인 후 db 삽입 */
@@ -90,13 +104,8 @@ internal class MainViewModel @Inject constructor(
     /** 마지막 방문 페이지 가져오기 */
     fun getLastUrl(): String = pref.getUrl(AppPreferenceManager.LAST_URL) ?: getSettingUrl()
 
-    /** 마지막 방문 페이지 저장하기 */
-    fun setLastUrl(url: String) {
-        pref.setUrl(AppPreferenceManager.LAST_URL, url)
-    }
-
     companion object {
         private const val OCR_TEXT_LIMIT = 350
-        private const val DEFAULT_URL = "https://www.google.com"
+        private const val DEFAULT_URL = "about:blank"
     }
 }

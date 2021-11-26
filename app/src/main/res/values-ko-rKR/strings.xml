@@ -13,15 +13,18 @@
     <string name="app_version">Version %s</string>
 
     <!-- Main -->
-    <string name="main_fab_contents1">앱 설정</string>
-    <string name="main_fab_contents2">방문 기록</string>
-    <string name="main_fab_contents3">영역 선택</string>
-    <string name="main_fab_contents4">맨 위로</string>
-    <string name="main_fab_contents5">번역 노트</string>
+    <string name="move_top">맨 위로</string>
+    <string name="app_setting">앱 설정</string>
+    <string name="visit_history">방문 기록</string>
+    <string name="select_area">영역 선택</string>
+    <string name="camera">카메라</string>
+    <string name="translate_note">번역 노트</string>
     <string name="fab_description">이미지가 확인되지 않습니다.</string>
     <string name="ocr_error">텍스트 추출에 실패하였습니다.</string>
     <string name="ocr_text_limit">최대 350자까지 추출이 가능합니다.\n다시 영역을 선택해주세요.</string>
     <string name="backward_finish">뒤로가기를 한번 더 실행하면 앱이 종료 됩니다.</string>
+    <string name="not_allow_empty">공백은 포함할 수 없습니다.</string>
+    <string name="input_address">주소를 입력해주세요.</string>
 
     <!-- BottomSheetDialog -->
     <string name="tts_error">예기치 못한 오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.</string>
@@ -72,9 +75,11 @@
     <string name="delete">삭제</string>
     <string name="update">업데이트</string>
     <string name="edit">수정</string>
+    <string name="add">추가</string>
 
     <!-- Custom Dialog -->
     <string name="custom_dialog_text">새로운 버전이 출시되었습니다.\n새로운 기능을 사용해보세요.</string>
+    <string name="input_default_address">기본주소로 사용할 주소를 입력해주세요.</string>
 
     <!-- License -->
     <string name="license_contents">

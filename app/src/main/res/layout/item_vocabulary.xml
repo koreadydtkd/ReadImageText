@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    android:background="@drawable/rounded_white_16"
+    android:background="@drawable/bg_white_rounded_16"
     android:elevation="6dp"
     android:padding="8dp">
 
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:background="@drawable/edittext_light_gray_background"
+        android:background="@drawable/bg_light_grey_rounded_4"
         android:padding="6dp"
         android:textColor="@color/black"
         android:textSize="16sp"
@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:background="@drawable/edittext_light_yellow_background"
+        android:background="@drawable/bg_dark_yellow_rounded_4"
         android:padding="6dp"
         android:textColor="@color/black"
         android:textSize="16sp"
@@ -79,7 +79,7 @@
             <View
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/ic_sound"
+                android:background="@drawable/ic_play"
                 android:backgroundTint="@color/teal_200"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +123,7 @@
             <View
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/ic_clear_24"
+                android:background="@drawable/ic_clear"
                 android:backgroundTint="@android:color/holo_red_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

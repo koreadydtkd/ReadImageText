@@ -12,15 +12,18 @@
     <string name="app_version">Version %s</string>
 
     <!-- Main -->
-    <string name="main_fab_contents1">App Setting</string>
-    <string name="main_fab_contents2">Visit record</string>
-    <string name="main_fab_contents3">Choose an area</string>
-    <string name="main_fab_contents4">Top</string>
-    <string name="main_fab_contents5">Translation Note</string>
+    <string name="move_top">Top</string>
+    <string name="app_setting">App Setting</string>
+    <string name="visit_history">Visit record</string>
+    <string name="select_area">Choose an area</string>
+    <string name="camera">Camera</string>
+    <string name="translate_note">Translation Note</string>
     <string name="fab_description">no image.</string>
     <string name="ocr_error">Text extraction failed.</string>
     <string name="ocr_text_limit">Up to 350 characters can be extracted.\nPlease select the area again.</string>
     <string name="backward_finish">If you run Go Back one more time, it will end.</string>
+    <string name="not_allow_empty">Spaces cannot be included.</string>
+    <string name="input_address">Please enter web address.</string>
 
     <!-- BottomSheetDialog -->
     <string name="tts_error">An unexpected error occurred.\nPlease try again in a little while.</string>
@@ -71,9 +74,11 @@
     <string name="delete">Delete</string>
     <string name="update">Update</string>
     <string name="edit">Edit</string>
+    <string name="add">Add</string>
 
     <!-- Custom Dialog -->
     <string name="custom_dialog_text">A new version has been released.\nTry using a new feature.</string>
+    <string name="input_default_address">Please enter the web address to use.</string>
 
     <!-- License -->
     <string name="license_contents">

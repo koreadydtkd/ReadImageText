@@ -16,10 +16,13 @@ class AppPreferenceManager(
         private const val DEFAULT_VALUE_FLOAT = -1f
 
         private const val DEFAULT_TTS_SPEED = 0.8f
+        private const val DEFAULT_FIRST_TIME = true
 
         const val TTS_SPEED = "tts_speed"
         const val SETTING_URL = "setting_url"
         const val LAST_URL = "last_url"
+
+        const val IS_FIRST = "is_first"
     }
 
     private val prefs by lazy { context.getSharedPreferences(APP_DEFAULT_KEY, Context.MODE_PRIVATE) }
@@ -93,5 +96,12 @@ class AppPreferenceManager(
 
     /** TTS 속도 가져오기 */
     fun getTTSSpeed(key: String?): Float = prefs.getFloat(key, DEFAULT_TTS_SPEED)
+
+    fun setIsFirst(key: String?, value: Boolean) {
+        editor.putBoolean(key, value)
+        editor.apply()
+    }
+
+    fun getIsFirst(key: String?): Boolean = prefs.getBoolean(key, DEFAULT_FIRST_TIME)
 
 }

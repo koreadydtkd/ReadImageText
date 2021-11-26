@@ -6,5 +6,7 @@ object Constant {
     const val EXTRACTION_ERROR = "extraction_error"
     const val BLANK = "blank"
 
+    const val DEFAULT_URL = "about:blank"
+
     const val TTS_PITCH = 1.0F
 }

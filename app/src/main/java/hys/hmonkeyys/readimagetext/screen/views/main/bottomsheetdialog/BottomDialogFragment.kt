@@ -3,7 +3,6 @@ package hys.hmonkeyys.readimagetext.screen.views.main.bottomsheetdialog
 import android.graphics.Color
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -32,6 +31,8 @@ internal class BottomDialogFragment(
 
     private var ocrResultText = ""
 
+    private var isAdd: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
@@ -41,15 +42,15 @@ internal class BottomDialogFragment(
     override fun initViews() = with(binding) {
         // 듣기 버튼 (영어 사용자는 한국어 듣기 기능 없음)
         if (isKorean().not()) {
-            listenButton.isGone = true
+            textViewListen.isGone = true
         } else {
-            listenButton.setOnDuplicatePreventionClickListener {
+            textViewListen.setOnDuplicatePreventionClickListener {
                 executeTTS(resultEditText.text.toString())
             }
         }
 
         // 번역 버튼
-        translateButton.setOnDuplicatePreventionClickListener {
+        textViewTranslate.setOnDuplicatePreventionClickListener {
             requireActivity().currentFocus?.let { view ->
                 hideKeyboardAndCursor(requireContext(), view)
             }
@@ -57,7 +58,7 @@ internal class BottomDialogFragment(
         }
 
         // 노트 추가 버튼
-        addNoteButton.setOnDuplicatePreventionClickListener {
+        textViewAdd.setOnDuplicatePreventionClickListener {
             addNoteData(resultEditText.text.toString(), resultTranslationEditText.text.toString())
         }
 
@@ -107,7 +108,12 @@ internal class BottomDialogFragment(
             return
         }
 
-        viewModel.insertNoteData(englishText, koreanText)
+        if (isAdd) {
+            toast(requireContext(), "이미 추가하였습니다.")
+        } else {
+            isAdd = true
+            viewModel.insertNoteData(englishText, koreanText)
+        }
     }
 
     /** 추출된 문자 초기화 */
@@ -145,12 +151,12 @@ internal class BottomDialogFragment(
         viewModel.translateCount.observe(this) { count ->
             // 선택한 영역에 대한 번역 횟수 3회 제한
             if (count == 3) {
-                binding.translateButton.apply {
-                    setBackgroundResource(R.drawable.clicked_background)
+                binding.textViewTranslate.apply {
+                    setBackgroundResource(R.drawable.bg_gery_rounded_10)
+                    setTextColor(Color.WHITE)
                     isEnabled = false
                     isClickable = false
                 }
-                binding.translateTextView.setTextColor(Color.WHITE)
 
                 toast(requireContext(), getString(R.string.selected_translate_limit))
             }

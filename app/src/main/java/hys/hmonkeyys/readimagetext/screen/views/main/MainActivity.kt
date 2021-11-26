@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.graphics.Bitmap
 import android.os.Handler
+import android.provider.MediaStore
 import android.view.inputmethod.EditorInfo
 import android.webkit.URLUtil
 import android.webkit.WebView
@@ -20,6 +21,7 @@ import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ActivityMainBinding
 import hys.hmonkeyys.readimagetext.extensions.setOnDuplicatePreventionClickListener
 import hys.hmonkeyys.readimagetext.screen.BaseActivity
+import hys.hmonkeyys.readimagetext.screen.dialog.UrlInputDialog
 import hys.hmonkeyys.readimagetext.screen.views.main.appsetting.AppSettingActivity
 import hys.hmonkeyys.readimagetext.screen.views.main.bottomsheetdialog.BottomDialogFragment
 import hys.hmonkeyys.readimagetext.screen.views.main.note.NoteActivity
@@ -36,7 +38,8 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
     override val viewModel: MainViewModel by viewModels()
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+    // 방문했던 url 데이터 전달 시 webView load
+    private val getSelectedUrlResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
         if (activityResult.resultCode == 200) {
             val data = activityResult.data
             data ?: return@registerForActivityResult
@@ -46,10 +49,23 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
         }
     }
 
+    // 내장된 카메라로 사진찍고 text 추출
+    private val getCameraResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        if (activityResult.resultCode == RESULT_OK) {
+            val imageBitmap = activityResult.data?.extras?.get("data") as? Bitmap
+            imageBitmap?.let { bitmap ->
+                viewModel.readImageTextBitmap(bitmap)
+            }
+        }
+    }
+
     private val floatingButtons by lazy {
         listOf(binding.moveTopTextView, binding.moveTopFloatingButton, binding.appSettingTextView, binding.appSettingFloatingButton,
-            binding.noteTextView, binding.noteFloatingButton, binding.screenCaptureTextView, binding.screenCaptureFloatingButton)
+            binding.noteTextView, binding.noteFloatingButton, binding.cameraTextView, binding.cameraFloatingButton,
+            binding.screenCaptureTextView, binding.screenCaptureFloatingButton)
     }
+
+    private lateinit var dialog: UrlInputDialog
 
     private var backPressTime = 0L
 
@@ -101,9 +117,6 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
             webChromeClient = WebChromeClient()
             settings.javaScriptEnabled = true
 
-            // 앱 실행 시 마지막 방문한 페이지로 이동
-            loadUrl(viewModel.getLastUrl())
-
             setOnScrollChangeListener { _, _, scrollY, _, _ ->
                 scrollValue = scrollY
             }
@@ -123,13 +136,19 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
         // 앱 설정 플로팅 버튼
         appSettingFloatingButton.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
-            startForResult.launch(Intent(this@MainActivity, AppSettingActivity::class.java))
+            getSelectedUrlResult.launch(Intent(this@MainActivity, AppSettingActivity::class.java))
         }
 
         // 단어 노트 플로팅 버튼
         noteFloatingButton.setOnDuplicatePreventionClickListener {
             closeFloatingButtonWithAnimation()
             startActivity(Intent(this@MainActivity, NoteActivity::class.java))
+        }
+
+        // 카메라 플로팅 버튼
+        cameraFloatingButton.setOnClickListener {
+            closeFloatingButtonWithAnimation()
+            executeCamera()
         }
 
         // 스크린 캡처 플로팅 버튼
@@ -142,15 +161,60 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
         checkFloatingButton.setOnDuplicatePreventionClickListener {
             textExtractionFromCapture()
         }
+
+        // 하단 배너광고 초기화
+        initAdmob()
     }
 
-    override fun observeData() {
-        viewModel.mainStateLiveData.observe(this) {
-            when (it) {
-                is MainState.Initialized -> initAdmob()
+    /** 플로팅 Toggle(on/off) Animation */
+    private fun toggleFab() {
+        when (binding.isFabItemVisible) {
+            true, null -> closeFloatingButtonWithAnimation()
+            false -> openFloatingButtonWithAnimation()
+        }
+    }
 
-                is MainState.TextExtractionComplete -> extractionComplete(it.result)
-            }
+    /** 플로팅 off Animation */
+    private fun closeFloatingButtonWithAnimation() {
+        floatingButtons.forEach {
+            ObjectAnimator.ofFloat(it, TRANSLATION_Y, 0f).apply { start() }
+        }
+        binding.mainFloatingButton.setImageResource(R.drawable.ic_add)
+        binding.isFabItemVisible = false
+    }
+
+    /** 플로팅 on Animation */
+    private fun openFloatingButtonWithAnimation() {
+        floatingButtons.forEach {
+            ObjectAnimator.ofFloat(it, TRANSLATION_Y, it.tag.toString().toFloat()).apply { start() }
+        }
+        binding.mainFloatingButton.setImageResource(R.drawable.ic_clear)
+        binding.isFabItemVisible = true
+    }
+
+    /** 카메라 사진 찍기 */
+    private fun executeCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)
+        }
+        getCameraResult.launch(intent)
+    }
+
+    /** 사용자 전체 화면 캡처 */
+    private fun showCaptureScreen() {
+        Handler(mainLooper).postDelayed({
+            val bitmap = viewModel.getBitmapFromView(window.decorView.rootView)
+
+            binding.cropImageView.setImageBitmap(bitmap)
+            binding.isCropImageViewVisible = true
+        }, CAPTURE_DELAY)
+    }
+
+    /** 화면 캡처 후 텍스트 추출 */
+    private fun textExtractionFromCapture() {
+        binding.cropImageView.croppedImage?.let { selectedBitmap ->
+            viewModel.readImageTextBitmap(selectedBitmap)
+            binding.isCropImageViewVisible = false
         }
     }
 
@@ -173,47 +237,50 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
         }
     }
 
-    /** 플로팅 Toggle(on/off) Animation */
-    private fun toggleFab() {
-        when (binding.isFabItemVisible) {
-            true, null -> closeFloatingButtonWithAnimation()
-            false -> openFloatingButtonWithAnimation()
+    override fun observeData() {
+        viewModel.mainStateLiveData.observe(this) {
+            when (it) {
+                is MainState.Initialized -> checkFirstInstall()
+
+                is MainState.TextExtractionComplete -> extractionComplete(it.result)
+            }
         }
     }
 
-    /** 플로팅 off Animation */
-    private fun closeFloatingButtonWithAnimation() {
-        floatingButtons.forEach {
-            ObjectAnimator.ofFloat(it, TRANSLATION_Y, 0f).apply { start() }
+    /** 처음 실행 여부에 따른 분기처리 */
+    private fun checkFirstInstall() {
+        if (viewModel.isFirst()) {
+            showUrlInputDialog()
+        } else {
+            // 앱 실행 시 마지막 방문한 페이지로 이동
+            binding.webView.loadUrl(viewModel.getLastUrl())
         }
-        binding.mainFloatingButton.setImageResource(R.drawable.ic_add_24)
-        binding.isFabItemVisible = false
     }
 
-    /** 플로팅 on Animation */
-    private fun openFloatingButtonWithAnimation() {
-        floatingButtons.forEach {
-            ObjectAnimator.ofFloat(it, TRANSLATION_Y, it.tag.toString().toFloat()).apply { start() }
+    /** Url Input Dialog 띄우기 */
+    private fun showUrlInputDialog() {
+        dialog = UrlInputDialog(dialogClickedListener = {
+            saveUrl(it)
+        })
+        dialog.isCancelable = false
+        dialog.show(supportFragmentManager, dialog.tag)
+    }
+
+    /** 예외 처리 후 저장 */
+    private fun saveUrl(url: String) {
+        val errorMessage = when {
+            url.isEmpty() -> getString(R.string.input_address)
+            url.contains(" ") -> getString(R.string.not_allow_empty)
+            else -> ""
         }
-        binding.mainFloatingButton.setImageResource(R.drawable.ic_clear_24)
-        binding.isFabItemVisible = true
-    }
 
-    /** 사용자 전체 화면 캡처 */
-    private fun showCaptureScreen() {
-        Handler(mainLooper).postDelayed({
-            val bitmap = viewModel.getBitmapFromView(window.decorView.rootView)
-
-            binding.cropImageView.setImageBitmap(bitmap)
-            binding.isCropImageViewVisible = true
-        }, CAPTURE_DELAY)
-    }
-
-    /** 화면 캡처 후 텍스트 추출 */
-    private fun textExtractionFromCapture() {
-        binding.cropImageView.croppedImage?.let { selectedBitmap ->
-            viewModel.readImageTextBitmap(selectedBitmap)
-            binding.isCropImageViewVisible = false
+        if (errorMessage.isEmpty()) {
+            dialog.dismiss()
+            viewModel.setUrl(url)
+            viewModel.setFirst()
+            binding.webView.loadUrl(url)
+        } else {
+            toast(this, errorMessage)
         }
     }
 
@@ -280,7 +347,7 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
         super.onPause()
 
         // 마지막 접속한 페이지 저장
-        viewModel.setLastUrl(binding.addressBar.text.toString())
+        viewModel.setUrl(binding.addressBar.text.toString())
     }
 
     /** 뒤로가기 실행 시

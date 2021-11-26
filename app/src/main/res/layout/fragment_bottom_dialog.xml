@@ -3,205 +3,153 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/rounded_white_top_16"
-    android:padding="12dp">
-
-    <TextView
-        android:id="@+id/warningTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:autoSizeMaxTextSize="12sp"
-        android:text="@string/bottom_sheet_text1"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/addNoteButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:targetApi="o" />
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_rounded_top_16"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:autoSizeMaxTextSize="18sp"
         android:text="@string/bottom_sheet_text2"
-        android:textColor="@color/dark_gray"
+        android:textColor="@color/black"
+        android:textSize="16dp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/addNoteButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/warningTextView"
-        tools:targetApi="o" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/addNoteButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/ic_note_add"
-        android:backgroundTint="@color/teal_200"
-        android:contentDescription="@string/main_fab_contents5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="o"
+        tools:ignore="SpUsage" />
 
     <EditText
         android:id="@+id/resultEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:autoSizeMaxTextSize="22sp"
-        android:background="@drawable/edittext_light_gray_background"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_light_grey_rounded_4"
         android:gravity="start|center_vertical"
         android:inputType="textMultiLine"
         android:maxHeight="250dp"
-        android:padding="16dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
         android:scrollbars="vertical"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:ignore="Autofill,LabelFor"
+        tools:ignore="Autofill,LabelFor,SpUsage"
         tools:targetApi="o"
         tools:text="Test" />
+
+    <TextView
+        android:id="@+id/warningTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:autoSizeMaxTextSize="12sp"
+        android:text="@string/bottom_sheet_text1"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resultEditText"
+        tools:targetApi="o"
+        tools:ignore="SpUsage" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="24dp"
         android:autoSizeMaxTextSize="18sp"
+        android:textSize="16dp"
         android:text="@string/bottom_sheet_text3"
         android:textColor="@color/view_yellow"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultEditText"
-        tools:targetApi="o" />
+        app:layout_constraintTop_toBottomOf="@+id/warningTextView"
+        tools:targetApi="o"
+        tools:ignore="SpUsage" />
 
     <EditText
         android:id="@+id/resultTranslationEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:autoSizeMaxTextSize="22sp"
-        android:background="@drawable/edittext_light_yellow_background"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_dark_yellow_rounded_4"
         android:clickable="false"
         android:focusableInTouchMode="false"
         android:gravity="start|center_vertical"
         android:inputType="textMultiLine"
         android:maxHeight="250dp"
-        android:padding="16dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
         android:scrollbars="vertical"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:ignore="Autofill,LabelFor"
+        tools:ignore="Autofill,LabelFor,SpUsage"
         tools:targetApi="o"
         tools:text="테스트" />
 
     <TextView
-        android:id="@+id/addNoteTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/textViewAdd"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/add_note_explanation"
-        android:textColor="@color/dark_gray"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/border_light_grey_8"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="@string/add"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_note_add"
+        app:drawableTint="@color/teal_200"
+        app:layout_constraintEnd_toStartOf="@+id/textViewTranslate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resultTranslationEditText" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/listenButton"
+    <TextView
+        android:id="@+id/textViewTranslate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="4dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/translateButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addNoteTextView">
+        android:layout_marginHorizontal="12dp"
+        android:background="@drawable/border_light_grey_8"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="@string/bottom_sheet_button"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_text"
+        app:drawableTint="@color/view_yellow"
+        app:layout_constraintEnd_toStartOf="@+id/textViewListen"
+        app:layout_constraintStart_toEndOf="@+id/textViewAdd"
+        app:layout_constraintTop_toTopOf="@+id/textViewAdd" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingTop="7dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="7dp">
-
-            <View
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:background="@drawable/ic_sound"
-                android:backgroundTint="@color/teal_200"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:gravity="center"
-                android:text="@string/bottom_sheet_text4"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/translateButton"
+    <TextView
+        android:id="@+id/textViewListen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="4dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/border_light_grey_8"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="@string/bottom_sheet_text4"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_play"
+        app:drawableTint="@color/teal_200"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/listenButton"
-        app:layout_constraintTop_toBottomOf="@+id/addNoteTextView">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:elevation="4dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingTop="7dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="7dp">
-
-            <View
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:background="@drawable/ic_text_24"
-                android:backgroundTint="@color/view_yellow"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/resultTranslationTextView" />
-
-            <TextView
-                android:id="@+id/translateTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:gravity="center"
-                android:text="@string/bottom_sheet_button"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintStart_toEndOf="@+id/textViewTranslate"
+        app:layout_constraintTop_toTopOf="@+id/textViewAdd" />
 
     <ProgressBar
         android:id="@+id/progressBar"

@@ -62,12 +62,12 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel, ActivityAp
         }
 
         // 방문기록 버튼
-        historyButton.setOnDuplicatePreventionClickListener {
+        layoutHistory.setOnDuplicatePreventionClickListener {
             startForResult.launch(Intent(this@AppSettingActivity, HistoryActivity::class.java))
         }
 
         // 라이센스 이용약관 버튼
-        licenseDetailButton.setOnDuplicatePreventionClickListener {
+        layoutLicense.setOnDuplicatePreventionClickListener {
             startActivity(Intent(this@AppSettingActivity, LicenseDetailActivity::class.java))
         }
 
@@ -100,8 +100,8 @@ internal class AppSettingActivity : BaseActivity<AppSettingViewModel, ActivityAp
 
     /** 영어 설정인 경우 - 읽기를 사용하지 않기 때문에 속도조절 없애기 */
     private fun setOtherLangViews() {
+        binding.viewIcon2.isGone = true
         binding.speakSpeedTextView.isGone = true
-        binding.speakSpeedView.isGone = true
         binding.speakSpeedCardView.isGone = true
     }
 

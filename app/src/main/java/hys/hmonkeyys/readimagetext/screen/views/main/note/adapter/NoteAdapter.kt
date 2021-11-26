@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import hys.hmonkeyys.readimagetext.R
 import hys.hmonkeyys.readimagetext.databinding.ItemNoteBinding
 import hys.hmonkeyys.readimagetext.data.db.entity.Note
 import hys.hmonkeyys.readimagetext.extensions.setOnDuplicatePreventionClickListener
@@ -36,25 +37,27 @@ class NoteAdapter(
 
             // 영어 언어 사용자는 듣기 안되게
             if (isLanguageKorean.not()) {
-                binding.listenButton.isGone = true
-                binding.textView2.isVisible = true
+                binding.textViewListen.isGone = true
+                binding.labelResultTranslation.isVisible = true
                 binding.resultTranslationTextView.isVisible = true
             } else {
                 // 듣기 버튼
-                binding.listenButton.setOnDuplicatePreventionClickListener {
+                binding.textViewListen.setOnDuplicatePreventionClickListener {
                     onItemClick(binding.resultTextView.text.toString())
                 }
 
-                // 아이템 클릭
-                binding.root.setOnDuplicatePreventionClickListener {
+                // 아이템 클릭 toggle
+                binding.viewToggle.setOnDuplicatePreventionClickListener {
                     if (!isShowKoreanText) {
-                        binding.textView2.isVisible = true
+                        binding.labelResultTranslation.isVisible = true
                         binding.resultTranslationTextView.isVisible = true
+                        binding.viewToggle.setBackgroundResource(R.drawable.ic_arrow_up)
 
                         isShowKoreanText = isShowKoreanText.not()
                     } else {
-                        binding.textView2.isVisible = false
-                        binding.resultTranslationTextView.isVisible = false
+                        binding.labelResultTranslation.isGone = true
+                        binding.resultTranslationTextView.isGone = true
+                        binding.viewToggle.setBackgroundResource(R.drawable.ic_arrow_down)
 
                         isShowKoreanText = isShowKoreanText.not()
                     }
