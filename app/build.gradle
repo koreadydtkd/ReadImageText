@@ -15,8 +15,8 @@ android {
         applicationId "hys.hmonkeyys.readimagetext"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 31
-        versionName "1.4.1"
+        versionCode 32
+        versionName "1.4.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -45,8 +45,8 @@ android {
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10"
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
@@ -74,8 +74,8 @@ dependencies {
     // ----- Firebase End -----
 
     // ML Kit OCR
-    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:17.0.0'
-    implementation 'com.google.mlkit:image-labeling:17.0.5'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:17.0.1'
+    implementation 'com.google.mlkit:image-labeling:17.0.6'
 
     // 스와이프하여 새로고침
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
@@ -84,9 +84,9 @@ dependencies {
     implementation 'com.github.CanHub:Android-Image-Cropper:3.1.1'
 
     // Room library
-    implementation 'androidx.room:room-runtime:2.3.0'
-    kapt 'androidx.room:room-compiler:2.3.0'
-    implementation "androidx.room:room-ktx:2.3.0"
+    implementation 'androidx.room:room-runtime:2.4.0'
+    kapt 'androidx.room:room-compiler:2.4.0'
+    implementation "androidx.room:room-ktx:2.4.0"
 
     // Retrofit2 & OkHttp3
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
