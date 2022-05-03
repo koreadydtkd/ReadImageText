@@ -13,5 +13,6 @@ Used
 - Hilt
 - Coroutine
 
-# Creator : YongSang Han
-# Language : Kotlin
+# Creator: YongSang Han
+# Language: Kotlin
+# Google Play: https://play.google.com/store/apps/details?id=hys.hmonkeyys.readimagetext
