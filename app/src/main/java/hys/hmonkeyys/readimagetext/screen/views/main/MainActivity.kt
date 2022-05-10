@@ -161,9 +161,6 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
         checkFloatingButton.setOnDuplicatePreventionClickListener {
             textExtractionFromCapture()
         }
-
-        // 하단 배너광고 초기화
-        initAdmob()
     }
 
     /** 플로팅 Toggle(on/off) Animation */
@@ -215,25 +212,6 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
         binding.cropImageView.croppedImage?.let { selectedBitmap ->
             viewModel.readImageTextBitmap(selectedBitmap)
             binding.isCropImageViewVisible = false
-        }
-    }
-
-    /** 하단 배너광고 초기화 */
-    private fun initAdmob() {
-        MobileAds.initialize(this)
-        val adRequest = AdRequest.Builder().build()
-
-        binding.adView.apply {
-            loadAd(adRequest)
-            adListener = object : AdListener() {
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                }
-
-                override fun onAdFailedToLoad(error: LoadAdError) {
-                    super.onAdFailedToLoad(error)
-                }
-            }
         }
     }
 
