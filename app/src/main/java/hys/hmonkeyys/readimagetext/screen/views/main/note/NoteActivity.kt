@@ -50,9 +50,6 @@ internal class NoteActivity : BaseActivity<NoteViewModel, ActivityNoteBinding>()
 
         // TTS 초기화
         initTTS()
-
-        // 하단 배너광고 초기화
-        initAdmob()
     }
 
     /** TTS 실행 */
@@ -74,25 +71,6 @@ internal class NoteActivity : BaseActivity<NoteViewModel, ActivityNoteBinding>()
     /** 한번 실행시켜 초기화 되도록 */
     private fun initTTS() {
         tts?.speak("" ,TextToSpeech.QUEUE_FLUSH, null, "id1")
-    }
-
-    /** 하단 배너광고 초기화 */
-    private fun initAdmob() {
-        MobileAds.initialize(this)
-        val adRequest = AdRequest.Builder().build()
-
-        binding.adView.apply {
-            loadAd(adRequest)
-            adListener = object : AdListener() {
-                override fun onAdLoaded() {
-                    Log.i(TAG, "광고 로드 성공 onAdLoaded")
-                }
-
-                override fun onAdFailedToLoad(error: LoadAdError) {
-                    super.onAdFailedToLoad(error)
-                }
-            }
-        }
     }
 
     override fun observeData() {

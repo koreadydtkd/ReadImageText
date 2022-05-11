@@ -6,6 +6,7 @@ import android.content.*
 import android.graphics.Bitmap
 import android.os.Handler
 import android.provider.MediaStore
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.webkit.URLUtil
 import android.webkit.WebView
@@ -160,6 +161,27 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
         // 스크린 캡처한 텍스트 추출
         checkFloatingButton.setOnDuplicatePreventionClickListener {
             textExtractionFromCapture()
+        }
+
+        initAdmob()
+    }
+
+    /** 하단 배너광고 초기화 */
+    private fun initAdmob() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+
+        binding.adView.apply {
+            loadAd(adRequest)
+            adListener = object : AdListener() {
+                override fun onAdLoaded() {
+//                    Log.i(TAG, "광고 로드 성공 onAdLoaded")
+                }
+
+                override fun onAdFailedToLoad(error: LoadAdError) {
+                    super.onAdFailedToLoad(error)
+                }
+            }
         }
     }
 
